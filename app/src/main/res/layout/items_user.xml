@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:weightSum="100"
+    android:orientation="horizontal"
+    android:layout_marginBottom="10dp"
+    android:id="@+id/mLayoutUser"
+    >
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/mAvatar"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="20"
+        android:src="@mipmap/ic_avatar"
+        />
+
+    <TextView
+        android:id="@+id/mNameUser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center"
+        android:layout_weight="80"
+        android:text="This is Name"
+        android:textStyle="normal|bold"
+        tools:ignore="RtlHardcoded" />
+
+</LinearLayout>

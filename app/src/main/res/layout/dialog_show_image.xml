@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_setting_profile"
+    android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="-35dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <ImageView
+                android:id="@+id/mBtnBackZoom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="20"
+                android:src="@drawable/ic_back"
+                tools:ignore="RtlHardcoded" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center"
+                android:layout_weight="60"
+                android:text="@string/txt_your_avatar"
+                android:textStyle="normal|bold"
+                tools:ignore="RtlHardcoded" />
+
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/showImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_choose_image" />
+
+</LinearLayout>

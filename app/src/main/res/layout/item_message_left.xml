@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:weightSum="100"
+    android:orientation="horizontal"
+    android:layout_marginBottom="10dp"
+    android:id="@+id/mLayoutUser"
+    >
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/mAvatarMessage"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_weight="10"
+        android:src="@mipmap/ic_avatar"
+        android:layout_marginEnd="10dp"
+        android:layout_gravity="bottom"
+        />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="50"
+        android:layout_gravity="left|center"
+        tools:ignore="RtlHardcoded">
+        <TextView
+            android:id="@+id/mMessageRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center"
+            android:text="This is Name"
+            android:textStyle="normal|bold"
+            android:background="@drawable/item_left_message_background"
+            tools:ignore="RtlHardcoded"
+            android:padding="10dp"
+            />
+    </LinearLayout>
+
+
+
+</LinearLayout>

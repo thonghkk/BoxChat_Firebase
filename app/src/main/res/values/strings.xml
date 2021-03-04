@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">BoxChat</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="enter_message">Enter Message…</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_password">Enter PassWord</string>
+    <string name="enter_confirm_password">Enter Confirm PassWord</string>
+    <string name="btn_sign_up">Sign Up</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_save_profile">Save</string>
+    <string name="txt_profile">Profile</string>
+    <string name="txt_your_avatar">Your Avatar</string>
+    <string name="txt_message">Message</string>
+    <string name="view_image">View Profile Picture</string>
+    <string name="change_profile_image">Change Profile Picture</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
