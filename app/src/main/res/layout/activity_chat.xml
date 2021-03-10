@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".activity.ChatActivity">
+    tools:context=".ui.main.chat.ChatActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/mCard"
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/mL1"
         android:layout_below="@+id/mCard"
-        tools:context=".activity.UsersActivity" />
+        tools:context=".ui.main.users.UsersActivity" />
     <LinearLayout
         android:id="@+id/mL1"
         android:layout_width="match_parent"

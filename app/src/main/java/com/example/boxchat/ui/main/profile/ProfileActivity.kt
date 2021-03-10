@@ -1,47 +1,36 @@
-package com.example.boxchat.activity
+package com.example.boxchat.ui.main.profile
 
-import android.animation.TimeAnimator
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.webkit.MimeTypeMap
 import android.widget.*
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
 import com.example.boxchat.R
-import com.example.boxchat.activity.UsersActivity
+import com.example.boxchat.base.BaseActivity
 import com.example.boxchat.model.User
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
+import com.example.boxchat.ui.login.LoginActivity
+import com.example.boxchat.ui.main.users.UsersActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.OnProgressListener
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
 import de.hdodenhof.circleimageview.CircleImageView
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.HashMap
 
-const val PICK_IMAGE_REQUEST = 101
 
-class ProfileActivity : AppCompatActivity() {
+
+class ProfileActivity : BaseActivity(){
     private lateinit var firebaseUser: FirebaseUser
 
     //import to read/write data from firebase
@@ -59,11 +48,8 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var mProfile: LinearLayout
     private lateinit var mSignOut: ImageView
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
-
+    override fun getLayoutID() = R.layout.activity_profile
+    override fun onCreateActivity(savedInstanceState: Bundle?) {
         mUserName = findViewById(R.id.mUserName)
         mUserAvatar = findViewById(R.id.mAvatarProfile)
         mBtnBackProfile = findViewById(R.id.mBtnBackProfile)
@@ -129,6 +115,7 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
+
     }
 
     //choose a image to upload (using bitmap)

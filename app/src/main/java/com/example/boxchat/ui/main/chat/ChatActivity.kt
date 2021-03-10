@@ -1,17 +1,14 @@
-package com.example.boxchat.activity
+package com.example.boxchat.ui.main.chat
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Message
 import android.util.Log
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
-import com.example.boxchat.adapter.ChatAdapter
-import com.example.boxchat.adapter.UserAdapter
+import com.example.boxchat.base.BaseActivity
 import com.example.boxchat.model.Chat
 import com.example.boxchat.model.User
 import com.google.firebase.auth.FirebaseAuth
@@ -19,7 +16,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import de.hdodenhof.circleimageview.CircleImageView
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : BaseActivity() {
     private var firebaseUser: FirebaseUser? = null
     private var reference: DatabaseReference? = null
     private lateinit var mNameFriend: TextView
@@ -33,11 +30,10 @@ class ChatActivity : AppCompatActivity() {
     private val chatList = mutableListOf<Chat>()
     private val userList = mutableListOf<User>()
 
-    @SuppressLint("WrongConstant")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chat)
+    override fun getLayoutID() = R.layout.activity_chat
 
+    @SuppressLint("WrongConstant")
+    override fun onCreateActivity(savedInstanceState: Bundle?) {
         mAvatarChat = findViewById(R.id.mAvatarChat)
         mNameFriend = findViewById(R.id.mNameFriend)
         mBtnBackMessageFriend = findViewById(R.id.mBtnBackMessageFriend)
@@ -93,6 +89,8 @@ class ChatActivity : AppCompatActivity() {
             }
         })
     }
+
+
 
     private fun sendMessage(senderId: String, receiverId: String, message: String) {
         val reference: DatabaseReference = FirebaseDatabase.getInstance().reference

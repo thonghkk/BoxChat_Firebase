@@ -1,41 +1,39 @@
-package com.example.boxchat.activity
+package com.example.boxchat.ui.login
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import com.example.boxchat.ui.main.MainActivity
 import com.example.boxchat.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.example.boxchat.base.BaseActivity
+import com.example.boxchat.commom.Firebase.Companion.auth
+import com.example.boxchat.ui.signup.SignUpActivity
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     private lateinit var mBtnLogin: Button
     private lateinit var mBtnSignUp: Button
     private lateinit var mEdtEmailLogin: EditText
     private lateinit var mEdtPassWordLogin: EditText
-    private lateinit var auth: FirebaseAuth
-    private lateinit var firebaseUser: FirebaseUser
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+    private lateinit var mLoginViewModel: LoginViewModel
 
+    override fun getLayoutID() = R.layout.activity_login
+
+    override fun onCreateActivity(savedInstanceState: Bundle?) {
         mBtnLogin = findViewById(R.id.mBtnLogin_2)
         mBtnSignUp = findViewById(R.id.mBtnSignUp_2)
         mEdtEmailLogin = findViewById(R.id.mEmailLogin)
         mEdtPassWordLogin = findViewById(R.id.mPassWordLogin)
 
-        auth = FirebaseAuth.getInstance()
-//        firebaseUser = auth.currentUser!!
+        mLoginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        if(auth.currentUser != null){
-            val intent = Intent(this, UsersActivity::class.java)
+        if (mLoginViewModel.checkCurrentUser()) {
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -52,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(email, passWord)
                     .addOnCompleteListener(this) {
                         if (it.isSuccessful) {
-                            val intent = Intent(this, UsersActivity::class.java)
+                            val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
@@ -67,6 +65,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
     }
+
 }

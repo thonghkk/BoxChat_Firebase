@@ -1,4 +1,4 @@
-package com.example.boxchat.activity
+package com.example.boxchat.ui.signup
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,16 +7,18 @@ import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.example.boxchat.R
+import com.example.boxchat.base.BaseActivity
+import com.example.boxchat.commom.Firebase.Companion.auth
+import com.example.boxchat.commom.Firebase.Companion.user
+import com.example.boxchat.ui.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
-class SignUpActivity : AppCompatActivity() {
-
-    private lateinit var auth: FirebaseAuth
-    private lateinit var databaseReference: DatabaseReference
+class SignUpActivity : BaseActivity() {
 
     private lateinit var btnSignUp: Button
     private lateinit var btnLogin: Button
@@ -25,10 +27,10 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var mEdtPassWord: EditText
     private lateinit var mEdtConfirmPassWord: EditText
 
+    private lateinit var mSignUpViewModel: SignUpViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_up)
+    override fun getLayoutID() = R.layout.activity_sign_up
+    override fun onCreateActivity(savedInstanceState: Bundle?) {
 
         btnSignUp = findViewById(R.id.mBtnSignUp)
         btnLogin = findViewById(R.id.mBtnLogin)
@@ -38,7 +40,7 @@ class SignUpActivity : AppCompatActivity() {
         mEdtPassWord = findViewById(R.id.mPassWordSignUp)
         mEdtConfirmPassWord = findViewById(R.id.mConfirmPassWordSignUp)
 
-        auth = FirebaseAuth.getInstance()
+        mSignUpViewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
         btnSignUp.setOnClickListener {
             val userName = mEdtName.text.toString()
@@ -48,40 +50,33 @@ class SignUpActivity : AppCompatActivity() {
 
             if (TextUtils.isEmpty(userName)) {
                 Toast.makeText(this, "User Name is require", Toast.LENGTH_SHORT).show()
-            }
-            if (TextUtils.isEmpty(password)) {
+            } else if (TextUtils.isEmpty(password)) {
                 Toast.makeText(this, "PassWord is require", Toast.LENGTH_SHORT).show()
-            }
-            if (TextUtils.isEmpty(email)) {
+            } else if (TextUtils.isEmpty(email)) {
                 Toast.makeText(this, "Email is require", Toast.LENGTH_SHORT).show()
-            }
-            if (TextUtils.isEmpty(confirmPassWord)) {
+            } else if (TextUtils.isEmpty(confirmPassWord)) {
                 Toast.makeText(this, "Confirm PassWord is require", Toast.LENGTH_SHORT).show()
-            }
-            if (password != confirmPassWord) {
+            } else if (password != confirmPassWord) {
                 Toast.makeText(this, "PassWord not match", Toast.LENGTH_SHORT).show()
+            } else {
+                registerUser(userName, email, password)
             }
 
-            registerUser(userName, email, password)
         }
         btnLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
-
-
     }
 
     private fun registerUser(userName: String, email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) {
                 if (it.isSuccessful) {
-                    val user: FirebaseUser? = auth.currentUser
-                    val userId: String = user?.uid!!
 
-                    databaseReference =
-                        FirebaseDatabase.getInstance().getReference("Users").child(userId)
+                    val userId: String = user!!.uid
+
                     val hashMap: HashMap<String, String> = HashMap()
                     hashMap["userId"] = userId
                     hashMap["userName"] = userName
@@ -95,19 +90,20 @@ class SignUpActivity : AppCompatActivity() {
 //                            }
 //                        }
 
-                    databaseReference.setValue(hashMap).addOnCompleteListener(this) {
-                        if (it.isSuccessful) {
-                            //auto open home activity
-                            mEdtName.setText("")
-                            mEdtEmail.setText("")
-                            mEdtPassWord.setText("")
-                            mEdtConfirmPassWord.setText("")
+                    mSignUpViewModel.databaseReference.child(userId).setValue(hashMap)
+                        .addOnCompleteListener(this) {
+                            if (it.isSuccessful) {
+                                //auto open home activity
+                                mEdtName.setText("")
+                                mEdtEmail.setText("")
+                                mEdtPassWord.setText("")
+                                mEdtConfirmPassWord.setText("")
 
-                            val intent = Intent(this@SignUpActivity, LoginActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                                val intent = Intent(this@SignUpActivity, LoginActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
                         }
-                    }
                 }
             }
     }

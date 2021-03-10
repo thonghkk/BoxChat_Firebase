@@ -1,6 +1,5 @@
-package com.example.boxchat.adapter
+package com.example.boxchat.ui.main.users
 
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,9 +11,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
-import com.example.boxchat.activity.ChatActivity
+import com.example.boxchat.databaselocal.entity.UserLocal
 import com.example.boxchat.model.User
-import de.hdodenhof.circleimageview.CircleImageView
+import com.example.boxchat.ui.main.chat.ChatActivity
 
 class UserAdapter(private val user:List<User>): RecyclerView.Adapter<UserAdapter.ViewHolder>()  {
     class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
@@ -34,7 +33,7 @@ class UserAdapter(private val user:List<User>): RecyclerView.Adapter<UserAdapter
             Log.d("test",url)
 
             mLayoutUser.setOnClickListener {
-                val intent = Intent(itemView.context,ChatActivity::class.java)
+                val intent = Intent(itemView.context, ChatActivity::class.java)
                 intent.putExtra("userId",user.userId)
                 itemView.context.startActivity(intent)
             }

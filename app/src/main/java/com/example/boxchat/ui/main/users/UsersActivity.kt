@@ -1,4 +1,4 @@
-package com.example.boxchat.activity
+package com.example.boxchat.ui.main.users
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,32 +7,36 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
-import com.example.boxchat.adapter.UserAdapter
+import com.example.boxchat.base.BaseActivity
+import com.example.boxchat.commom.Firebase.Companion.auth
+import com.example.boxchat.databaselocal.entity.UserLocal
 import com.example.boxchat.model.User
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.example.boxchat.ui.main.profile.ProfileActivity
 import com.google.firebase.database.*
 import de.hdodenhof.circleimageview.CircleImageView
 
-class UsersActivity : AppCompatActivity() {
+class UsersActivity : BaseActivity() {
     private lateinit var mRecyclerUserView: RecyclerView
+    private lateinit var mBack: ImageView
+    private lateinit var mProfile: CircleImageView
+    private lateinit var mUserViewModel: UserViewModel
+
     private val userList = mutableListOf<User>()
-    private lateinit var mBack:ImageView
-    private lateinit var mProfile:CircleImageView
+
+    override fun getLayoutID() = R.layout.activity_users
 
     @SuppressLint("WrongConstant")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_users)
+    override fun onCreateActivity(savedInstanceState: Bundle?) {
         mBack = findViewById(R.id.mBtnBackMessage)
         mProfile = findViewById(R.id.mAvatarBar)
+        mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        mBack.setOnClickListener{
+        mBack.setOnClickListener {
             finish()
         }
         mProfile.setOnClickListener {
@@ -45,41 +49,37 @@ class UsersActivity : AppCompatActivity() {
 
         getUsersList()
     }
+
+
     private fun getUsersList() {
-        val firebase: FirebaseUser = FirebaseAuth.getInstance().currentUser!!
-        val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference("Users")
-
-        val databaseReference2 =
-            FirebaseDatabase.getInstance().getReference("Users").child(firebase.uid)
-
-        databaseReference2.addValueEventListener(object : ValueEventListener {
+        mUserViewModel.databaseReferenceSelf.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
-                Log.d("Linked", user!!.userProfileImage)
+//                Log.d("Linked", user!!.userProfileImage)
 
-                if (user.userProfileImage == ""){
+                if (user?.userProfileImage == "") {
                     mProfile.setImageResource(R.mipmap.ic_avatar)
-                }else{
+                } else {
                     Glide.with(this@UsersActivity)
-                        .load(user.userProfileImage)
+                        .load(user?.userProfileImage)
                         .fitCenter()
                         .into(mProfile)
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
         })
 
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        mUserViewModel.databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 userList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val user = dataSnapShot.getValue(User::class.java)
 
                     Log.d("user", "User: $user ")
-                    if (user!!.userId != firebase.uid) {
+                    if (user!!.userId != auth.uid) {
                         userList.add(user)
                     }
                 }
@@ -92,8 +92,9 @@ class UsersActivity : AppCompatActivity() {
 
         })
     }
+
     override fun onBackPressed() {
-            super.onBackPressed()
+        super.onBackPressed()
 
     }
 
