@@ -1,22 +1,22 @@
-package com.example.boxchat.ui.main.users
+package com.example.boxchat.ui.main.friends
 
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
-import com.example.boxchat.databaselocal.entity.UserLocal
 import com.example.boxchat.model.User
 import com.example.boxchat.ui.main.chat.ChatActivity
+import com.example.boxchat.ui.main.users.UserAdapter
+import com.example.boxchat.ui.main.users.ViewStrangerActivity
 
-class UserAdapter(private val user: List<User>) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
+class ChatWithFriendAdapter(private val user: List<User>) : RecyclerView.Adapter<ChatWithFriendAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val txtUserName: TextView = itemView.findViewById(R.id.mNameUser)
@@ -33,21 +33,12 @@ class UserAdapter(private val user: List<User>) : RecyclerView.Adapter<UserAdapt
                 .into(imgAvatar)
             Log.d("test", url)
 
-
-//            mLayoutUser.setOnClickListener {
-//                val intent = Intent(itemView.context, ChatActivity::class.java)
-//                intent.putExtra("userId",user.userId)
-//                intent.putExtra("userName",user.userName)
-//                itemView.context.startActivity(intent)
-//            }
             mLayoutUser.setOnClickListener {
-                val intent = Intent(itemView.context, ViewStrangerActivity::class.java)
-                intent.putExtra("userId", user.userId)
-                intent.putExtra("userName", user.userName)
-                intent.putExtra("userImage", user.userProfileImage)
+                val intent = Intent(itemView.context, ChatActivity::class.java)
+                intent.putExtra("userId",user.userId)
+                intent.putExtra("userName",user.userName)
                 itemView.context.startActivity(intent)
             }
-
         }
     }
 
@@ -61,5 +52,4 @@ class UserAdapter(private val user: List<User>) : RecyclerView.Adapter<UserAdapt
     }
 
     override fun getItemCount() = user.size
-
 }

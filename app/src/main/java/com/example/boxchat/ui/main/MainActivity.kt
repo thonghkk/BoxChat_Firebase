@@ -21,13 +21,11 @@ class MainActivity : BaseActivity() {
     private lateinit var mBottomNavigationView: BottomNavigationView
     private lateinit var mFab: FloatingActionButton
 
-
     override fun getLayoutID() = R.layout.activity_main
 
     override fun onCreateActivity(savedInstanceState: Bundle?) {
         mBottomNavigationView = findViewById(R.id.mBottomNavigationView)
         mFab = findViewById(R.id.mFab)
-
         mBottomNavigationView.background = null
         // mBottomNavigationView.menu.getItem(3).isEnabled = false
 
@@ -40,10 +38,10 @@ class MainActivity : BaseActivity() {
 
         getContextThis(this)
 
-        if (checkNetwork()){
-            Toast.makeText(this,"Connected",Toast.LENGTH_SHORT).show()
-        }else{
-            Toast.makeText(this,"Not Connected",Toast.LENGTH_SHORT).show()
+        if (checkNetwork()) {
+            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
         }
 
     }

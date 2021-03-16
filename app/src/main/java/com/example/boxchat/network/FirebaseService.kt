@@ -41,12 +41,10 @@ class FirebaseService : FirebaseMessagingService() {
 
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
-
         val intent = Intent(this, StrangerFragment::class.java)
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationId = Random.nextInt()
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotification(notificationManager)
         }
@@ -59,7 +57,6 @@ class FirebaseService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
-
         notificationManager.notify(notificationId, notification)
     }
 
