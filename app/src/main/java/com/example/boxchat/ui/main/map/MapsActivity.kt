@@ -101,13 +101,13 @@ class MapsActivity : BaseActivity() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        //firebase
-        val userId = user?.uid
-        val ref = firebaseDatabase.getReference("driverAvailable")
-        // library Geo
-        val geoFire = GeoFire(ref)
-        geoFire.removeLocation(userId)
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        //firebase
+//        val userId = user?.uid
+//        val ref = firebaseDatabase.getReference("driverAvailable")
+//        // library Geo
+//        val geoFire = GeoFire(ref)
+//        geoFire.removeLocation(userId)
+//    }
 }

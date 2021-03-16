@@ -51,11 +51,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-core:18.0.2'
     implementation 'com.google.firebase:firebase-auth:20.0.3'
-    implementation 'com.google.firebase:firebase-database:19.6.0'
+    implementation 'com.google.firebase:firebase-database:19.7.0'
     implementation 'com.google.firebase:firebase-storage:19.2.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     //glide
@@ -71,8 +69,8 @@ dependencies {
 
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     // Navigation Component
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.4'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.4'
 
     // Room components
     implementation "androidx.room:room-runtime:2.2.6"
