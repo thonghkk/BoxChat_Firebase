@@ -29,6 +29,7 @@ class MapsActivity : BaseActivity() {
     private lateinit var client: FusedLocationProviderClient
     private lateinit var mapFragment: SupportMapFragment
 
+
     override fun getLayoutID() = R.layout.activity_maps
     override fun onCreateActivity(savedInstanceState: Bundle?) {
 
