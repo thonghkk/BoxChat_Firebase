@@ -14,6 +14,15 @@
     <string name="txt_message">Message</string>
     <string name="view_image">View Profile Picture</string>
     <string name="change_profile_image">Change Profile Picture</string>
+    <string name="txt_add_friend">Add Friend</string>
+    <string name="txt_un_friend">UnFriend</string>
+    <string name="txt_cancel_friend">Cancel</string>
+    <string name="txt_name_user">Name User</string>
+    <string name="txt_cancel_request_friend">Cancel Friend Request</string>
+    <string name="txt_send_sms">Send SMS</string>
+    <string name="txt_accept">Accept Friend</string>
+    <string name="txt_send_friend_request">Send Friend Request</string>
+
     //menu
     <string name="txt_chat">Chat</string>
     <string name="txt_map">Map</string>

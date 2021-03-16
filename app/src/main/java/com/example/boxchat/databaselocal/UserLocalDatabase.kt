@@ -8,21 +8,21 @@ import com.example.boxchat.databaselocal.dao.UserLocalDao
 import com.example.boxchat.databaselocal.entity.UserLocal
 
 
-@Database(entities = [UserLocal::class],version = 1,exportSchema = false)
-abstract class UserLocalDatabase:RoomDatabase() {
+@Database(entities = [UserLocal::class], version = 1, exportSchema = false)
+abstract class UserLocalDatabase : RoomDatabase() {
 
-    abstract fun userLocalDao():UserLocalDao
+    abstract fun userLocalDao(): UserLocalDao
 
-    companion object{
+    companion object {
         @Volatile
         private var INSTANCE: UserLocalDatabase? = null
 
-        fun getDatabase(context: Context):UserLocalDatabase{
+        fun getDatabase(context: Context): UserLocalDatabase {
             val tempInstance = INSTANCE
-            if (tempInstance != null){
+            if (tempInstance != null) {
                 return tempInstance
             }
-            synchronized(this){
+            synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     UserLocalDatabase::class.java,
@@ -34,5 +34,4 @@ abstract class UserLocalDatabase:RoomDatabase() {
 
         }
     }
-
 }

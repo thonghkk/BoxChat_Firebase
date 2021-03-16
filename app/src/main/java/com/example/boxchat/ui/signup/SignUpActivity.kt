@@ -12,7 +12,9 @@ import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
 import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.commom.Firebase.Companion.user
+import com.example.boxchat.model.Chat
 import com.example.boxchat.ui.login.LoginActivity
+import com.example.boxchat.ui.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
@@ -26,20 +28,16 @@ class SignUpActivity : BaseActivity() {
     private lateinit var mEdtEmail: EditText
     private lateinit var mEdtPassWord: EditText
     private lateinit var mEdtConfirmPassWord: EditText
-
     private lateinit var mSignUpViewModel: SignUpViewModel
 
     override fun getLayoutID() = R.layout.activity_sign_up
     override fun onCreateActivity(savedInstanceState: Bundle?) {
-
         btnSignUp = findViewById(R.id.mBtnSignUp)
         btnLogin = findViewById(R.id.mBtnLogin)
-
         mEdtName = findViewById(R.id.mNameSignUp)
         mEdtEmail = findViewById(R.id.mEmailSignUp)
         mEdtPassWord = findViewById(R.id.mPassWordSignUp)
         mEdtConfirmPassWord = findViewById(R.id.mConfirmPassWordSignUp)
-
         mSignUpViewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
         btnSignUp.setOnClickListener {
@@ -61,7 +59,6 @@ class SignUpActivity : BaseActivity() {
             } else {
                 registerUser(userName, email, password)
             }
-
         }
         btnLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
@@ -74,11 +71,10 @@ class SignUpActivity : BaseActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) {
                 if (it.isSuccessful) {
-
-                    val userId: String = user!!.uid
-
                     val hashMap: HashMap<String, String> = HashMap()
-                    hashMap["userId"] = userId
+                    val userCurr:FirebaseUser? = auth.currentUser
+                    val userId:String =  userCurr!!.uid
+                    hashMap["userId"] =  userId
                     hashMap["userName"] = userName
                     hashMap["email"] = email
                     hashMap["userProfileImage"] = ""
@@ -93,12 +89,6 @@ class SignUpActivity : BaseActivity() {
                     mSignUpViewModel.databaseReference.child(userId).setValue(hashMap)
                         .addOnCompleteListener(this) {
                             if (it.isSuccessful) {
-                                //auto open home activity
-                                mEdtName.setText("")
-                                mEdtEmail.setText("")
-                                mEdtPassWord.setText("")
-                                mEdtConfirmPassWord.setText("")
-
                                 val intent = Intent(this@SignUpActivity, LoginActivity::class.java)
                                 startActivity(intent)
                                 finish()

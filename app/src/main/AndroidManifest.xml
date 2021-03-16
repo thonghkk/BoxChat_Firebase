@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.boxchat">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -21,7 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BoxChat">
-
+        <activity android:name=".ui.main.users.ViewStrangerActivity"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -34,12 +33,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <service
+            android:name=".network.FirebaseService"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
         <activity
-            android:name="com.example.boxchat.ui.main.map.MapsActivity"
-            android:label="@string/title_activity_maps"/>
-        <activity
-            android:name="com.example.boxchat.ui.main.map.MapActivity"
-            android:theme="@style/NoActionBar" />
+            android:name=".ui.main.map.MapsActivity"
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".ui.main.MainActivity"
             android:theme="@style/NoActionBar" />
@@ -51,14 +56,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.boxchat.ui.main.profile.ProfileActivity"
+            android:name=".ui.main.profile.ProfileActivity"
             android:theme="@style/NoActionBar" />
         <activity android:name=".ui.signup.SignUpActivity" />
         <activity
-            android:name="com.example.boxchat.ui.main.chat.ChatActivity"
+            android:name=".ui.main.chat.ChatActivity"
             android:theme="@style/NoActionBar" />
         <activity
-            android:name="com.example.boxchat.ui.main.users.UsersActivity"
+            android:name=".ui.main.users.UsersActivity"
             android:theme="@style/NoActionBar" />
     </application>
 

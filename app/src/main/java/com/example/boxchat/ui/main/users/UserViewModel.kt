@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
 class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     var databaseReference = getUserId()
-    var databaseReferenceSelf: DatabaseReference = getUserId().child(user?.uid!!)
-
+    val requestRef = getRequestReference()
+    val friendRef = getFriendReference()
     val readAllData: LiveData<List<UserLocal>>
     private val repository: UserLocalRepository
 
@@ -28,7 +28,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         readAllData = repository.readAllData
     }
 
-    fun addUser(userLocal:UserLocal) {
+    fun addUser(userLocal: UserLocal) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addUser(userLocal)
         }
@@ -36,5 +36,13 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun getUserId(): DatabaseReference {
         return firebaseDatabase.getReference("Users")
+    }
+
+    private fun getRequestReference(): DatabaseReference {
+        return firebaseDatabase.getReference("Requests")
+    }
+
+    private fun getFriendReference(): DatabaseReference {
+        return firebaseDatabase.getReference("Friends")
     }
 }

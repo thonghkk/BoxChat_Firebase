@@ -19,7 +19,6 @@ class LoginActivity : BaseActivity() {
     private lateinit var mBtnSignUp: Button
     private lateinit var mEdtEmailLogin: EditText
     private lateinit var mEdtPassWordLogin: EditText
-
     private lateinit var mLoginViewModel: LoginViewModel
 
     override fun getLayoutID() = R.layout.activity_login
@@ -45,7 +44,6 @@ class LoginActivity : BaseActivity() {
 
             if (TextUtils.isEmpty(passWord) || TextUtils.isEmpty(email)) {
                 Toast.makeText(this, "name or pass word are required", Toast.LENGTH_SHORT).show()
-
             } else {
                 auth.signInWithEmailAndPassword(email, passWord)
                     .addOnCompleteListener(this) {
@@ -66,5 +64,4 @@ class LoginActivity : BaseActivity() {
             finish()
         }
     }
-
 }
