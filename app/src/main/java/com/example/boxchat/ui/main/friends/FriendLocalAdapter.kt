@@ -8,20 +8,22 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
+import com.example.boxchat.databaselocal.entity.FriendLocal
 import com.example.boxchat.model.User
 import com.example.boxchat.ui.main.chat.ChatActivity
 
-class ChatWithFriendAdapter(private val user: List<User>) : RecyclerView.Adapter<ChatWithFriendAdapter.ViewHolder>() {
+class FriendLocalAdapter(private val user: List<FriendLocal>) : RecyclerView.Adapter<FriendLocalAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val txtUserName: TextView = itemView.findViewById(R.id.mNameFriends)
         private val imgAvatar: ImageView = itemView.findViewById(R.id.mAvatarFriend)
         private val mLayoutUser: LinearLayout = itemView.findViewById(R.id.mLayoutFriend)
 
-        fun bindUser(friend: User) {
+        fun bindUser(friend: FriendLocal) {
             txtUserName.text = friend.userName
             Log.d("MEO",friend.userName)
             Log.d("MEO",friend.userId)
@@ -36,11 +38,7 @@ class ChatWithFriendAdapter(private val user: List<User>) : RecyclerView.Adapter
             Log.d("test", url)
 
             mLayoutUser.setOnClickListener {
-                val intent = Intent(itemView.context, ChatActivity::class.java)
-                intent.putExtra("userId",friend.userId)
-                intent.putExtra("userName",friend.userName)
-                intent.putExtra("userImage",friend.userProfileImage)
-                itemView.context.startActivity(intent)
+                Toast.makeText(itemView.context,"Internet access for texting",Toast.LENGTH_SHORT).show()
             }
         }
     }

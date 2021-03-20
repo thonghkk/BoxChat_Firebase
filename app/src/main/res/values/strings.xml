@@ -22,6 +22,9 @@
     <string name="txt_send_sms">Send SMS</string>
     <string name="txt_accept">Accept Friend</string>
     <string name="txt_send_friend_request">Send Friend Request</string>
+    <string name="title">Chat With Friends</string>
+    <string name="txt_progressBar">Please Wait...</string>
+    <string name="txt_title">Looking For English Classmates</string>
 
     //menu
     <string name="txt_chat">Chat</string>

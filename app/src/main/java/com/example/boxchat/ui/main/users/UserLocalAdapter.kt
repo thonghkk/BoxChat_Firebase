@@ -33,7 +33,7 @@ class UserLocalAdapter(private val userLocal: List<UserLocal>) :
             Log.d("test2", url)
 
             mLayoutUser.setOnClickListener {
-                val intent = Intent(itemView.context, ChatActivity::class.java)
+                val intent = Intent(itemView.context, ViewStrangerActivity::class.java)
                 intent.putExtra("userId", userLocal.userId)
                 intent.putExtra("userName", userLocal.userName)
                 itemView.context.startActivity(intent)

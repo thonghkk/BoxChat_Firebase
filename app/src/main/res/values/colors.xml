@@ -10,4 +10,7 @@
     <color name="button">#41C3E0</color>
     <color name="left_message">#DADEF2</color>
     <color name="right_message">#4771F5</color>
+    <color name="color_icon">#0099ff</color>
+    <color name="color_search">#F2F3F5</color>
+
 </resources>

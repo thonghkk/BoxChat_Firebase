@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:id="@+id/mFriendRecycleView"
-    />
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center|left"
+        android:paddingLeft="40dp"
+        android:text="@string/title"
+        android:textSize="20sp"
+        android:textStyle="bold|normal"
+        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+    <android.widget.SearchView
+        android:id="@+id/mSearchFriends"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/background_search" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mFriendRecycleView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center" />
+
+</LinearLayout>
+

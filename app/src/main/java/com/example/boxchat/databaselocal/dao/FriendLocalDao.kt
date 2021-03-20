@@ -6,14 +6,13 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.boxchat.databaselocal.entity.FriendLocal
-import com.example.boxchat.databaselocal.entity.UserLocal
 
 @Dao
-interface UserLocalDao {
+interface FriendLocalDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addUserLocal(userLocal: UserLocal)
+    suspend fun addFriendLocal(friendLocal: FriendLocal)
 
-    @Query("SELECT * FROM user_table")
-    fun readAllDataFromUser(): LiveData<List<UserLocal>>
+    @Query("SELECT * FROM friend_table")
+    fun readAllDataFromFriend(): LiveData<List<FriendLocal>>
 
 }

@@ -2,39 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mLayoutUser"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/mLayoutFriend"
     android:orientation="vertical">
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true"
         app:cardElevation="2dp"
-        app:cardUseCompatPadding="true">
-
+        >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:orientation="vertical"
-            android:weightSum="10">
-
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            >
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/mAvatar"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="top|center"
-                android:layout_weight="7"
-                android:src="@mipmap/ic_avatar" />
-
-            <TextView
-                android:id="@+id/mNameUser"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:id="@+id/mAvatarFriend"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:gravity="center"
-                android:text="@string/txt_name_user" />
+                android:layout_gravity="top|center"
+                android:layout_margin="5dp"
+                android:src="@mipmap/ic_avatar"
+                />
+            <TextView
+                android:id="@+id/mNameFriends"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:text="@string/txt_name_user"
+                android:layout_gravity="center" />
 
         </LinearLayout>
 

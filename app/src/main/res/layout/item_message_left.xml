@@ -9,15 +9,15 @@
     android:layout_marginBottom="10dp"
     android:id="@+id/mLayoutUser"
     >
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/mAvatarMessage"
-        android:layout_width="0dp"
+        android:layout_width="36dp"
         android:layout_height="30dp"
-        android:layout_weight="10"
-        android:src="@mipmap/ic_avatar"
-        android:layout_marginEnd="10dp"
         android:layout_gravity="bottom"
-        />
+        android:layout_marginEnd="10dp"
+        android:layout_weight="10"
+        android:src="@mipmap/ic_avatar" />
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center"
-            android:text="This is Name"
+            android:text="@string/txt_name_user"
             android:textStyle="normal|bold"
             android:background="@drawable/item_left_message_background"
             tools:ignore="RtlHardcoded"

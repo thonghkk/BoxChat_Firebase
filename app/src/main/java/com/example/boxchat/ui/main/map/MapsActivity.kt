@@ -7,34 +7,47 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
 import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.commom.Firebase.Companion.firebaseDatabase
 import com.example.boxchat.commom.Firebase.Companion.user
+import com.example.boxchat.databaselocal.entity.UserLocal
+import com.example.boxchat.model.LatLngMap
+import com.example.boxchat.model.MapLocation
+import com.example.boxchat.model.User
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 const val REQUEST_CODE = 101
 
-class MapsActivity : BaseActivity() {
+class MapsActivity : BaseActivity(), OnMapReadyCallback {
     private lateinit var client: FusedLocationProviderClient
     private lateinit var mapFragment: SupportMapFragment
-
+    private lateinit var mMapViewModel: MapModel
+    private lateinit var mMap: GoogleMap
+    private val mUserLocation = mutableListOf<MapLocation>()
 
     override fun getLayoutID() = R.layout.activity_maps
     override fun onCreateActivity(savedInstanceState: Bundle?) {
 
         mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         client = LocationServices.getFusedLocationProviderClient(this)
+        mMapViewModel = ViewModelProvider(this).get(MapModel::class.java)
 
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -49,6 +62,8 @@ class MapsActivity : BaseActivity() {
                 REQUEST_CODE
             )
         }
+
+
     }
 
     @SuppressLint("MissingPermission")
@@ -102,13 +117,51 @@ class MapsActivity : BaseActivity() {
         }
     }
 
-//    override fun onStop() {
-//        super.onStop()
-//        //firebase
-//        val userId = user?.uid
-//        val ref = firebaseDatabase.getReference("driverAvailable")
-//        // library Geo
-//        val geoFire = GeoFire(ref)
-//        geoFire.removeLocation(userId)
-//    }
+
+    private fun showUserOnMap():List<MapLocation> {
+        var mMapLocation = mUserLocation
+
+        mMapViewModel.friendRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                mUserLocation.clear()
+                for (dataSnapShot: DataSnapshot in snapshot.children) {
+                    val mLocation = dataSnapShot.getValue(MapLocation::class.java)
+                    if (mLocation?.userId != auth.uid) {
+                        mUserLocation.add(mLocation!!)
+                    }
+                }
+                 mMapLocation = mUserLocation
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+        return mMapLocation
+    }
+
+    override fun onMapReady(googleMap: GoogleMap?) {
+        val mLatLng = mutableListOf<LatLngMap>()
+        mMap = googleMap!!
+
+        
+
+
+//        mMap.setOnMapLoadedCallback {
+//            GoogleMap.OnMapLoadedCallback {
+//                for (i in showUserOnMap()){
+//                    mLatLng.add(LatLngMap(i.latitude,i.longitude))
+//                    for (j in mLatLng){
+//                        mMap.addMarker(
+//                            MarkerOptions().position(j)
+//                        )
+//                    }
+//
+//                }
+//
+//            }
+//        }
+    }
+
+
 }

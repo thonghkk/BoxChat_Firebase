@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_enter_message"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="27dp">
+
+        <ProgressBar
+            android:id="@+id/mProcessLogin"
+            style="@style/SpinKitView.Large.WanderingCubes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="cursive"
+            android:text="@string/txt_progressBar"
+            android:textColor="@color/color_icon"
+            android:textSize="20sp"
+            android:padding="10dp"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

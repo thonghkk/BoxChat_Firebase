@@ -22,7 +22,6 @@ class UserAdapter(private val user: List<User>) : RecyclerView.Adapter<UserAdapt
         private val txtUserName: TextView = itemView.findViewById(R.id.mNameUser)
         private val imgAvatar: ImageView = itemView.findViewById(R.id.mAvatar)
         private val mLayoutUser: LinearLayout = itemView.findViewById(R.id.mLayoutUser)
-
         fun bindUser(user: User) {
             txtUserName.text = user.userName
             val url = user.userProfileImage
@@ -32,14 +31,6 @@ class UserAdapter(private val user: List<User>) : RecyclerView.Adapter<UserAdapt
                 .fitCenter()
                 .into(imgAvatar)
             Log.d("test", url)
-
-
-//            mLayoutUser.setOnClickListener {
-//                val intent = Intent(itemView.context, ChatActivity::class.java)
-//                intent.putExtra("userId",user.userId)
-//                intent.putExtra("userName",user.userName)
-//                itemView.context.startActivity(intent)
-//            }
             mLayoutUser.setOnClickListener {
                 val intent = Intent(itemView.context, ViewStrangerActivity::class.java)
                 intent.putExtra("userId", user.userId)
@@ -47,7 +38,6 @@ class UserAdapter(private val user: List<User>) : RecyclerView.Adapter<UserAdapt
                 intent.putExtra("userImage", user.userProfileImage)
                 itemView.context.startActivity(intent)
             }
-
         }
     }
 

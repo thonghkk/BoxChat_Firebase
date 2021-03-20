@@ -24,7 +24,8 @@
         app:backgroundTint="@color/white"
         app:fabCradleMargin="10dp"
         app:fabCradleRoundedCornerRadius="10dp"
-        app:fabCradleVerticalOffset="10dp">
+        app:fabCradleVerticalOffset="10dp"
+        >
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

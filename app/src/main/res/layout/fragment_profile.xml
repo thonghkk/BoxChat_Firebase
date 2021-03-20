@@ -1,49 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mProfile"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:orientation="vertical"
-    android:id="@+id/mProfile"
-    >
+    android:orientation="vertical">
 
-
+    <ImageView
+        android:id="@+id/mCoverImg"
+        android:layout_width="410dp"
+        android:layout_height="109dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/background_setting_profile"
+        app:srcCompat="@drawable/ic_launcher_background" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/mAvatarProfile"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:src="@mipmap/ic_avatar" />
+        android:layout_width="162dp"
+        android:layout_height="151dp"
+        android:layout_marginTop="48dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_avatar"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/mUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="This is Name"
+        android:layout_marginTop="15dp"
+        android:padding="10dp"
+        android:text="@string/txt_name_user"
         android:textStyle="normal|bold"
-        android:background="@color/white"
-        tools:ignore="RtlHardcoded" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mAvatarProfile" />
+
     <Button
         android:id="@+id/mBtnSaveProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_send_message"
         android:text="@string/btn_save_profile"
         android:textColor="@color/white"
-        android:background="@color/button"
-        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mUserName"
         android:visibility="gone"
-        />
+        tools:ignore="MissingConstraints" />
+
     <ProgressBar
         android:id="@+id/mProgressLoadProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/mUserName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mAvatarProfile"
         android:visibility="gone"
-        />
+        tools:ignore="MissingConstraints" />
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

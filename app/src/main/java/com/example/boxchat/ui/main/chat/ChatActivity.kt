@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -36,6 +37,7 @@ class ChatActivity : BaseActivity() {
     private lateinit var mEnterMessage: EditText
     private lateinit var mChatRecycleView: RecyclerView
     private lateinit var mLinearLayoutManager: LinearLayoutManager
+    private lateinit var mChatViewModel:ChatViewModel
     private val chatList = mutableListOf<Chat>()
     private val userList = mutableListOf<User>()
     var topic = ""
@@ -50,6 +52,7 @@ class ChatActivity : BaseActivity() {
         mBtnSendMessage = findViewById(R.id.mSendMessage)
         mEnterMessage = findViewById(R.id.mEnterMessage)
         mChatRecycleView = findViewById(R.id.mRecycleChat)
+        mChatViewModel = ViewModelProvider(this).get(ChatViewModel::class.java)
 
         mLinearLayoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         mChatRecycleView.layoutManager = mLinearLayoutManager
@@ -60,6 +63,18 @@ class ChatActivity : BaseActivity() {
 
         val userId = intent.getStringExtra("userId")
         val userName = intent.getStringExtra("userName")
+        val userImg = intent.getStringExtra("userImage")
+        mNameFriend.text = userName
+
+        if (userImg == "") {
+            mAvatarChat.setImageResource(R.mipmap.ic_avatar)
+        } else {
+            Glide.with(this@ChatActivity)
+                .load(userImg)
+                .fitCenter()
+                .into(mAvatarChat)
+        }
+
 
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
         reference = FirebaseDatabase.getInstance().getReference("Users").child(userId!!)
@@ -84,43 +99,19 @@ class ChatActivity : BaseActivity() {
         }
         readMessage(firebaseUser!!.uid, userId)
 
-        reference!!.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val user = snapshot.getValue(User::class.java)
-                mNameFriend.text = user!!.userName
-
-                if (user.userProfileImage == "") {
-                    mAvatarChat.setImageResource(R.mipmap.ic_avatar)
-                    Log.d("Test", user.userProfileImage)
-                } else {
-                    Glide.with(this@ChatActivity)
-                        .load(user.userProfileImage)
-                        .fitCenter()
-                        .into(mAvatarChat)
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
     }
 
     private fun sendMessage(senderId: String, receiverId: String, message: String) {
-        val reference: DatabaseReference = FirebaseDatabase.getInstance().reference
-
         val hashMap: HashMap<String, String> = HashMap()
         hashMap["senderId"] = senderId
         hashMap["receiverId"] = receiverId
         hashMap["message"] = message
-        reference.child("Chat").push().setValue(hashMap)
+        mChatViewModel.refChat.push().setValue(hashMap)
     }
 
     private fun readMessage(senderId: String, receiverId: String) {
-        val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference("Chat")
 
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        mChatViewModel.refChat.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 chatList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
@@ -135,7 +126,21 @@ class ChatActivity : BaseActivity() {
                         Log.d("Chat List Size", chatList.size.toString())
                     }
                 }
-                mChatRecycleView.adapter = ChatAdapter(chatList)
+
+                mChatViewModel.refChat.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val user = snapshot.getValue(User::class.java)
+                        if (user?.userId == receiverId ){
+                            userList.add(user)
+                        }
+                        mChatRecycleView.adapter = ChatAdapter(chatList,userList)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+                })
+
             }
 
             override fun onCancelled(error: DatabaseError) {

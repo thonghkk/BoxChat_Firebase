@@ -1,3 +1,5 @@
 package com.example.boxchat.model
 
-data class User(val userId:String="",val userName:String="",val userProfileImage:String="")
+import com.example.boxchat.commom.KeyAddFriend.Companion.FRIEND
+
+open class User(var userId:String="", val userName:String="", var userProfileImage:String="" )
