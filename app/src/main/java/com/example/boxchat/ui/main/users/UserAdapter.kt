@@ -18,7 +18,6 @@ import com.example.boxchat.ui.main.chat.ChatActivity
 
 class UserAdapter(private val user: List<User>) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         private val txtUserName: TextView = itemView.findViewById(R.id.mNameUser)
         private val imgAvatar: ImageView = itemView.findViewById(R.id.mAvatar)
         private val mLayoutUser: LinearLayout = itemView.findViewById(R.id.mLayoutUser)

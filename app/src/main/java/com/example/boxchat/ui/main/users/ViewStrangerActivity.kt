@@ -31,7 +31,6 @@ import com.google.firebase.database.ValueEventListener
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ViewStrangerActivity : BaseActivity() {
-
     private lateinit var mAvatarStranger: CircleImageView
     private lateinit var mNameStranger: TextView
     private lateinit var mBtnAddFriend: Button
@@ -69,7 +68,6 @@ class ViewStrangerActivity : BaseActivity() {
             mBtnCancelFriend.setOnClickListener {
                 Toast.makeText(this, "Let Connect Internet", Toast.LENGTH_SHORT).show()
             }
-
         }
         mCheckUserExistence(strangerId)
     }
@@ -203,7 +201,6 @@ class ViewStrangerActivity : BaseActivity() {
             mUserViewModel.requestRef.child(strangerId).child(auth.uid!!).removeValue()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-
                         val hashMap: HashMap<String, String> = HashMap()
                         hashMap["userId"] = strangerId
                         hashMap["userName"] = strangerName

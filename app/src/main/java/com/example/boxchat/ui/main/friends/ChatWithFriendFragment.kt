@@ -14,25 +14,22 @@ import com.example.boxchat.R
 import com.example.boxchat.base.BaseFragment
 import com.example.boxchat.commom.CheckNetwork.Companion.checkNetwork
 import com.example.boxchat.commom.Firebase.Companion.auth
-import com.example.boxchat.commom.Firebase.Companion.user
 import com.example.boxchat.databaselocal.entity.FriendLocal
+import com.example.boxchat.databaselocal.entity.UserLocal
 import com.example.boxchat.model.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import java.util.*
 
-
-const val TAG = "FriendList"
-
 class ChatWithFriendFragment : BaseFragment() {
-
     private lateinit var mFriendRecycleView: RecyclerView
     private lateinit var mFriendFragmentViewModel: ChatWithFriendViewModel
     private lateinit var mSearchFriends: SearchView
     private var friendList = mutableListOf<User>()
 
     override fun getLayoutID() = R.layout.fragment_chat
+
     @SuppressLint("WrongConstant")
     override fun onViewReady(view: View) {
         mFriendRecycleView = view.findViewById(R.id.mFriendRecycleView)
@@ -42,8 +39,11 @@ class ChatWithFriendFragment : BaseFragment() {
         mFriendFragmentViewModel = ViewModelProvider(this).get(ChatWithFriendViewModel::class.java)
 
         addFriendLocal()
+        getFriendList()
         if (checkNetwork()) {
-            getFriendList()
+            mFriendFragmentViewModel.friend.observe(viewLifecycleOwner, Observer { friendList ->
+                mFriendRecycleView.adapter = ChatWithFriendAdapter(friendList)
+            })
         } else {
             getFriendLocal()
         }
@@ -59,10 +59,10 @@ class ChatWithFriendFragment : BaseFragment() {
                             val mReceive = dataSnapShotSecond.getValue(User::class.java)
                             Log.d("ttt22", "$dataSnapShotSecond")
                             friendList.add(mReceive!!)
+                            mFriendFragmentViewModel.addListFriend(friendList)
                         }
                         break
                     }
-                    mFriendRecycleView.adapter = ChatWithFriendAdapter(friendList)
                 }
 
                 override fun onCancelled(error: DatabaseError) {

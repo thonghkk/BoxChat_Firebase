@@ -18,7 +18,6 @@ class SettingFragment : BaseFragment() {
         mSignOut = view.findViewById(R.id.mSignOut)
         mSignOut.setOnClickListener {
             auth.signOut()
-            user?.delete()
             startActivity(Intent(context, LoginActivity::class.java))
         }
     }
