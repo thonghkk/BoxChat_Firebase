@@ -1,42 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mLayoutUser"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:weightSum="100"
-    android:orientation="horizontal"
     android:layout_marginBottom="10dp"
-    android:id="@+id/mLayoutUser"
-    >
+    android:orientation="horizontal"
+    android:weightSum="100">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/mAvatarMessage"
-        android:layout_width="36dp"
+        android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_gravity="bottom"
         android:layout_marginEnd="10dp"
         android:layout_weight="10"
         android:src="@mipmap/ic_avatar" />
-    <LinearLayout
-        android:layout_width="0dp"
+
+    <TextView
+        android:id="@+id/mMessageRight"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="50"
         android:layout_gravity="left|center"
-        tools:ignore="RtlHardcoded">
-        <TextView
-            android:id="@+id/mMessageRight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|center"
-            android:text="@string/txt_name_user"
-            android:textStyle="normal|bold"
-            android:background="@drawable/item_left_message_background"
-            tools:ignore="RtlHardcoded"
-            android:padding="10dp"
-            />
-    </LinearLayout>
-
-
+        android:background="@drawable/item_left_message_background"
+        android:padding="10dp"
+        android:text="@string/txt_name_user"
+        android:textStyle="normal|bold"
+        tools:ignore="RtlHardcoded" />
 
 </LinearLayout>

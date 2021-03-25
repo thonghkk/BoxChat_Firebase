@@ -23,13 +23,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center"
-            android:background="@drawable/item_right_message_background"
-            android:text="This is Name"
-            android:textStyle="normal|bold"
             android:layout_marginRight="30dp"
-            tools:ignore="RtlHardcoded"
+            android:background="@drawable/item_right_message_background"
             android:padding="10dp"
-            />
+            android:text="@string/txt_name_user"
+            android:textStyle="normal|bold"
+            tools:ignore="RtlHardcoded" />
 
     </LinearLayout>
 
