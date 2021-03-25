@@ -2,6 +2,7 @@ package com.example.boxchat.ui.main.map
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +12,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
+import com.example.boxchat.commom.Firebase
 import com.example.boxchat.commom.Firebase.Companion.auth
+import com.example.boxchat.commom.Firebase.Companion.user
 import com.example.boxchat.model.MapLocation
 import com.example.boxchat.model.User
+import com.example.boxchat.ui.main.MainActivity
+import com.example.boxchat.ui.main.users.StrangerFragment
 import com.example.boxchat.ui.main.users.UserViewModel
+import com.example.boxchat.ui.main.users.ViewStrangerActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -23,6 +29,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -31,7 +38,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 
 const val REQUEST_CODE = 101
 
-class MapsActivity : BaseActivity(), OnMapReadyCallback {
+class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private lateinit var client: FusedLocationProviderClient
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var mMapViewModel: MapModel
@@ -74,6 +81,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         task.addOnSuccessListener { location ->
             if (location != null) {
                 mapFragment.getMapAsync { googleMap ->
+
                     //get location
                     val latLng = LatLng(location.latitude, location.longitude)
                     Log.d("Location", "${location.latitude}")
@@ -83,10 +91,12 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 21F))
                     googleMap.addMarker(markerOptions).showInfoWindow()
+                    //User #
+                    onMapReady(googleMap)
                     //firebase
                     val userId = auth.uid
-                    val ref2 = mMapViewModel.friendRef.child(userId!!)
-                    mUserViewModel.users.observe(this, Observer { user ->
+                    val ref2 = mMapViewModel.mUserOnReference.child(userId!!)
+                    mMapViewModel.users.observe(this, Observer { user ->
                         for (i in user) {
                             val hashMap: HashMap<String, String> = HashMap()
                             hashMap["userId"] = userId
@@ -96,8 +106,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                             ref2.setValue(hashMap)
                         }
                     })
-                    //User #
-                    onMapReady(googleMap)
                 }
             }
         }
@@ -118,7 +126,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun getLocation() {
-        mMapViewModel.friendRef.addValueEventListener(object : ValueEventListener {
+        mMapViewModel.mUserOnReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val mLocation = dataSnapShot.getValue(MapLocation::class.java)
@@ -136,16 +144,14 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun getUsersList() {
-        val userId = auth.uid
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/$userId")
         mUserViewModel.databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 userList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val mUser = dataSnapShot.getValue(User::class.java)
-                    if (mUser!!.userId == auth.uid) {
+                    if (mUser!!.userId == user?.uid) {
                         userList.add(mUser)
-                        mUserViewModel.addListUser(userList)
+                        mMapViewModel.addListUser(userList)
                     }
                 }
             }
@@ -161,13 +167,46 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         mMapViewModel.driverAvailable.observe(this@MapsActivity, Observer { driver ->
             for (i in driver) {
                 val a = LatLng(i.latitude.toDouble(), i.longitude.toDouble())
-                mMap.addMarker(
+               mMap.addMarker(
                     MarkerOptions()
                         .position(a)
                         .title(i.userName)
                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_chat))
                 ).showInfoWindow()
+
+//                mMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
+//                    override fun onMarkerClick(p0: Marker?): Boolean {
+//
+//                        mMapViewModel.users.observe(mapFragment, Observer { user ->
+//                            for (j in user) {
+//                                if (i.userId == j.userId) {
+//                                    val intent =
+//                                        Intent(this@MapsActivity, ViewStrangerActivity::class.java)
+//                                    intent.putExtra("userId", i.userId)
+//                                    intent.putExtra("userName", i.userName)
+//                                    intent.putExtra("userImage", i.userProfileImage)
+//                                    startActivity(intent)
+//                                }
+//                            }
+//                        })
+//
+//                        return true
+//                    }
+//
+//                })
             }
         })
+        mMap.setOnMarkerClickListener(this)
     }
+
+    override fun onMarkerClick(maker: Marker?): Boolean {
+        val a = maker!!.title
+        val intent = Intent(this,StrangerFragment::class.java)
+        intent.putExtra("name",a)
+        startActivity(intent)
+        return false
+     }
+
+
 }
+
