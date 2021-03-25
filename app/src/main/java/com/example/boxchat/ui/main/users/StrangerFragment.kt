@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,7 +37,7 @@ class StrangerFragment : BaseFragment() {
     private lateinit var mRecyclerUserView: RecyclerView
     private lateinit var mUserViewModel: UserViewModel
     private val userList = mutableListOf<User>()
-    private val friendList = mutableListOf<User>()
+    private var friendList = mutableListOf<User>()
 
     override fun getLayoutID() = R.layout.fragment_stranger
 
@@ -48,6 +49,8 @@ class StrangerFragment : BaseFragment() {
         mRecyclerUserView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
+
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/${user?.uid}")
         //get value SharedPreferences
         FirebaseService.sharePref =
             this.activity?.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
@@ -56,90 +59,26 @@ class StrangerFragment : BaseFragment() {
             Log.d("token", it.result.token)
         }
 
-        getFriendList()
-        getUsersList()
-        getAddUserLocal()
         if (checkNetwork()) {
-            mUserViewModel.users.observe(viewLifecycleOwner, Observer { user ->
-                mUserViewModel.friends.observe(viewLifecycleOwner, Observer { friend ->
-//                    val stranger = user.minus(friend)
-                    mRecyclerUserView.adapter = UserAdapter(user)
+            mUserViewModel.users.observe(this, Observer { user ->
+                mRecyclerUserView.adapter = UserAdapter(user)
+                mUserViewModel.friends.observe(this, Observer { friend ->
+                    val sum = friend + user
+                    val a = sum.groupBy { it.userId }
+                        .filter { it.value.size == 1 }
+                        .flatMap { it.value } as MutableList<User>
+                    mRecyclerUserView.adapter = UserAdapter(a)
                 })
             })
-
         } else {
             getUserLocal()
         }
-    }
-
-    private fun getUsersList() {
-        val userId = auth.uid
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/$userId")
-        mUserViewModel.databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                userList.clear()
-                for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val mUser = dataSnapShot.getValue(User::class.java)
-                    if (mUser!!.userId != auth.uid) {
-                        userList.add(mUser)
-                        mUserViewModel.addListUser(userList)
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun getAddUserLocal() {
-        mUserViewModel.databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val mUser = dataSnapShot.getValue(UserLocal::class.java)
-                    Log.d("userLocal", "User: $user ")
-                    if (mUser?.userId != auth.uid) {
-                        val userLocal =
-                            UserLocal(mUser?.userId!!, mUser.userName, mUser.userProfileImage)
-                        mUserViewModel.addUser(userLocal)
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     private fun getUserLocal() {
         mUserViewModel.readAllData.observe(viewLifecycleOwner, Observer { user ->
             mRecyclerUserView.adapter = UserLocalAdapter(user)
         })
-    }
-
-
-    private fun getFriendList() {
-        mUserViewModel.friendRef.child(auth.uid!!)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.d("snapshot", "User: $snapshot  ")
-                    for (dataSnapShot: DataSnapshot in snapshot.children) {
-                        for (dataSnapShotSecond: DataSnapshot in snapshot.children) {
-                            val mReceive = dataSnapShotSecond.getValue(User::class.java)
-                            Log.d("ttt22", "$dataSnapShotSecond")
-                            friendList.add(mReceive!!)
-                            mUserViewModel.addListFriend(friendList)
-                        }
-                        break
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-                }
-            })
     }
 
 }
