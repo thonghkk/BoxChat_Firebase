@@ -1,5 +1,6 @@
 package com.example.boxchat.ui.main.users
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -24,6 +25,7 @@ import com.example.boxchat.commom.KeyAddFriend.Companion.PENDING
 import com.example.boxchat.commom.KeyAddFriend.Companion.RECEIVER
 import com.example.boxchat.databaselocal.entity.UserLocal
 import com.example.boxchat.model.User
+import com.example.boxchat.ui.main.chat.ChatActivity
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -55,6 +57,7 @@ class ViewStrangerActivity : BaseActivity() {
             getInfoStranger(strangerId!!)
             mBtnAddFriend.setOnClickListener {
                 mPerformActions(strangerId, strangerName!!, strangerImage!!)
+                mSendSMS(strangerId, strangerName!!, strangerImage!!)
             }
             mBtnCancelFriend.setOnClickListener {
                 mUnFriend(strangerId)
@@ -296,6 +299,17 @@ class ViewStrangerActivity : BaseActivity() {
                 }
             }
         })
+    }
+
+    private fun mSendSMS(strangerId: String, strangerName: String, strangerImage: String) {
+        if (mCurrentState == FRIEND) {
+            val intent = Intent(context, ChatActivity::class.java)
+            intent.putExtra("userId", strangerId)
+            intent.putExtra("userName", strangerName)
+            intent.putExtra("userImage", strangerImage)
+            context.startActivity(intent)
+
+        }
     }
 
 }

@@ -44,6 +44,7 @@ class MainActivity : BaseActivity() {
             Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
         }
 
+        
     }
 
 }
