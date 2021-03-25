@@ -12,9 +12,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseFragment
+import com.example.boxchat.commom.CheckNetwork.Companion.checkNetwork
+import com.example.boxchat.commom.CheckNetwork.Companion.getContextThis
 import com.example.boxchat.commom.Firebase.Companion.user
 import com.example.boxchat.model.User
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -57,28 +60,13 @@ class ProfileFragment : BaseFragment() {
         Log.d("Storage ref", storageRef.toString())
 
         //To read data at a path and listen to read the changes
-        mProfileViewModel.databaseReferenceProfile.addValueEventListener(object :
-            ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val user = snapshot.getValue(User::class.java)
-                mUserName.text = user?.userName
-                Log.d("profile", "onDataChange: ${user?.userProfileImage}")
+        getContextThis(requireContext())
+        if (checkNetwork()) {
+            getYourself()
+        } else {
+            getYourselfLocal()
+        }
 
-                if (user?.userProfileImage == "") {
-                    mUserAvatar.setImageResource(R.mipmap.ic_avatar)
-                } else {
-                    Glide.with(activity!!.application)
-                        .load(user?.userProfileImage)
-                        .fitCenter()
-                        .circleCrop()
-                        .into(mUserAvatar)
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-            }
-        })
         mUserAvatar.setOnClickListener {
             // chooseImage()
             dialogViewProfile()
@@ -86,6 +74,41 @@ class ProfileFragment : BaseFragment() {
         mBtnSaveProfile.setOnClickListener {
             uploadImage()
         }
+    }
+
+    private fun getYourself() {
+        mProfileViewModel.me.observe(this, Observer { me ->
+            for (i in me) {
+                mUserName.text = i.userName
+                if (i.userProfileImage == "") {
+                    mUserAvatar.setImageResource(R.mipmap.ic_avatar)
+                } else {
+                    Glide.with(this)
+                        .load(i.userProfileImage)
+                        .fitCenter()
+                        .circleCrop()
+                        .into(mUserAvatar)
+                }
+            }
+        })
+    }
+
+    private fun getYourselfLocal() {
+        mProfileViewModel.readAllDataFromMe.observe(
+            viewLifecycleOwner, Observer { me ->
+                for (i in me) {
+                    mUserName.text = i.userName
+                    if (i.userProfileImage == "") {
+                        mUserAvatar.setImageResource(R.mipmap.ic_avatar)
+                    } else {
+                        Glide.with(this)
+                            .load(i.userProfileImage)
+                            .fitCenter()
+                            .circleCrop()
+                            .into(mUserAvatar)
+                    }
+                }
+            })
     }
 
     //choose a image to upload (using bitmap)
@@ -154,38 +177,44 @@ class ProfileFragment : BaseFragment() {
             LayoutInflater.from(context).inflate(R.layout.view_profile_image, mLinearLayout)
         bottomSheetDialog.setContentView(mDialogView)
         bottomSheetDialog.show()
+
+        //change avatar
         mDialogView.findViewById<LinearLayout>(R.id.mDialogChangeProfilePicture)
             .setOnClickListener {
-                chooseImage()
-                bottomSheetDialog.dismiss()
-                Log.d("Bitmap", chooseImage().toString())
+                if (checkNetwork()) {
+                    chooseImage()
+                    bottomSheetDialog.dismiss()
+                    Log.d("Bitmap", chooseImage().toString())
+                } else {
+                    Toast.makeText(context, "Connect Internet To Change !", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
-        mDialogView.findViewById<LinearLayout>(R.id.mDialogViewProfilePicture).setOnClickListener {
-            mProfileViewModel.databaseReferenceProfile.addValueEventListener(object :
-                ValueEventListener {
-                @SuppressLint("ResourceType")
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val user = snapshot.getValue(User::class.java)
-                    val dialog = Dialog(requireContext())
-                    dialog.setContentView(R.layout.dialog_show_image)
-                    val img = dialog.findViewById<ImageView>(R.id.showImage)
-                    val btnBack = dialog.findViewById<ImageView>(R.id.mBtnBackZoom)
-                    Glide.with(context!!)
-                        .load(user?.userProfileImage)
-                        .fitCenter()
-                        .into(img)
-                    btnBack.setOnClickListener {
-                        dialog.cancel()
-                    }
-                    dialog.show()
-                    Log.d("Get Id", user?.userProfileImage.toString())
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+        //view avatar
+        mDialogView.findViewById<LinearLayout>(R.id.mDialogViewProfilePicture).setOnClickListener {
+            if (checkNetwork()) {
+                val dialog = Dialog(requireContext())
+                dialog.setContentView(R.layout.dialog_show_image)
+                val img = dialog.findViewById<ImageView>(R.id.showImage)
+                val btnBack = dialog.findViewById<ImageView>(R.id.mBtnBackZoom)
+
+                mProfileViewModel.me.observe(this, Observer { me ->
+                    for (i in me) {
+                        Glide.with(requireContext())
+                            .load(i.userProfileImage)
+                            .fitCenter()
+                            .into(img)
+                    }
+                })
+                btnBack.setOnClickListener {
+                    dialog.cancel()
                 }
-            })
-            bottomSheetDialog.dismiss()
+                dialog.show()
+                bottomSheetDialog.dismiss()
+            } else {
+                Toast.makeText(context, "Connect Internet To View !", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
