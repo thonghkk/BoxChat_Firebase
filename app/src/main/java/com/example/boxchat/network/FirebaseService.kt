@@ -11,9 +11,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.example.boxchat.R
+import com.example.boxchat.ui.main.MainActivity
+import com.example.boxchat.ui.main.chat.ChatActivity
+import com.example.boxchat.ui.main.friends.ChatWithFriendFragment
 import com.example.boxchat.ui.main.users.StrangerFragment
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -25,7 +29,7 @@ class FirebaseService : FirebaseMessagingService() {
 
     companion object {
         var sharePref: SharedPreferences? = null
-        var token: String?
+        var   token: String?
             get() {
                 return sharePref?.getString("token", "")
             }
@@ -39,17 +43,26 @@ class FirebaseService : FirebaseMessagingService() {
         token = p0
     }
 
+    //handle messages received
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
-        val intent = Intent(this, StrangerFragment::class.java)
+        Log.d("senderid", "onMessageReceived: ${p0.senderId}")
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationId = Random.nextInt()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotification(notificationManager)
         }
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_ONE_SHOT)
+
+       // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
         val notification = NotificationCompat.Builder(this, CHANGNEL_ID)
             .setContentTitle(p0.data["title"])
             .setContentText(p0.data["message"])

@@ -1,6 +1,7 @@
 package com.example.boxchat.ui.main.chat
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
@@ -10,11 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
+import com.example.boxchat.commom.Firebase.Companion.user
 import com.example.boxchat.model.Chat
 import com.example.boxchat.model.Notification
 import com.example.boxchat.model.PushNotification
 import com.example.boxchat.model.User
 import com.example.boxchat.network.RetrofitInstance
+import com.example.boxchat.ui.main.users.ViewStrangerActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -28,8 +31,6 @@ import okhttp3.Dispatcher
 import java.lang.Exception
 
 class ChatActivity : BaseActivity() {
-    private var firebaseUser: FirebaseUser? = null
-    private var reference: DatabaseReference? = null
     private lateinit var mNameFriend: TextView
     private lateinit var mBtnBackMessageFriend: ImageView
     private lateinit var mBtnSendMessage: ImageButton
@@ -37,7 +38,7 @@ class ChatActivity : BaseActivity() {
     private lateinit var mEnterMessage: EditText
     private lateinit var mChatRecycleView: RecyclerView
     private lateinit var mLinearLayoutManager: LinearLayoutManager
-    private lateinit var mChatViewModel:ChatViewModel
+    private lateinit var mChatViewModel: ChatViewModel
     private val chatList = mutableListOf<Chat>()
     private val userList = mutableListOf<User>()
     var topic = ""
@@ -64,8 +65,16 @@ class ChatActivity : BaseActivity() {
         val userId = intent.getStringExtra("userId")
         val userName = intent.getStringExtra("userName")
         val userImg = intent.getStringExtra("userImage")
-        mNameFriend.text = userName
 
+        mAvatarChat.setOnClickListener {
+            val intent = Intent(this, ViewStrangerActivity::class.java)
+            intent.putExtra("userId", userId)
+            intent.putExtra("userName", userName)
+            intent.putExtra("userImage", userImg)
+            startActivity(intent)
+        }
+
+        mNameFriend.text = userName
         if (userImg == "") {
             mAvatarChat.setImageResource(R.mipmap.ic_avatar)
         } else {
@@ -75,30 +84,23 @@ class ChatActivity : BaseActivity() {
                 .into(mAvatarChat)
         }
 
-
-        firebaseUser = FirebaseAuth.getInstance().currentUser!!
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(userId!!)
-
         mBtnSendMessage.setOnClickListener {
             val message: String = mEnterMessage.text.toString()
             if (message.isBlank()) {
-                Toast.makeText(this, "Enter Message", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Enter Message",  Toast.LENGTH_SHORT).show()
                 mEnterMessage.setText("")
             } else {
-                sendMessage(firebaseUser!!.uid, userId, message)
+                sendMessage(user!!.uid, userId!!, message)
                 mEnterMessage.setText("")
-                Log.d("uid", userId)
-                Log.d("uid", firebaseUser!!.uid)
 
                 /*Error : Fixing*/
-//                topic = "/topics/$userId"
-//                PushNotification(Notification(userName!!, message), topic).also {
-//                    sendNotification(it)
-//                }
+                topic = "/topics/$userId"
+                PushNotification(Notification(userName!!, message), topic).also {
+                    sendNotification(it)
+                }
             }
         }
-        readMessage(firebaseUser!!.uid, userId)
-
+        readMessage(user!!.uid, userId!!)
     }
 
     private fun sendMessage(senderId: String, receiverId: String, message: String) {
@@ -110,13 +112,11 @@ class ChatActivity : BaseActivity() {
     }
 
     private fun readMessage(senderId: String, receiverId: String) {
-
         mChatViewModel.refChat.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 chatList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val chat = dataSnapShot.getValue(Chat::class.java)
-
                     if ((chat!!.senderId == senderId && chat.receiverId == receiverId) ||
                         (chat.senderId == receiverId && chat.receiverId == senderId)
                     ) {
@@ -126,21 +126,7 @@ class ChatActivity : BaseActivity() {
                         Log.d("Chat List Size", chatList.size.toString())
                     }
                 }
-
-                mChatViewModel.refChat.addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val user = snapshot.getValue(User::class.java)
-                        if (user?.userId == receiverId ){
-                            userList.add(user)
-                        }
-                        mChatRecycleView.adapter = ChatAdapter(chatList,userList)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-                })
-
+                mChatRecycleView.adapter = ChatAdapter(chatList)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -150,24 +136,25 @@ class ChatActivity : BaseActivity() {
     }
 
     //sent message and show notification on Receiver
-    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val response = RetrofitInstance.notificationApi.postNotification(notification)
-            if (response.isSuccessful) {
-                Toast.makeText(
-                    this@ChatActivity,
-                    " Response : ${Gson().toJson(response)}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                Toast.makeText(
-                    this@ChatActivity,
-                    response.errorBody().toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+    private fun sendNotification(notification: PushNotification) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitInstance.notificationApi.postNotification(notification)
+                if (response.isSuccessful) {
+                    Toast.makeText(
+                        this@ChatActivity,
+                        " Response : ${Gson().toJson(response)}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        this@ChatActivity,
+                        response.errorBody().toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+//                Toast.makeText(this@ChatActivity, "${e.message}", Toast.LENGTH_SHORT).show()
             }
-        } catch (e: Exception) {
-            Toast.makeText(this@ChatActivity, "${e.message}", Toast.LENGTH_SHORT).show()
         }
-    }
 }
