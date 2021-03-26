@@ -1,4 +1,4 @@
-package com.example.boxchat.commom
+package com.example.boxchat.utils
 
 import android.app.Service
 import android.content.Context
@@ -11,7 +11,7 @@ open class CheckNetwork {
         var connectivity: ConnectivityManager? = null
         var info: NetworkInfo? = null
         fun getContextThis(context: Context) {
-            this.context = context
+            Companion.context = context
         }
 
         fun checkNetwork(): Boolean {
