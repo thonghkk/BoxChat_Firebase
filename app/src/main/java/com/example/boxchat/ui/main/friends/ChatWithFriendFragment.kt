@@ -41,8 +41,6 @@ class ChatWithFriendFragment : BaseFragment() {
         } else {
             getFriendLocal()
         }
-
-
     }
 
     private fun getFriend() {
@@ -79,7 +77,5 @@ class ChatWithFriendFragment : BaseFragment() {
                 return false
             }
         })
-
-
     }
 }
