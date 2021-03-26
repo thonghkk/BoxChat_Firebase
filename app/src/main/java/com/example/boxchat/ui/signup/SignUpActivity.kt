@@ -2,31 +2,19 @@ package com.example.boxchat.ui.signup
 
 import android.app.ProgressDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
-import com.example.boxchat.commom.CheckNetwork
-import com.example.boxchat.commom.CheckNetwork.Companion.checkNetwork
-import com.example.boxchat.commom.CheckNetwork.Companion.getContextThis
+import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
+import com.example.boxchat.utils.CheckNetwork.Companion.getContextThis
 import com.example.boxchat.commom.Firebase.Companion.auth
-import com.example.boxchat.commom.Firebase.Companion.user
-import com.example.boxchat.model.Chat
 import com.example.boxchat.ui.login.LoginActivity
-import com.example.boxchat.ui.main.MainActivity
-import com.github.ybq.android.spinkit.sprite.Sprite
-import com.github.ybq.android.spinkit.style.Wave
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 
 class SignUpActivity : BaseActivity() {
 

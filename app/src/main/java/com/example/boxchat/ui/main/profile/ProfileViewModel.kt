@@ -3,13 +3,12 @@ package com.example.boxchat.ui.main.profile
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.*
-import com.example.boxchat.commom.CheckNetwork
-import com.example.boxchat.commom.CheckNetwork.Companion.context
+import com.example.boxchat.utils.CheckNetwork.Companion.context
 import com.example.boxchat.commom.Firebase
 import com.example.boxchat.commom.Firebase.Companion.auth
+import com.example.boxchat.commom.Firebase.Companion.user
 import com.example.boxchat.databaselocal.YourselfLocalDatabase
 import com.example.boxchat.databaselocal.entity.YourselfLocal
-import com.example.boxchat.databaselocal.repository.FriendLocalRepository
 import com.example.boxchat.databaselocal.repository.YourselfLocalRepository
 import com.example.boxchat.model.User
 import com.google.firebase.database.DataSnapshot
@@ -54,7 +53,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val mYourself = dataSnapShot.getValue(YourselfLocal::class.java)
-                    if (mYourself?.userId == auth.uid){
+                    if (mYourself?.userId == user?.uid){
                         addProfile(mYourself!!)
                     }
 

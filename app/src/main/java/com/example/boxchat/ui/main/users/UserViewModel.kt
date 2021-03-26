@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.boxchat.commom.CheckNetwork.Companion.context
+import com.example.boxchat.utils.CheckNetwork.Companion.context
 import com.example.boxchat.commom.Firebase
 import com.example.boxchat.commom.Firebase.Companion.firebaseDatabase
 import com.example.boxchat.commom.Firebase.Companion.user
@@ -17,7 +17,6 @@ import com.example.boxchat.databaselocal.entity.UserLocal
 import com.example.boxchat.model.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -33,7 +32,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     val users = MutableLiveData<List<User>>()
     val friends = MutableLiveData<List<User>>()
     private var friendList = mutableListOf<User>()
-
     private val userList = mutableListOf<User>()
     private val repository: UserLocalRepository
 
@@ -74,7 +72,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         friends.value = user
     }
 
-
     private fun getFriendList() {
         friendRef.child(Firebase.auth.uid!!)
             .addValueEventListener(object : ValueEventListener {
@@ -105,7 +102,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 userList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val mUser = dataSnapShot.getValue(User::class.java)
-                    if (mUser!!.userId != user?.uid) {
+                    if (mUser!!.userId != userId) {
                         userList.add(mUser)
                         addListUser(userList)
                     }
@@ -137,7 +134,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             }
         })
     }
-
 
 
 }

@@ -1,17 +1,14 @@
 package com.example.boxchat.ui.main
 
-import android.app.Service
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
-import com.example.boxchat.commom.CheckNetwork.Companion.checkNetwork
-import com.example.boxchat.commom.CheckNetwork.Companion.getContextThis
+import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
+import com.example.boxchat.utils.CheckNetwork.Companion.getContextThis
 import com.example.boxchat.ui.main.map.MapsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,13 +35,10 @@ class MainActivity : BaseActivity() {
 
         getContextThis(this)
 
-        if (checkNetwork()) {
-            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
-        } else {
+        if (!checkNetwork()) {
             Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
         }
 
-        
     }
 
 }

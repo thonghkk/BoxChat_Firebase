@@ -12,10 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
-import com.example.boxchat.commom.CheckNetwork
-import com.example.boxchat.commom.CheckNetwork.Companion.checkNetwork
-import com.example.boxchat.commom.CheckNetwork.Companion.context
-import com.example.boxchat.commom.Firebase
+import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
+import com.example.boxchat.utils.CheckNetwork.Companion.context
 import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.commom.Firebase.Companion.user
 import com.example.boxchat.commom.KeyAddFriend.Companion.CURRENT_STATE
@@ -23,10 +21,8 @@ import com.example.boxchat.commom.KeyAddFriend.Companion.FRIEND
 import com.example.boxchat.commom.KeyAddFriend.Companion.NOT_SUBMIT_PENDING
 import com.example.boxchat.commom.KeyAddFriend.Companion.PENDING
 import com.example.boxchat.commom.KeyAddFriend.Companion.RECEIVER
-import com.example.boxchat.databaselocal.entity.UserLocal
 import com.example.boxchat.model.User
 import com.example.boxchat.ui.main.chat.ChatActivity
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -57,7 +53,7 @@ class ViewStrangerActivity : BaseActivity() {
             getInfoStranger(strangerId!!)
             mBtnAddFriend.setOnClickListener {
                 mPerformActions(strangerId, strangerName!!, strangerImage!!)
-                mSendSMS(strangerId, strangerName!!, strangerImage!!)
+                mSendSMS(strangerId, strangerName, strangerImage)
             }
             mBtnCancelFriend.setOnClickListener {
                 mUnFriend(strangerId)
@@ -308,7 +304,6 @@ class ViewStrangerActivity : BaseActivity() {
             intent.putExtra("userName", strangerName)
             intent.putExtra("userImage", strangerImage)
             context.startActivity(intent)
-
         }
     }
 

@@ -2,7 +2,6 @@ package com.example.boxchat.ui.main.profile
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -16,14 +15,9 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseFragment
-import com.example.boxchat.commom.CheckNetwork.Companion.checkNetwork
-import com.example.boxchat.commom.CheckNetwork.Companion.getContextThis
-import com.example.boxchat.commom.Firebase.Companion.user
-import com.example.boxchat.model.User
+import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
+import com.example.boxchat.utils.CheckNetwork.Companion.getContextThis
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import de.hdodenhof.circleimageview.CircleImageView

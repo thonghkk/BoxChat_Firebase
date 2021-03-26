@@ -44,6 +44,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     private lateinit var mMapViewModel: MapModel
     private lateinit var mUserViewModel: UserViewModel
     private lateinit var mMap: GoogleMap
+    private lateinit var mMarker: Marker
     private var mUserLocation = mutableListOf<MapLocation>()
     private val userList = mutableListOf<User>()
 
@@ -56,9 +57,8 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         //get Location of user
         getLocation()
-        //set User on map
-        getUsersList()
 
+        //getCurrentLocation()
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -67,6 +67,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             getCurrentLocation()
         } else {
             ActivityCompat.requestPermissions(
+
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_CODE
@@ -94,9 +95,9 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                     //User #
                     onMapReady(googleMap)
                     //firebase
-                    val userId = auth.uid
+                    val userId = user?.uid
                     val ref2 = mMapViewModel.mUserOnReference.child(userId!!)
-                    mMapViewModel.users.observe(this, Observer { user ->
+                    mMapViewModel.me.observe(this, Observer { user ->
                         for (i in user) {
                             val hashMap: HashMap<String, String> = HashMap()
                             hashMap["userId"] = userId
@@ -133,31 +134,13 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                     if (mLocation!!.userId != auth.uid) {
                         mUserLocation.add(mLocation)
                         mMapViewModel.addDriverAvailable(mUserLocation)
+
                     }
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
 
-            }
-        })
-    }
-
-    private fun getUsersList() {
-        mUserViewModel.databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                userList.clear()
-                for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val mUser = dataSnapShot.getValue(User::class.java)
-                    if (mUser!!.userId == user?.uid) {
-                        userList.add(mUser)
-                        mMapViewModel.addListUser(userList)
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@MapsActivity, error.message, Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -166,47 +149,81 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         mMap = googleMap!!
         mMapViewModel.driverAvailable.observe(this@MapsActivity, Observer { driver ->
             for (i in driver) {
-                val a = LatLng(i.latitude.toDouble(), i.longitude.toDouble())
-               mMap.addMarker(
+                val location = LatLng(i.latitude.toDouble(), i.longitude.toDouble())
+                mMarker = mMap.addMarker(
                     MarkerOptions()
-                        .position(a)
+                        .position(location)
                         .title(i.userName)
                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_chat))
-                ).showInfoWindow()
+                )
+                mMarker.tag = 0
 
 //                mMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
 //                    override fun onMarkerClick(p0: Marker?): Boolean {
-//
-//                        mMapViewModel.users.observe(mapFragment, Observer { user ->
-//                            for (j in user) {
+//                        mMapViewModel.user.observe(mapFragment, Observer { users ->
+//                            for (j in users) {
 //                                if (i.userId == j.userId) {
 //                                    val intent =
 //                                        Intent(this@MapsActivity, ViewStrangerActivity::class.java)
-//                                    intent.putExtra("userId", i.userId)
-//                                    intent.putExtra("userName", i.userName)
-//                                    intent.putExtra("userImage", i.userProfileImage)
+//                                    intent.putExtra("userId", j.userId)
+//                                    intent.putExtra("userName", j.userName)
+//                                    intent.putExtra("userImage", j.userProfileImage)
+//                                    Log.d("TAG", "onMarkerClick: $p0")
 //                                    startActivity(intent)
 //                                }
+//                                break
 //                            }
+//
 //                        })
 //
 //                        return true
 //                    }
 //
+//
 //                })
             }
         })
         mMap.setOnMarkerClickListener(this)
+
+//        mMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
+//            override fun onMarkerClick(p0: Marker?): Boolean {
+//                mMapViewModel.users.observe(mapFragment, Observer { users ->
+//                    for (j in users) {
+//                        mMapViewModel.driverAvailable.observe(this@MapsActivity, Observer { driver ->
+//                            for (i in driver){
+//                                if (j.userId == i.userId){
+//                                    val intent =
+//                                        Intent(this@MapsActivity, ViewStrangerActivity::class.java)
+//                                    intent.putExtra("userId", j.userId)
+//                                    intent.putExtra("userName", j.userName)
+//                                    intent.putExtra("userImage", j.userProfileImage)
+//                                    Log.d("TAG", "onMarkerClick: $p0")
+//                                    startActivity(intent)
+//                                }
+//                            }
+//
+//                        })
+//                    }
+//                })
+//
+//                return true
+//            }
+//
+//        })
+
     }
 
-    override fun onMarkerClick(maker: Marker?): Boolean {
-        val a = maker!!.title
-        val intent = Intent(this,StrangerFragment::class.java)
-        intent.putExtra("name",a)
-        startActivity(intent)
-        return false
-     }
+    override fun onMarkerClick(marker: Marker?): Boolean {
+        val clickCount = marker?.tag as Int
+        clickCount.let {
+            val newClickCount = it + 1
+            marker.tag = newClickCount
+            Toast.makeText(this,"Click ok",Toast.LENGTH_SHORT).show()
+        }
 
+
+        return false
+    }
 
 }
 
