@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/mLineaLayout"
+    android:orientation="vertical">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/mImgIcon"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|left"
+        android:layout_margin="5dp"
+        android:src="@drawable/ic_launcher_foreground"
+        tools:ignore="RtlHardcoded" />
+    <TextView
+        android:id="@+id/mNameFriend"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="Nguyen Van Thong"
+        android:textSize="10dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        />
+</LinearLayout>

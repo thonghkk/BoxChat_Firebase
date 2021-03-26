@@ -9,7 +9,9 @@ import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -34,7 +36,7 @@ class FirebaseService : FirebaseMessagingService() {
                 return sharePref?.getString("token", "")
             }
             set(value) {
-                sharePref?.edit()?.putString("Token", value)?.apply()
+                sharePref?.edit()?.putString("token", value)?.apply()
             }
     }
 
@@ -54,25 +56,32 @@ class FirebaseService : FirebaseMessagingService() {
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificationId = Random.nextInt()
+        //val notificationId = Random.nextInt()
+        val notificationId = 0
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotification(notificationManager)
         }
 
-       // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+       // intent.addFlags
+        val bitmap = BitmapFactory.decodeResource(resources,R.mipmap.ic_avatar)
+        val uri = Uri.parse("android.resource://" + packageName + "/" + R.raw.music)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         val notification = NotificationCompat.Builder(this, CHANGNEL_ID)
             .setContentTitle(p0.data["title"])
             .setContentText(p0.data["message"])
+            .setLargeIcon(bitmap)
             .setSmallIcon(R.drawable.ic_notification)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(p0.data["message"]) )
+            .setSound(uri)
             .build()
         notificationManager.notify(notificationId, notification)
     }
 
+    //Create a notification channel
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotification(notificationManager: NotificationManager) {
         val channelName = "ChannelFirebaseChat"
@@ -80,6 +89,7 @@ class FirebaseService : FirebaseMessagingService() {
             description = "My Firebase Chat Description"
             enableLights(true)
             lightColor = Color.WHITE
+
         }
         notificationManager.createNotificationChannel(channel)
     }
