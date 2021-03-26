@@ -20,6 +20,7 @@ class ChatWithFriendFragment : BaseFragment() {
     private lateinit var mFriendRecycleViewCircle: RecyclerView
     private lateinit var mFriendFragmentViewModel: ChatWithFriendViewModel
     private lateinit var mSearchFriends: SearchView
+    private lateinit var friendAdapter: ChatWithFriendAdapter
     private var friendList = mutableListOf<User>()
 
     override fun getLayoutID() = R.layout.fragment_chat
@@ -40,11 +41,15 @@ class ChatWithFriendFragment : BaseFragment() {
         } else {
             getFriendLocal()
         }
+
+
     }
 
     private fun getFriend() {
         mFriendFragmentViewModel.friend.observe(viewLifecycleOwner, Observer { friendList ->
-            mFriendRecycleView.adapter = ChatWithFriendAdapter(friendList)
+            friendAdapter = ChatWithFriendAdapter(friendList)
+            mFriendRecycleView.adapter = friendAdapter
+            searchFriend(friendAdapter)
         })
 
         mFriendFragmentViewModel.friend.observe(viewLifecycleOwner, Observer { friendList ->
@@ -57,33 +62,24 @@ class ChatWithFriendFragment : BaseFragment() {
             viewLifecycleOwner,
             Observer { friend ->
                 mFriendRecycleView.adapter = FriendLocalAdapter(friend)
+
             })
     }
 
-    fun searchFriend(list: MutableList<User>) {
-        val displayList = mutableListOf<User>()
+    private fun searchFriend(friendAdapter: ChatWithFriendAdapter) {
         mSearchFriends.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
+                friendAdapter.filter.filter(query)
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText!!.isNotEmpty()) {
-                    displayList.clear()
-                    val search = newText.toLowerCase(Locale.getDefault())
-                    list.forEach {
-                        if (it.userName.toLowerCase(Locale.getDefault()).contains(search)) {
-                            displayList.add(it)
-                        }
-                    }
-                    mFriendRecycleView.adapter!!.notifyDataSetChanged()
-                } else {
-                    displayList.clear()
-                    displayList.addAll(list)
-                    mFriendRecycleView.adapter!!.notifyDataSetChanged()
-                }
-                return true
+                friendAdapter.filter.filter(newText)
+                return false
             }
         })
+
+
     }
 }
