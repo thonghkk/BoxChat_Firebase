@@ -1,29 +1,23 @@
 package com.example.boxchat.ui.main.friends
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseFragment
-import com.example.boxchat.commom.CheckNetwork.Companion.checkNetwork
-import com.example.boxchat.commom.Firebase.Companion.auth
-import com.example.boxchat.databaselocal.entity.FriendLocal
-import com.example.boxchat.databaselocal.entity.UserLocal
+import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
 import com.example.boxchat.model.User
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import java.util.*
 
 class ChatWithFriendFragment : BaseFragment() {
     private lateinit var mFriendRecycleView: RecyclerView
+    private lateinit var mFriendRecycleViewCircle: RecyclerView
     private lateinit var mFriendFragmentViewModel: ChatWithFriendViewModel
     private lateinit var mSearchFriends: SearchView
     private var friendList = mutableListOf<User>()
@@ -33,62 +27,29 @@ class ChatWithFriendFragment : BaseFragment() {
     @SuppressLint("WrongConstant")
     override fun onViewReady(view: View) {
         mFriendRecycleView = view.findViewById(R.id.mFriendRecycleView)
+        mFriendRecycleViewCircle = view.findViewById(R.id.mFriendRecycleViewCircle)
         mSearchFriends = view.findViewById(R.id.mSearchFriends)
         mFriendRecycleView.layoutManager =
             LinearLayoutManager(context, LinearLayout.VERTICAL, false)
+        mFriendRecycleViewCircle.layoutManager =
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
         mFriendFragmentViewModel = ViewModelProvider(this).get(ChatWithFriendViewModel::class.java)
 
-        addFriendLocal()
-        getFriendList()
         if (checkNetwork()) {
-            mFriendFragmentViewModel.friend.observe(viewLifecycleOwner, Observer { friendList ->
-                mFriendRecycleView.adapter = ChatWithFriendAdapter(friendList)
-            })
+            getFriend()
         } else {
             getFriendLocal()
         }
     }
 
-    private fun getFriendList() {
-        mFriendFragmentViewModel.friendRef.child(auth.uid!!)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.d("snapshot", "User: $snapshot  ")
-                    for (dataSnapShot: DataSnapshot in snapshot.children) {
-                        for (dataSnapShotSecond: DataSnapshot in snapshot.children) {
-                            val mReceive = dataSnapShotSecond.getValue(User::class.java)
-                            Log.d("ttt22", "$dataSnapShotSecond")
-                            friendList.add(mReceive!!)
-                            mFriendFragmentViewModel.addListFriend(friendList)
-                        }
-                        break
-                    }
-                }
+    private fun getFriend() {
+        mFriendFragmentViewModel.friend.observe(viewLifecycleOwner, Observer { friendList ->
+            mFriendRecycleView.adapter = ChatWithFriendAdapter(friendList)
+        })
 
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-                }
-            })
-    }
-
-    private fun addFriendLocal() {
-        mFriendFragmentViewModel.friendRef.child(auth.uid!!)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.d("snapshot", "User: $snapshot  ")
-                    for (dataSnapShot: DataSnapshot in snapshot.children) {
-                        for (dataSnapShotSecond: DataSnapshot in snapshot.children) {
-                            val mReceive = dataSnapShotSecond.getValue(FriendLocal::class.java)
-                            Log.d("ttt22", "$dataSnapShotSecond")
-                            mFriendFragmentViewModel.addFriend(mReceive!!)
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-                }
-            })
+        mFriendFragmentViewModel.friend.observe(viewLifecycleOwner, Observer { friendList ->
+            mFriendRecycleViewCircle.adapter = ChatWithFriendAdapterCircle(friendList)
+        })
     }
 
     private fun getFriendLocal() {

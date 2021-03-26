@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
+import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.commom.Firebase.Companion.user
 import com.example.boxchat.model.Chat
 import com.example.boxchat.model.Notification
@@ -87,20 +88,18 @@ class ChatActivity : BaseActivity() {
         mBtnSendMessage.setOnClickListener {
             val message: String = mEnterMessage.text.toString()
             if (message.isBlank()) {
-                Toast.makeText(this, "Enter Message",  Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Enter Message", Toast.LENGTH_SHORT).show()
                 mEnterMessage.setText("")
             } else {
                 sendMessage(user!!.uid, userId!!, message)
                 mEnterMessage.setText("")
-
-                /*Error : Fixing*/
                 topic = "/topics/$userId"
                 PushNotification(Notification(userName!!, message), topic).also {
                     sendNotification(it)
                 }
             }
         }
-        readMessage(user!!.uid, userId!!)
+        readMessage(auth.uid!!, userId!!)
     }
 
     private fun sendMessage(senderId: String, receiverId: String, message: String) {
