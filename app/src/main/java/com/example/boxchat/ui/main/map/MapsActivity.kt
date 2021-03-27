@@ -50,7 +50,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
     override fun getLayoutID() = R.layout.activity_maps
     override fun onCreateActivity(savedInstanceState: Bundle?) {
-
         mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         client = LocationServices.getFusedLocationProviderClient(this)
         mMapViewModel = ViewModelProvider(this).get(MapModel::class.java)
@@ -93,18 +92,13 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                     //User #
                     onMapReady(googleMap)
                     //firebase
-                    val userId = user?.uid
+                    val userId = auth.uid
                     val ref2 = mMapViewModel.mUserOnReference.child(userId!!)
-                    mMapViewModel.me.observe(this, Observer { user ->
-                        for (i in user) {
-                            val hashMap: HashMap<String, String> = HashMap()
-                            hashMap["userId"] = userId
-                            hashMap["userName"] = i.userName
-                            hashMap["latitude"] = location.latitude.toString()
-                            hashMap["longitude"] = location.longitude.toString()
-                            ref2.setValue(hashMap)
-                        }
-                    })
+                    val hashMap: HashMap<String, String> = HashMap()
+                    hashMap["userId"] = userId
+                    hashMap["latitude"] = location.latitude.toString()
+                    hashMap["longitude"] = location.longitude.toString()
+                    ref2.setValue(hashMap)
                 }
             }
         }
@@ -158,7 +152,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             }
         })
         mMap.setOnMarkerClickListener(this)
-
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
@@ -167,10 +160,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             val newClickCount = it + 1
             marker.tag = newClickCount
 
-            mMapViewModel.me.observe(this, Observer {user->
-                for (i in user){
-                    if (marker.title == i.userId){
-                        val intent = Intent(this,ViewStrangerActivity::class.java)
+            mMapViewModel.me.observe(this, Observer { user ->
+                for (i in user) {
+                    if (marker.title == i.userId && marker.title != auth.uid) {
+                        val intent = Intent(this, ViewStrangerActivity::class.java)
                         intent.putExtra("userId", i.userId)
                         intent.putExtra("userName", i.userName)
                         intent.putExtra("userImage", i.userProfileImage)
@@ -179,7 +172,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                 }
             })
         }
-
         return true
     }
 
