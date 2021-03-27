@@ -19,7 +19,7 @@ class MapModel : ViewModel() {
     var databaseReference = getUser()
     val me = MutableLiveData<List<User>>()
     val user = MutableLiveData<List<User>>()
-    private val userList = mutableListOf<User>()
+    val userList = mutableListOf<User>()
 
     init {
         getYourself()

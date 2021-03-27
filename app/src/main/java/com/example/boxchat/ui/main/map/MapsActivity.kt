@@ -57,7 +57,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         //get Location of user
         getLocation()
-
         //getCurrentLocation()
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -67,7 +66,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             getCurrentLocation()
         } else {
             ActivityCompat.requestPermissions(
-
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_CODE
@@ -153,63 +151,13 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                 mMarker = mMap.addMarker(
                     MarkerOptions()
                         .position(location)
-                        .title(i.userName)
+                        .title(i.userId)
                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_chat))
                 )
                 mMarker.tag = 0
-
-//                mMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
-//                    override fun onMarkerClick(p0: Marker?): Boolean {
-//                        mMapViewModel.user.observe(mapFragment, Observer { users ->
-//                            for (j in users) {
-//                                if (i.userId == j.userId) {
-//                                    val intent =
-//                                        Intent(this@MapsActivity, ViewStrangerActivity::class.java)
-//                                    intent.putExtra("userId", j.userId)
-//                                    intent.putExtra("userName", j.userName)
-//                                    intent.putExtra("userImage", j.userProfileImage)
-//                                    Log.d("TAG", "onMarkerClick: $p0")
-//                                    startActivity(intent)
-//                                }
-//                                break
-//                            }
-//
-//                        })
-//
-//                        return true
-//                    }
-//
-//
-//                })
             }
         })
         mMap.setOnMarkerClickListener(this)
-
-//        mMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
-//            override fun onMarkerClick(p0: Marker?): Boolean {
-//                mMapViewModel.users.observe(mapFragment, Observer { users ->
-//                    for (j in users) {
-//                        mMapViewModel.driverAvailable.observe(this@MapsActivity, Observer { driver ->
-//                            for (i in driver){
-//                                if (j.userId == i.userId){
-//                                    val intent =
-//                                        Intent(this@MapsActivity, ViewStrangerActivity::class.java)
-//                                    intent.putExtra("userId", j.userId)
-//                                    intent.putExtra("userName", j.userName)
-//                                    intent.putExtra("userImage", j.userProfileImage)
-//                                    Log.d("TAG", "onMarkerClick: $p0")
-//                                    startActivity(intent)
-//                                }
-//                            }
-//
-//                        })
-//                    }
-//                })
-//
-//                return true
-//            }
-//
-//        })
 
     }
 
@@ -218,11 +166,21 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         clickCount.let {
             val newClickCount = it + 1
             marker.tag = newClickCount
-            Toast.makeText(this,"Click ok",Toast.LENGTH_SHORT).show()
+
+            mMapViewModel.me.observe(this, Observer {user->
+                for (i in user){
+                    if (marker.title == i.userId){
+                        val intent = Intent(this,ViewStrangerActivity::class.java)
+                        intent.putExtra("userId", i.userId)
+                        intent.putExtra("userName", i.userName)
+                        intent.putExtra("userImage", i.userProfileImage)
+                        startActivity(intent)
+                    }
+                }
+            })
         }
 
-
-        return false
+        return true
     }
 
 }
