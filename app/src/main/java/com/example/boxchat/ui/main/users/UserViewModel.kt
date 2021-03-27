@@ -76,15 +76,13 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         friendRef.child(Firebase.auth.uid!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    friendList.clear()
                     Log.d("snapshot", "User: $snapshot  ")
                     for (dataSnapShot: DataSnapshot in snapshot.children) {
-                        for (dataSnapShotSecond: DataSnapshot in snapshot.children) {
-                            val mReceive = dataSnapShotSecond.getValue(User::class.java)
-                            Log.d("ttt22", "$dataSnapShotSecond")
-                            friendList.add(mReceive!!)
-                            addListFriend(friendList)
-                        }
-                        break
+                        val mReceive = dataSnapShot.getValue(User::class.java)
+                        Log.d("ttt22", "$dataSnapShot")
+                        friendList.add(mReceive!!)
+                        addListFriend(friendList)
                     }
                 }
 
@@ -102,7 +100,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 userList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val mUser = dataSnapShot.getValue(User::class.java)
-                    if (mUser!!.userId != userId) {
+                    if (mUser!!.userId != user!!.uid) {
                         userList.add(mUser)
                         addListUser(userList)
                     }

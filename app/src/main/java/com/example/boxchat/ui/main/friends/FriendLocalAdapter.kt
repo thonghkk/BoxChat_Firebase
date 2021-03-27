@@ -38,7 +38,7 @@ class FriendLocalAdapter(private val user: List<FriendLocal>) : RecyclerView.Ada
             Log.d("test", url)
 
             mLayoutUser.setOnClickListener {
-                Toast.makeText(itemView.context,"Internet access for texting",Toast.LENGTH_SHORT).show()
+                Toast.makeText(itemView.context,"Internet access for text",Toast.LENGTH_SHORT).show()
             }
         }
     }

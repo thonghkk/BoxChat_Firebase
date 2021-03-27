@@ -13,6 +13,7 @@ import com.example.boxchat.R
 import com.example.boxchat.base.BaseFragment
 import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
 import com.example.boxchat.model.User
+import okhttp3.internal.notify
 import java.util.*
 
 class ChatWithFriendFragment : BaseFragment() {
@@ -48,10 +49,12 @@ class ChatWithFriendFragment : BaseFragment() {
             friendAdapter = ChatWithFriendAdapter(friendList)
             mFriendRecycleView.adapter = friendAdapter
             searchFriend(friendAdapter)
+            friendAdapter.notifyDataSetChanged()
         })
 
         mFriendFragmentViewModel.friend.observe(viewLifecycleOwner, Observer { friendList ->
-            mFriendRecycleViewCircle.adapter = ChatWithFriendAdapterCircle(friendList)
+            val friendAdapter = ChatWithFriendAdapterCircle(friendList)
+            mFriendRecycleViewCircle.adapter = friendAdapter
         })
     }
 
@@ -59,14 +62,14 @@ class ChatWithFriendFragment : BaseFragment() {
         mFriendFragmentViewModel.readAllDataFromFriend.observe(
             viewLifecycleOwner,
             Observer { friend ->
-                mFriendRecycleView.adapter = FriendLocalAdapter(friend)
-
+                val mFriendLocalAdapter = FriendLocalAdapter(friend)
+                mFriendRecycleView.adapter =  mFriendLocalAdapter
+                mFriendLocalAdapter.notifyDataSetChanged()
             })
     }
 
     private fun searchFriend(friendAdapter: ChatWithFriendAdapter) {
         mSearchFriends.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
             override fun onQueryTextSubmit(query: String?): Boolean {
                 friendAdapter.filter.filter(query)
                 return false

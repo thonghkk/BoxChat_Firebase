@@ -12,7 +12,8 @@ import com.example.boxchat.R
 import com.example.boxchat.model.User
 import com.example.boxchat.ui.main.chat.ChatActivity
 
-class ChatWithFriendAdapter(private var user: List<User>) : RecyclerView.Adapter<ChatWithFriendAdapter.ViewHolder>(), Filterable {
+class ChatWithFriendAdapter(private var user: List<User>) :
+    RecyclerView.Adapter<ChatWithFriendAdapter.ViewHolder>(), Filterable {
     private val userOld: List<User> = user
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -61,10 +62,10 @@ class ChatWithFriendAdapter(private var user: List<User>) : RecyclerView.Adapter
                 val strSearch = constraint.toString()
                 if (strSearch.isEmpty()) {
                     user = userOld
-                }else{
+                } else {
                     val list = mutableListOf<User>()
-                    for (i in userOld){
-                        if (i.userName.toLowerCase().contains(strSearch.toLowerCase())){
+                    for (i in userOld) {
+                        if (i.userName.toLowerCase().contains(strSearch.toLowerCase())) {
                             list.add(i)
                         }
                     }

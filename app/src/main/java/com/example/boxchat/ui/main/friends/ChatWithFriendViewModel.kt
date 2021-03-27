@@ -61,15 +61,13 @@ class ChatWithFriendViewModel(application: Application) : AndroidViewModel(appli
         friendRef.child(Firebase.auth.uid!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    friendList.clear()
                     Log.d("snapshot", "User: $snapshot  ")
                     for (dataSnapShot: DataSnapshot in snapshot.children) {
-                        for (dataSnapShotSecond: DataSnapshot in snapshot.children) {
-                            val mReceive = dataSnapShotSecond.getValue(User::class.java)
-                            Log.d("ttt22", "$dataSnapShotSecond")
-                            friendList.add(mReceive!!)
-                            addListFriend(friendList)
-                        }
-                        break
+                        val mReceive = dataSnapShot.getValue(User::class.java)
+                        Log.d("ttt22", "$dataSnapShot")
+                        friendList.add(mReceive!!)
+                        addListFriend(friendList)
                     }
                 }
 
@@ -85,11 +83,8 @@ class ChatWithFriendViewModel(application: Application) : AndroidViewModel(appli
                 override fun onDataChange(snapshot: DataSnapshot) {
                     Log.d("snapshot", "User: $snapshot  ")
                     for (dataSnapShot: DataSnapshot in snapshot.children) {
-                        for (dataSnapShotSecond: DataSnapshot in snapshot.children) {
-                            val mReceive = dataSnapShotSecond.getValue(FriendLocal::class.java)
-                            Log.d("ttt22", "$dataSnapShotSecond")
-                            addFriend(mReceive!!)
-                        }
+                        val mReceive = dataSnapShot.getValue(FriendLocal::class.java)
+                        addFriend(mReceive!!)
                     }
                 }
 
