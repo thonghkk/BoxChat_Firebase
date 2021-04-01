@@ -50,5 +50,21 @@
         android:text="@string/sign_up"
         android:textColor="@color/white" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_line_close"
+        />
+
+    <Button
+        android:id="@+id/btnLoginWithGoogle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:drawableStart="@drawable/ic_lock"
+        android:text="Login With Google"
+        android:padding="10dp"
+        />
+
 
 </LinearLayout>
