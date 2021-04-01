@@ -13,4 +13,7 @@ class YourselfLocalRepository(private val yourselfLocalDao: YourselfLocalDao) {
         yourselfLocalDao.addYourselfLocal(yourselfLocal)
     }
 
+    suspend fun deleteAllYourself() {
+        yourselfLocalDao.deleteAllYourSelf()
+    }
 }

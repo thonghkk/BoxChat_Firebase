@@ -10,4 +10,8 @@ class FriendLocalRepository(private val friendLocalDao: FriendLocalDao) {
     suspend fun addFriend(friendLocal: FriendLocal) {
         friendLocalDao.addFriendLocal(friendLocal)
     }
+
+    suspend fun deleteAllFriend(){
+        friendLocalDao.deleteAllFriend()
+    }
 }

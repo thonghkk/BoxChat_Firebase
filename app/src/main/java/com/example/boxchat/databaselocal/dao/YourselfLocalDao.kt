@@ -14,6 +14,9 @@ interface YourselfLocalDao {
 
     @Query("SELECT * FROM yourself_table")
     fun readAllDataFromYourself(): LiveData<List<YourselfLocal>>
+
+    @Query("DELETE FROM yourself_table ")
+    suspend fun deleteAllYourSelf()
 }
 
 

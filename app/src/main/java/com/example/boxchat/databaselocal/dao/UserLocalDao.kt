@@ -16,4 +16,8 @@ interface UserLocalDao {
     @Query("SELECT * FROM user_table")
     fun readAllDataFromUser(): LiveData<List<UserLocal>>
 
+
+    @Query("DELETE FROM user_table ")
+    suspend fun deleteAllUser()
+
 }

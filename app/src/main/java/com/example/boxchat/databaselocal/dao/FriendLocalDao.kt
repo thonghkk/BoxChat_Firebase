@@ -1,10 +1,7 @@
 package com.example.boxchat.databaselocal.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.boxchat.databaselocal.entity.FriendLocal
 
 @Dao
@@ -14,5 +11,11 @@ interface FriendLocalDao {
 
     @Query("SELECT * FROM friend_table")
     fun readAllDataFromFriend(): LiveData<List<FriendLocal>>
+
+    @Delete
+    suspend fun deleteFriendLocal(friendLocal: FriendLocal)
+
+    @Query("DELETE FROM friend_table ")
+    suspend fun deleteAllFriend()
 
 }

@@ -11,4 +11,8 @@ class UserLocalRepository(private val userLocalDao: UserLocalDao) {
     suspend fun addUser(userLocal: UserLocal) {
         userLocalDao.addUserLocal(userLocal)
     }
+
+    suspend fun deleteAllUser() {
+        userLocalDao.deleteAllUser()
+    }
 }
