@@ -18,7 +18,7 @@ class MapModel : ViewModel() {
     val driverAvailable = MutableLiveData<List<MapLocation>>()
     var databaseReference = getUser()
     val me = MutableLiveData<List<User>>()
-    val user = MutableLiveData<List<User>>()
+    val mUser = MutableLiveData<List<User>>()
     val userList = mutableListOf<User>()
 
     init {
@@ -43,7 +43,7 @@ class MapModel : ViewModel() {
     }
 
     fun addListUser(user: List<User>) {
-        me.value = user
+        mUser.value = user
     }
 
     private fun getYourself() {

@@ -155,23 +155,28 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
-        val clickCount = marker?.tag as Int
-        clickCount.let {
-            val newClickCount = it + 1
-            marker.tag = newClickCount
+        try {
+            val clickCount = marker?.tag as Int
+            clickCount.let {
+                val newClickCount = it + 1
+                marker.tag = newClickCount
 
-            mMapViewModel.me.observe(this, Observer { user ->
-                for (i in user) {
-                    if (marker.title == i.userId && marker.title != auth.uid) {
-                        val intent = Intent(this, ViewStrangerActivity::class.java)
-                        intent.putExtra("userId", i.userId)
-                        intent.putExtra("userName", i.userName)
-                        intent.putExtra("userImage", i.userProfileImage)
-                        startActivity(intent)
+                mMapViewModel.mUser.observe(this, Observer { user ->
+                    for (i in user) {
+                        if (marker.title == i.userId) {
+                            val intent = Intent(this, ViewStrangerActivity::class.java)
+                            intent.putExtra("userId", i.userId)
+                            intent.putExtra("userName", i.userName)
+                            intent.putExtra("userImage", i.userProfileImage)
+                            startActivity(intent)
+                        }
                     }
-                }
-            })
+                })
+            }
+        }catch (e:Exception){
+            Toast.makeText(this,"That Are You !!!",Toast.LENGTH_SHORT).show()
         }
+
         return true
     }
 
