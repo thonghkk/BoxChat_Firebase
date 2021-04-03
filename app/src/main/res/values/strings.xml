@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BoxChat</string>
+    <string name="app_name">Learning English Together</string>
     <string name="sign_up">Sign Up</string>
     <string name="enter_name">Enter Name</string>
     <string name="enter_message">Enter Message…</string>
@@ -12,7 +12,9 @@
     <string name="txt_profile">Profile</string>
     <string name="txt_your_avatar">Your Avatar</string>
     <string name="txt_message">Message</string>
+    <string name="txt_edit_profile">Edit Profile</string>
     <string name="view_image">View Profile Picture</string>
+    <string name="view_camera">Camera</string>
     <string name="change_profile_image">Change Profile Picture</string>
     <string name="txt_add_friend">Add Friend</string>
     <string name="txt_un_friend">UnFriend</string>
@@ -25,6 +27,9 @@
     <string name="title">Chat With Friends</string>
     <string name="txt_progressBar">Please Wait...</string>
     <string name="txt_title">Looking For English Classmates</string>
+    <string name="txt_home_town">Home Town</string>
+    <string name="txt_birth_day">BirthDay</string>
+    <string name="txt_english_certificate">English Certificate</string>
 
     //menu
     <string name="txt_chat">Chat</string>
