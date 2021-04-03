@@ -61,14 +61,13 @@ class StrangerFragment : BaseFragment() {
         })
     }
 
-
     private fun getUserLocal() {
         mUserViewModel.readAllData.observe(viewLifecycleOwner, Observer { user ->
             mRecyclerUserView.adapter = UserLocalAdapter(user)
         })
     }
 
-    fun searchStranger(userAdapter: UserAdapter){
+    private fun searchStranger(userAdapter: UserAdapter){
         mSearchStranger.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 userAdapter.filter.filter(query)
@@ -82,5 +81,4 @@ class StrangerFragment : BaseFragment() {
         })
 
     }
-
 }
