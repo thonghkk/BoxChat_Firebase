@@ -4,23 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mLineaLayout"
     android:orientation="vertical">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/mImgIcon"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:layout_gravity="top|left"
-        android:layout_margin="5dp"
-        android:src="@drawable/ic_launcher_foreground"
-        tools:ignore="RtlHardcoded" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/mImgIcon"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_gravity="top|left"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_launcher_foreground"
+            tools:ignore="RtlHardcoded" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/mImgStatusOnCircle"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@color/status_user"
+            android:layout_gravity="bottom|right"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone"
+            tools:ignore="NotSibling,RtlHardcoded" />
+    </FrameLayout>
+
     <TextView
         android:id="@+id/mNameFriend"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:text="Nguyen Van Thong"
-        android:textSize="10dp"
+        android:textSize="10sp"
         android:gravity="center"
         android:layout_gravity="center"
         />
