@@ -1,10 +1,12 @@
 package com.example.boxchat.ui.main.chat
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,11 +19,17 @@ import com.example.boxchat.model.Chat
 import com.example.boxchat.model.Notification
 import com.example.boxchat.model.PushNotification
 import com.example.boxchat.model.User
+import com.example.boxchat.network.FirebaseService
 import com.example.boxchat.network.RetrofitInstance
+import com.example.boxchat.ui.main.MainActivity
+import com.example.boxchat.ui.main.friends.ChatWithFriendViewModel
 import com.example.boxchat.ui.main.users.ViewStrangerActivity
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
@@ -58,49 +66,76 @@ class ChatActivity : BaseActivity() {
 
         mLinearLayoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         mChatRecycleView.layoutManager = mLinearLayoutManager
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/${user?.uid}")
+        //get value SharedPreferences
+        FirebaseService.sharePref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
+            FirebaseService.token = it.result.token
+            Log.d("token", it.result.token)
+        }
 
         mBtnBackMessageFriend.setOnClickListener {
-            onBackPressed()
+            startActivity(Intent(this, MainActivity::class.java))
         }
 
         val userId = intent.getStringExtra("userId")
-        val userName = intent.getStringExtra("userName")
-        val userImg = intent.getStringExtra("userImage")
 
         mAvatarChat.setOnClickListener {
             val intent = Intent(this, ViewStrangerActivity::class.java)
-            intent.putExtra("userId", userId)
-            intent.putExtra("userName", userName)
-            intent.putExtra("userImage", userImg)
+            intent.apply {
+                putExtra("userId", userId)
+                mChatViewModel.friend.observe(this@ChatActivity, Observer { friend ->
+                    for (i in friend) {
+                        if (i.userId == userId) {
+                            putExtra("userName", i.userName)
+                            putExtra("userImage", i.userProfileImage)
+                            putExtra("userHomeTown", i.userHomeTown)
+                            putExtra("userBirthDay", i.userBirthDay)
+                            putExtra("userEnglishCertificate", i.userEnglishCertificate)
+                        }
+                    }
+                })
+            }
             startActivity(intent)
         }
 
-        mNameFriend.text = userName
-        if (userImg == "") {
-            mAvatarChat.setImageResource(R.mipmap.ic_avatar)
-        } else {
-            Glide.with(this@ChatActivity)
-                .load(userImg)
-                .fitCenter()
-                .into(mAvatarChat)
-        }
+        mChatViewModel.friend.observe(this, Observer { friend ->
+            for (j in friend) {
+                if (j.userId == userId) {
+                    mNameFriend.text = j.userName
+                    if (j.userProfileImage == "") {
+                        mAvatarChat.setImageResource(R.mipmap.ic_avatar)
+                    } else {
+                        Glide.with(this@ChatActivity)
+                            .load(j.userProfileImage)
+                            .fitCenter()
+                            .into(mAvatarChat)
+                    }
+                    sendMessage(j.userId, j.userName)
+                }
+            }
+        })
+        readMessage(auth.uid!!, userId!!)
+    }
 
+    private fun sendMessage(userId: String, userName: String) {
         mBtnSendMessage.setOnClickListener {
             val message: String = mEnterMessage.text.toString()
             if (message.isBlank()) {
                 Toast.makeText(this, "Enter Message", Toast.LENGTH_SHORT).show()
                 mEnterMessage.setText("")
             } else {
-                sendMessage(user!!.uid, userId!!, message)
+                sendMessage(auth.uid!!, userId, message)
                 mEnterMessage.setText("")
                 topic = "/topics/$userId"
-                PushNotification(Notification(userName!!, message), topic).also {
+                PushNotification(Notification(userName, message, auth.uid!!), topic).also {
                     sendNotification(it)
                 }
+
             }
         }
-        readMessage(auth.uid!!, userId!!)
     }
+
 
     private fun sendMessage(senderId: String, receiverId: String, message: String) {
         val hashMap: HashMap<String, String> = HashMap()
@@ -129,7 +164,7 @@ class ChatActivity : BaseActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
         })
     }
@@ -156,4 +191,5 @@ class ChatActivity : BaseActivity() {
 //                Toast.makeText(this@ChatActivity, "${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
+
 }

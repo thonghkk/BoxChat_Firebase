@@ -1,3 +1,3 @@
 package com.example.boxchat.model
 
-data class Notification(val title: String, val message: String)
+data class Notification(val title: String, val message: String, var userId: String = "")

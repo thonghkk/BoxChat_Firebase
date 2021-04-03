@@ -38,8 +38,6 @@ class ChatWithFriendAdapter(private var user: List<User>) :
             mLayoutUser.setOnClickListener {
                 val intent = Intent(itemView.context, ChatActivity::class.java)
                 intent.putExtra("userId", friend.userId)
-                intent.putExtra("userName", friend.userName)
-                intent.putExtra("userImage", friend.userProfileImage)
                 itemView.context.startActivity(intent)
             }
         }
