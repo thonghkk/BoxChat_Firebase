@@ -28,7 +28,8 @@
             android:padding="10dp"
             android:layout_marginLeft="20dp"
             android:text="@string/txt_name_user"
-            android:textStyle="normal|bold"
+            android:autoLink="all"
+            android:textColor="@color/black"
             tools:ignore="RtlHardcoded" />
 
     </LinearLayout>
