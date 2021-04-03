@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 class ChatWithFriendViewModel(application: Application) : AndroidViewModel(application) {
 
     val friendRef = getFriendReference()
+    val userRef = getUserReference()
 
     //list Friends
     val friend = MutableLiveData<List<User>>()
@@ -45,6 +46,9 @@ class ChatWithFriendViewModel(application: Application) : AndroidViewModel(appli
 
     private fun getFriendReference(): DatabaseReference {
         return Firebase.firebaseDatabase.getReference("Friends")
+    }
+    private fun getUserReference(): DatabaseReference {
+        return Firebase.firebaseDatabase.getReference("Users")
     }
 
     fun addFriend(friendLocal: FriendLocal) {

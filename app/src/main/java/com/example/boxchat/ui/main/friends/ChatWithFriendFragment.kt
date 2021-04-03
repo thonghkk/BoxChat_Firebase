@@ -1,6 +1,7 @@
 package com.example.boxchat.ui.main.friends
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.SearchView
@@ -11,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseFragment
+import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
 import com.example.boxchat.model.User
 import okhttp3.internal.notify
 import java.util.*
+import kotlin.collections.HashMap
 
 class ChatWithFriendFragment : BaseFragment() {
     private lateinit var mFriendRecycleView: RecyclerView

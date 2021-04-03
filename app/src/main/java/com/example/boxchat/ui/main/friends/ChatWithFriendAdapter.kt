@@ -26,10 +26,13 @@ class ChatWithFriendAdapter(private var user: List<User>) :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val chatList = mutableListOf<Chat>()
+        private val userList = mutableListOf<User>()
         private val txtUserName: TextView = itemView.findViewById(R.id.mNameFriends)
         private val imgAvatar: ImageView = itemView.findViewById(R.id.mAvatarFriend)
         private val mMessageLast: TextView = itemView.findViewById(R.id.mMessageLast)
         private val mLayoutUser: LinearLayout = itemView.findViewById(R.id.mLayoutFriend)
+        private var mImgStatusOn: ImageView = itemView.findViewById(R.id.mImgStatusOn)
+        private var mImgStatusOff: ImageView = itemView.findViewById(R.id.mImgStatusOff)
 
         fun bindUser(friend: User) {
             txtUserName.text = friend.userName
@@ -38,7 +41,6 @@ class ChatWithFriendAdapter(private var user: List<User>) :
             val url = friend.userProfileImage
 
             lastMessage(friend.userId, mMessageLast)
-
             Glide.with(itemView)
                 .load(url)
                 .placeholder(R.mipmap.ic_avatar)
@@ -52,6 +54,28 @@ class ChatWithFriendAdapter(private var user: List<User>) :
                 intent.putExtra("userId", friend.userId)
                 itemView.context.startActivity(intent)
             }
+            Firebase.firebaseDatabase.getReference("Users")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (dataSnapShot: DataSnapshot in snapshot.children) {
+                            val users = dataSnapShot.getValue(User::class.java)
+                            if (users?.userId == friend.userId) {
+                                userList.add(users)
+                            }
+                        }
+                        for (i in userList) {
+                            if (i.statusExist == "online") {
+                                mImgStatusOn.visibility = View.VISIBLE
+                                mImgStatusOff.visibility = View.GONE
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
         }
 
         // get last message for user

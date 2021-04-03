@@ -5,11 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
+import com.example.boxchat.commom.Firebase
 import com.example.boxchat.model.User
 import com.example.boxchat.ui.main.chat.ChatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 class ChatWithFriendAdapterCircle(private var friends:List<User>): RecyclerView.Adapter<ChatWithFriendAdapterCircle.ViewHolder>() ,Filterable {
 
@@ -19,6 +24,9 @@ class ChatWithFriendAdapterCircle(private var friends:List<User>): RecyclerView.
         private val imgAvatar: ImageView = itemView.findViewById(R.id.mImgIcon)
         private val mNameFriend: TextView = itemView.findViewById(R.id.mNameFriend)
         private val mLineaLayout: LinearLayout = itemView.findViewById(R.id.mLineaLayout)
+        private val mImgStatusOnCircle:ImageView = itemView.findViewById(R.id.mImgStatusOnCircle)
+        private val userList = mutableListOf<User>()
+        //private val mChatWithFriendViewModel :ChatWithFriendViewModel = ViewModelProvider(itemView.context).get(ChatWithFriendViewModel::class.java)
 
         fun bindItems(friend:User){
             mNameFriend.text = friend.userName
@@ -37,6 +45,30 @@ class ChatWithFriendAdapterCircle(private var friends:List<User>): RecyclerView.
                 intent.putExtra("userImage",friend.userProfileImage)
                 itemView.context.startActivity(intent)
             }
+
+            //get status of user
+            Firebase.firebaseDatabase.getReference("Users")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (dataSnapShot: DataSnapshot in snapshot.children) {
+                            val users = dataSnapShot.getValue(User::class.java)
+                            if (users?.userId == friend.userId) {
+                                userList.add(users)
+                            }
+                        }
+                        for (i in userList) {
+                            if (i.statusExist == "online") {
+                                mImgStatusOnCircle.visibility = View.VISIBLE
+
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
 
         }
     }
