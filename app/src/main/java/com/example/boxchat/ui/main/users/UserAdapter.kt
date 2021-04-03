@@ -5,10 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
@@ -16,7 +13,8 @@ import com.example.boxchat.databaselocal.entity.UserLocal
 import com.example.boxchat.model.User
 import com.example.boxchat.ui.main.chat.ChatActivity
 
-class UserAdapter(private val user: List<User>) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
+class UserAdapter(private var user: List<User>) : RecyclerView.Adapter<UserAdapter.ViewHolder>(),Filterable {
+    private val userOld: List<User> = user
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val txtUserName: TextView = itemView.findViewById(R.id.mNameUser)
         private val imgAvatar: ImageView = itemView.findViewById(R.id.mAvatar)
@@ -53,5 +51,33 @@ class UserAdapter(private val user: List<User>) : RecyclerView.Adapter<UserAdapt
     }
 
     override fun getItemCount() = user.size
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults? {
+                val strSearch = constraint.toString()
+                if (strSearch.isEmpty()) {
+                    user = userOld
+                } else {
+                    val list = mutableListOf<User>()
+                    for (i in userOld) {
+                        if (i.userName.toLowerCase().contains(strSearch.toLowerCase())) {
+                            list.add(i)
+                        }
+                    }
+                    user = list
+                }
+
+                val filterResult = FilterResults()
+                filterResult.values = user
+                return filterResult
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                user = results?.values as List<User>
+                notifyDataSetChanged()
+            }
+
+        }
+    }
 
 }

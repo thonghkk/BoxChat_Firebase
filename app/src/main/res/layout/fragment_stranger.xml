@@ -6,6 +6,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center|left"
+        android:paddingLeft="40dp"
+        android:text="@string/txt_search_stranger"
+        android:textSize="20sp"
+        android:textStyle="bold|normal"
+        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+    <android.widget.SearchView
+        android:id="@+id/mSearchStranger"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/background_search"
+        android:iconifiedByDefault="true" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mRecycleUsersView"
         android:layout_width="match_parent"
