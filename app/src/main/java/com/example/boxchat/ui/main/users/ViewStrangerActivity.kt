@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -21,21 +22,32 @@ import com.example.boxchat.commom.KeyAddFriend.Companion.FRIEND
 import com.example.boxchat.commom.KeyAddFriend.Companion.NOT_SUBMIT_PENDING
 import com.example.boxchat.commom.KeyAddFriend.Companion.PENDING
 import com.example.boxchat.commom.KeyAddFriend.Companion.RECEIVER
+import com.example.boxchat.model.Notification
+import com.example.boxchat.model.PushNotification
 import com.example.boxchat.model.User
+import com.example.boxchat.network.RetrofitInstance
 import com.example.boxchat.ui.main.chat.ChatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.google.gson.Gson
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class ViewStrangerActivity : BaseActivity() {
     private lateinit var mAvatarStranger: CircleImageView
     private lateinit var mNameStranger: TextView
+    private lateinit var mViewHomeTown: TextView
+    private lateinit var mViewBirthDay: TextView
+    private lateinit var mViewEnglishCertificate: TextView
     private lateinit var mBtnAddFriend: Button
     private lateinit var mBtnCancelFriend: Button
     private lateinit var mUserViewModel: UserViewModel
     private var mCurrentState = "NOTHING_HAPPEN"
-    val listUser = mutableListOf<User>()
+    var topic = ""
 
     override fun getLayoutID() = R.layout.activity_view_stranger
     override fun onCreateActivity(savedInstanceState: Bundle?) {
@@ -43,11 +55,17 @@ class ViewStrangerActivity : BaseActivity() {
         mNameStranger = findViewById(R.id.mNameStranger)
         mBtnAddFriend = findViewById(R.id.mBtnAddFriend)
         mBtnCancelFriend = findViewById(R.id.mBtnCancelFriend)
+        mViewBirthDay = findViewById(R.id.mViewBirthDay)
+        mViewHomeTown = findViewById(R.id.mViewHomeTown)
+        mViewEnglishCertificate = findViewById(R.id.mViewEnglishCertificate)
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         val strangerId = intent.getStringExtra("userId")
         val strangerName = intent.getStringExtra("userName")
         val strangerImage = intent.getStringExtra("userImage")
+        val strangerHomeTown = intent.getStringExtra("userHomeTown")
+        val strangerBirthDay = intent.getStringExtra("userBirthDay")
+        val strangerEnglishCertificate = intent.getStringExtra("userEnglishCertificate")
 
         if (checkNetwork()) {
             getInfoStranger(strangerId!!)
@@ -77,6 +95,23 @@ class ViewStrangerActivity : BaseActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val stranger = snapshot.getValue(User::class.java)
                     mNameStranger.text = stranger!!.userName
+
+                    if (stranger.userBirthDay == null) {
+                        mViewBirthDay.text = ""
+                    } else {
+                        mViewBirthDay.text = stranger.userBirthDay
+                    }
+                    if (stranger.userHomeTown == null) {
+                        mViewHomeTown.text = ""
+                    } else {
+                        mViewHomeTown.text = stranger.userHomeTown
+                    }
+                    if (stranger.userEnglishCertificate == null) {
+                        mViewEnglishCertificate.text = ""
+                    } else {
+                        mViewEnglishCertificate.text = stranger.userEnglishCertificate
+
+                    }
                     if (stranger.userProfileImage == "") {
                         mAvatarStranger.setImageResource(R.mipmap.ic_avatar)
                         Log.d("Test", stranger.userProfileImage)
@@ -172,6 +207,17 @@ class ViewStrangerActivity : BaseActivity() {
                         mBtnCancelFriend.visibility = View.GONE
                         mCurrentState = NOT_SUBMIT_PENDING
                         mBtnAddFriend.text = resources.getString(R.string.txt_cancel_request_friend)
+                        //push notification
+                        topic = "/topics/$strangerId"
+                        PushNotification(
+                            Notification(
+                                strangerName,
+                                "Send friend request", auth.uid!!
+                            ), topic
+                        ).also {
+                            sendNotification(it)
+                        }
+
                     } else {
                         Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                     }
@@ -243,7 +289,6 @@ class ViewStrangerActivity : BaseActivity() {
                             })
                     }
                 }
-
         }
     }
 
@@ -307,5 +352,27 @@ class ViewStrangerActivity : BaseActivity() {
         }
     }
 
+    //sent make friend and show notification on Receiver
+    private fun sendNotification(notification: PushNotification) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitInstance.notificationApi.postNotification(notification)
+                if (response.isSuccessful) {
+                    Toast.makeText(
+                        this@ViewStrangerActivity,
+                        " Response : ${Gson().toJson(response)}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        this@ViewStrangerActivity,
+                        response.errorBody().toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+//                Toast.makeText(this@ChatActivity, "${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
 }
 

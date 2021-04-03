@@ -35,6 +35,9 @@ class UserAdapter(private val user: List<User>) : RecyclerView.Adapter<UserAdapt
                 intent.putExtra("userId", user.userId)
                 intent.putExtra("userName", user.userName)
                 intent.putExtra("userImage", user.userProfileImage)
+                intent.putExtra("userHomeTown", user.userHomeTown)
+                intent.putExtra("userBirthDay", user.userBirthDay)
+                intent.putExtra("userEnglishCertificate", user.userEnglishCertificate)
                 itemView.context.startActivity(intent)
             }
         }

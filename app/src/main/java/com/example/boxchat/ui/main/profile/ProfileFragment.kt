@@ -1,6 +1,5 @@
 package com.example.boxchat.ui.main.profile
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
@@ -15,6 +14,7 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseFragment
+import com.example.boxchat.commom.Firebase
 import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
 import com.example.boxchat.utils.CheckNetwork.Companion.getContextThis
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -25,8 +25,8 @@ import java.lang.Exception
 import java.util.*
 import kotlin.collections.HashMap
 
-const val PICK_IMAGE_REQUEST = 101
-
+const val PICK_IMAGE_REQUEST = 99
+const val PICTURE = 999
 
 class ProfileFragment : BaseFragment() {
 
@@ -39,6 +39,9 @@ class ProfileFragment : BaseFragment() {
     private lateinit var mUserAvatar: CircleImageView
     private lateinit var mBtnSaveProfile: Button
     private lateinit var mProgress: ProgressBar
+    private lateinit var mHomeTown: TextView
+    private lateinit var mBirthDay: TextView
+    private lateinit var mEnglishCertificate: TextView
 
     override fun getLayoutID() = R.layout.fragment_profile
     override fun onViewReady(view: View) {
@@ -46,6 +49,9 @@ class ProfileFragment : BaseFragment() {
         mUserAvatar = view.findViewById(R.id.mAvatarProfile)
         mBtnSaveProfile = view.findViewById(R.id.mBtnSaveProfile)
         mProgress = view.findViewById(R.id.mProgressLoadProfile)
+        mHomeTown = view.findViewById(R.id.mTxtHomeTown)
+        mBirthDay = view.findViewById(R.id.mTxtBirthDay)
+        mEnglishCertificate = view.findViewById(R.id.mTxtEnglishCertificate)
         mProfileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         storage = FirebaseStorage.getInstance()
 
@@ -68,12 +74,17 @@ class ProfileFragment : BaseFragment() {
         mBtnSaveProfile.setOnClickListener {
             uploadImage()
         }
+
+
     }
 
     private fun getYourself() {
         mProfileViewModel.me.observe(this, Observer { me ->
             for (i in me) {
                 mUserName.text = i.userName
+                mHomeTown.text = i.userHomeTown
+                mBirthDay.text = i.userBirthDay
+                mEnglishCertificate.text = i.userEnglishCertificate
                 if (i.userProfileImage == "") {
                     mUserAvatar.setImageResource(R.mipmap.ic_avatar)
                 } else {
@@ -125,6 +136,13 @@ class ProfileFragment : BaseFragment() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        } else if (requestCode == PICTURE) {
+
+            val picture: Bitmap? = data?.getParcelableExtra("data")
+            mUserAvatar.setImageBitmap(picture)
+
+            mBtnSaveProfile.visibility = View.VISIBLE
+
         }
     }
 
@@ -156,12 +174,12 @@ class ProfileFragment : BaseFragment() {
     private fun saveUser(urlString: String) {
         val hashMap: HashMap<String, String> = HashMap()
         hashMap["userProfileImage"] = urlString
-        mProfileViewModel.databaseReferenceProfile.updateChildren(hashMap as Map<String, Any>)
+        mProfileViewModel.databaseReferenceProfile.child(Firebase.auth.uid!!)
+            .updateChildren(hashMap as Map<String, Any>)
     }
 
     //Custom Dialog show Image and update image
-    @SuppressLint("InflateParams")
-    fun dialogViewProfile() {
+    private fun dialogViewProfile() {
         val bottomSheetDialog = BottomSheetDialog(
             requireContext(), R.style.BottomSheetDialogTheme
         )
@@ -178,7 +196,6 @@ class ProfileFragment : BaseFragment() {
                 if (checkNetwork()) {
                     chooseImage()
                     bottomSheetDialog.dismiss()
-                    Log.d("Bitmap", chooseImage().toString())
                 } else {
                     Toast.makeText(context, "Connect Internet To Change !", Toast.LENGTH_SHORT)
                         .show()
@@ -210,6 +227,15 @@ class ProfileFragment : BaseFragment() {
                 Toast.makeText(context, "Connect Internet To View !", Toast.LENGTH_SHORT).show()
             }
         }
+
+        //camera
+
+        mDialogView.findViewById<LinearLayout>(R.id.mDialogCameraPicture).setOnClickListener {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(intent, PICTURE)
+            bottomSheetDialog.dismiss()
+        }
+
     }
 }
 

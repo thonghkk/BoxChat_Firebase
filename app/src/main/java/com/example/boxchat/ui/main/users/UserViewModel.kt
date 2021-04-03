@@ -11,9 +11,12 @@ import com.example.boxchat.utils.CheckNetwork.Companion.context
 import com.example.boxchat.commom.Firebase
 import com.example.boxchat.commom.Firebase.Companion.firebaseDatabase
 import com.example.boxchat.commom.Firebase.Companion.user
+import com.example.boxchat.databaselocal.FriendLocalDatabase
 import com.example.boxchat.databaselocal.repository.UserLocalRepository
 import com.example.boxchat.databaselocal.UserLocalDatabase
+import com.example.boxchat.databaselocal.entity.FriendLocal
 import com.example.boxchat.databaselocal.entity.UserLocal
+import com.example.boxchat.databaselocal.repository.FriendLocalRepository
 import com.example.boxchat.model.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,16 +32,26 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     val requestRef = getRequestReference()
     val friendRef = getFriendReference()
     val readAllData: LiveData<List<UserLocal>>
+    private val repository: UserLocalRepository
+    val readAllDataFromFriend: LiveData<List<FriendLocal>>
+    private val repositoryFriendLocal: FriendLocalRepository
+
+
     val users = MutableLiveData<List<User>>()
     val friends = MutableLiveData<List<User>>()
     private var friendList = mutableListOf<User>()
     private val userList = mutableListOf<User>()
-    private val repository: UserLocalRepository
+
 
     init {
+        //initialization user on local
         val userLocalDao = UserLocalDatabase.getDatabase(application).userLocalDao()
         repository = UserLocalRepository(userLocalDao)
         readAllData = repository.readAllData
+        //initialization friend on local
+        val friendLocalDao = FriendLocalDatabase.getFriendFromDatabase(application).friendLocalDao()
+        repositoryFriendLocal = FriendLocalRepository(friendLocalDao)
+        readAllDataFromFriend = repositoryFriendLocal.readAllDataFromFriend
         //init friend
         getFriendList()
         getUsersList()
@@ -100,7 +113,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 userList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val mUser = dataSnapShot.getValue(User::class.java)
-                    if (mUser!!.userId != user!!.uid) {
+                    if (mUser!!.userId != userId) {
                         userList.add(mUser)
                         addListUser(userList)
                     }

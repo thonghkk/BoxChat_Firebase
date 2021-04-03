@@ -12,6 +12,7 @@ import com.example.boxchat.R
 import com.example.boxchat.base.BaseFragment
 import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
 import com.example.boxchat.commom.Firebase.Companion.user
+import com.example.boxchat.databaselocal.entity.UserLocal
 import com.example.boxchat.model.User
 import com.example.boxchat.network.FirebaseService
 import com.google.firebase.iid.FirebaseInstanceId
@@ -29,34 +30,30 @@ class StrangerFragment : BaseFragment() {
         //mapping view model
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         mRecyclerUserView = view.findViewById(R.id.mRecycleUsersView)
-
         mRecyclerUserView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/${user?.uid}")
-        //get value SharedPreferences
-        FirebaseService.sharePref =
-            this.activity?.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
-        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
-            FirebaseService.token = it.result.token
-            Log.d("token", it.result.token)
-        }
-
         if (checkNetwork()) {
-            mUserViewModel.users.observe(this, Observer { user ->
-                mRecyclerUserView.adapter = UserAdapter(user)
-                mUserViewModel.friends.observe(this, Observer { friend ->
-                    val sum = friend + user
-                    val a = sum.groupBy { it.userId }
-                        .filter { it.value.size == 1 }
-                        .flatMap { it.value } as MutableList<User>
-                    mRecyclerUserView.adapter = UserAdapter(a)
-                })
-            })
+            getStranger()
         } else {
             getUserLocal()
         }
     }
+
+    private fun getStranger(){
+        mUserViewModel.users.observe(this, Observer { user ->
+            mRecyclerUserView.adapter = UserAdapter(user)
+            mUserViewModel.friends.observe(this, Observer { friend ->
+                val sum = friend + user
+                val a = sum.groupBy { it.userId }
+                    .filter { it.value.size == 1 }
+                    .flatMap { it.value } as MutableList<User>
+                mRecyclerUserView.adapter = UserAdapter(a)
+
+            })
+        })
+    }
+
 
     private fun getUserLocal() {
         mUserViewModel.readAllData.observe(viewLifecycleOwner, Observer { user ->

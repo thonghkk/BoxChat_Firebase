@@ -56,7 +56,6 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                     if (mYourself?.userId == user?.uid){
                         addProfile(mYourself!!)
                     }
-
                 }
             }
 
