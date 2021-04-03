@@ -65,6 +65,11 @@ class FirebaseService : FirebaseMessagingService() {
         val intent = Intent(this, ChatActivity::class.java).apply {
             putExtra("userId", userId)
         }
+        val resultPendingIntent: PendingIntent = TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(intent)
+            // Get the PendingIntent containing the entire back stack
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         //val notificationId = Random.nextInt()
@@ -77,10 +82,7 @@ class FirebaseService : FirebaseMessagingService() {
         val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_avatar)
         val uri = Uri.parse("android.resource://" + packageName + "/" + R.raw.music)
 
-        val resultPendingIntent: PendingIntent = TaskStackBuilder.create(this).run {
-            addNextIntentWithParentStack(intent)
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-        }
+
         //notification 1
         val notification = NotificationCompat.Builder(this, CHANGNEL_ID)
             .setContentTitle(p0.data["title"])

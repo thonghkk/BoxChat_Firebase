@@ -1,6 +1,7 @@
 package com.example.boxchat.ui.main.profile
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -237,5 +238,6 @@ class ProfileFragment : BaseFragment() {
         }
 
     }
+
 }
 

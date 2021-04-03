@@ -178,6 +178,5 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         }
         return true
     }
-
 }
 

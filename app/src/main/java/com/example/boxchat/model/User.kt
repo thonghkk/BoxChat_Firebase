@@ -6,5 +6,6 @@ open class User(
     var userProfileImage: String = "",
     var userHomeTown:String="",
     var userBirthDay:String="",
-    var userEnglishCertificate:String=""
+    var userEnglishCertificate:String="",
+    var statusExist:String=""
 )
