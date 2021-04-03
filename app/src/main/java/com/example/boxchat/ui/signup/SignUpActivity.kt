@@ -89,6 +89,9 @@ class SignUpActivity : BaseActivity() {
                     hashMap["userName"] = userName
                     hashMap["email"] = email
                     hashMap["userProfileImage"] = ""
+                    hashMap["userHomeTown"] = ""
+                    hashMap["userBirthDay"] = ""
+                    hashMap["userEnglishCertificate"] = ""
                     mSignUpViewModel.databaseReference.child(userId).setValue(hashMap)
                         .addOnCompleteListener(this) {
                             if (it.isSuccessful) {

@@ -1,7 +1,9 @@
 package com.example.boxchat.ui.signup
 
 import androidx.lifecycle.ViewModel
+import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.commom.Firebase.Companion.firebaseDatabase
+import com.example.boxchat.commom.Firebase.Companion.user
 import com.google.firebase.database.DatabaseReference
 
 
