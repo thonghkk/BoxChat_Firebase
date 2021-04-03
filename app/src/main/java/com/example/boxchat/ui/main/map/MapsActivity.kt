@@ -176,7 +176,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         }catch (e:Exception){
             Toast.makeText(this,"That Are You !!!",Toast.LENGTH_SHORT).show()
         }
-
         return true
     }
 
