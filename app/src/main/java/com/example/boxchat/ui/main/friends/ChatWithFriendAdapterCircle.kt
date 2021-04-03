@@ -4,18 +4,16 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
 import com.example.boxchat.model.User
 import com.example.boxchat.ui.main.chat.ChatActivity
 
-class ChatWithFriendAdapterCircle(private val friends:List<User>): RecyclerView.Adapter<ChatWithFriendAdapterCircle.ViewHolder>()  {
+class ChatWithFriendAdapterCircle(private var friends:List<User>): RecyclerView.Adapter<ChatWithFriendAdapterCircle.ViewHolder>() ,Filterable {
 
+    private val userOld: List<User> = friends
     class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
 
         private val imgAvatar: ImageView = itemView.findViewById(R.id.mImgIcon)
@@ -53,4 +51,33 @@ class ChatWithFriendAdapterCircle(private val friends:List<User>): RecyclerView.
     }
 
     override fun getItemCount() = friends.size
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults? {
+                val strSearch = constraint.toString()
+                if (strSearch.isEmpty()) {
+                    friends = userOld
+                } else {
+                    val list = mutableListOf<User>()
+                    for (i in userOld) {
+                        if (i.userName.toLowerCase().contains(strSearch.toLowerCase())) {
+                            list.add(i)
+                        }
+                    }
+                    friends = list
+                }
+
+                val filterResult = FilterResults()
+                filterResult.values = friends
+                return filterResult
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                friends = results?.values as List<User>
+                notifyDataSetChanged()
+            }
+
+        }
+    }
 }

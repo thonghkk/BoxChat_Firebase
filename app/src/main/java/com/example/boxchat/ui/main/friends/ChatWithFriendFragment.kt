@@ -22,7 +22,7 @@ class ChatWithFriendFragment : BaseFragment() {
     private lateinit var mFriendFragmentViewModel: ChatWithFriendViewModel
     private lateinit var mSearchFriends: SearchView
     private lateinit var friendAdapter: ChatWithFriendAdapter
-    private var friendList = mutableListOf<User>()
+    private lateinit var friendAdapterCircle: ChatWithFriendAdapterCircle
 
     override fun getLayoutID() = R.layout.fragment_chat
 
@@ -47,15 +47,16 @@ class ChatWithFriendFragment : BaseFragment() {
     private fun getFriend() {
         mFriendFragmentViewModel.friend.observe(viewLifecycleOwner, Observer { friendList ->
             friendAdapter = ChatWithFriendAdapter(friendList)
+            friendAdapterCircle = ChatWithFriendAdapterCircle((friendList))
+
             mFriendRecycleView.adapter = friendAdapter
-            searchFriend(friendAdapter)
+            mFriendRecycleViewCircle.adapter = friendAdapterCircle
+
+            searchFriend(friendAdapter, friendAdapterCircle)
             friendAdapter.notifyDataSetChanged()
+            friendAdapterCircle.notifyDataSetChanged()
         })
 
-        mFriendFragmentViewModel.friend.observe(viewLifecycleOwner, Observer { friendList ->
-            val friendAdapter = ChatWithFriendAdapterCircle(friendList)
-            mFriendRecycleViewCircle.adapter = friendAdapter
-        })
     }
 
     private fun getFriendLocal() {
@@ -63,22 +64,28 @@ class ChatWithFriendFragment : BaseFragment() {
             viewLifecycleOwner,
             Observer { friend ->
                 val mFriendLocalAdapter = FriendLocalAdapter(friend)
-                mFriendRecycleView.adapter =  mFriendLocalAdapter
+                mFriendRecycleView.adapter = mFriendLocalAdapter
                 mFriendLocalAdapter.notifyDataSetChanged()
             })
     }
 
-    private fun searchFriend(friendAdapter: ChatWithFriendAdapter) {
+    private fun searchFriend(
+        friendAdapter: ChatWithFriendAdapter,
+        friendAdapterCircle: ChatWithFriendAdapterCircle
+    ) {
         mSearchFriends.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 friendAdapter.filter.filter(query)
+                friendAdapterCircle.filter.filter(query)
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 friendAdapter.filter.filter(newText)
+                friendAdapterCircle.filter.filter(newText)
                 return false
             }
         })
     }
+
 }
