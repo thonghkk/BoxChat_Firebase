@@ -9,16 +9,26 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
+import com.example.boxchat.commom.Firebase
+import com.example.boxchat.commom.Firebase.Companion.auth
+import com.example.boxchat.model.Chat
 import com.example.boxchat.model.User
 import com.example.boxchat.ui.main.chat.ChatActivity
+import com.example.boxchat.ui.main.chat.ChatAdapter
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 class ChatWithFriendAdapter(private var user: List<User>) :
     RecyclerView.Adapter<ChatWithFriendAdapter.ViewHolder>(), Filterable {
     private val userOld: List<User> = user
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val chatList = mutableListOf<Chat>()
         private val txtUserName: TextView = itemView.findViewById(R.id.mNameFriends)
         private val imgAvatar: ImageView = itemView.findViewById(R.id.mAvatarFriend)
+        private val mMessageLast: TextView = itemView.findViewById(R.id.mMessageLast)
         private val mLayoutUser: LinearLayout = itemView.findViewById(R.id.mLayoutFriend)
 
         fun bindUser(friend: User) {
@@ -26,6 +36,8 @@ class ChatWithFriendAdapter(private var user: List<User>) :
             Log.d("MEO", friend.userName)
             Log.d("MEO", friend.userId)
             val url = friend.userProfileImage
+
+            lastMessage(friend.userId, mMessageLast)
 
             Glide.with(itemView)
                 .load(url)
@@ -40,6 +52,29 @@ class ChatWithFriendAdapter(private var user: List<User>) :
                 intent.putExtra("userId", friend.userId)
                 itemView.context.startActivity(intent)
             }
+        }
+
+        // get last message for user
+        private fun lastMessage(userId: String, message: TextView) {
+            Firebase.firebaseDatabase.getReference("Chat").addValueEventListener(object :
+                ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (dataSnapShot: DataSnapshot in snapshot.children) {
+                        val chat = dataSnapShot.getValue(Chat::class.java)
+                        if ((chat!!.senderId == userId && chat.receiverId == auth.uid!!) ||
+                            (chat.senderId == auth.uid!! && chat.receiverId == userId)
+                        ) {
+                            chat.message
+                            chatList.add(chat)
+                            message.text = chatList.last().message
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+            })
         }
     }
 
@@ -82,4 +117,6 @@ class ChatWithFriendAdapter(private var user: List<User>) :
 
         }
     }
+
+
 }
