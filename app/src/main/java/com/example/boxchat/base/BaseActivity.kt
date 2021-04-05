@@ -1,9 +1,11 @@
 package com.example.boxchat.base
 
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.boxchat.commom.Firebase
+import com.example.boxchat.ui.login.LoginActivity
 
 abstract class BaseActivity : AppCompatActivity() {
     abstract fun getLayoutID(): Int
@@ -14,7 +16,6 @@ abstract class BaseActivity : AppCompatActivity() {
         setContentView(getLayoutID())
         onCreateActivity(savedInstanceState)
     }
-
     fun status(status:String){
         val hashMap: HashMap<String, String> = HashMap()
         hashMap["statusExist"] = status
@@ -28,6 +29,11 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        status("offline")
+        try {
+            status("offline")
+        }catch (e:Exception){
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+
     }
 }
