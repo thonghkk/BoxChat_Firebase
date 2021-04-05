@@ -10,10 +10,10 @@ import com.example.boxchat.ui.login.LoginActivity
 import com.github.ybq.android.spinkit.SpinKitView
 import com.github.ybq.android.spinkit.style.ThreeBounce
 
-class SplashActivity : BaseActivity() {
-    override fun getLayoutID() = R.layout.activity_splash
-    override fun onCreateActivity(savedInstanceState: Bundle?) {
-
+class SplashActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_splash)
         Handler().postDelayed({
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -23,6 +23,5 @@ class SplashActivity : BaseActivity() {
         val progressBar = findViewById<ProgressBar>(R.id.spin_kit)
         val doubleBounce = ThreeBounce()
         progressBar.indeterminateDrawable = doubleBounce
-
     }
 }

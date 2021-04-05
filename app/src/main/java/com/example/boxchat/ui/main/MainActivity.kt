@@ -8,6 +8,7 @@ import androidx.navigation.ui.NavigationUI
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
 import com.example.boxchat.commom.Firebase
+import com.example.boxchat.ui.login.LoginActivity
 import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
 import com.example.boxchat.utils.CheckNetwork.Companion.getContextThis
 import com.example.boxchat.ui.main.map.MapsActivity
@@ -40,4 +41,7 @@ class MainActivity : BaseActivity() {
             Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+
 }

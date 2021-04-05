@@ -72,7 +72,7 @@ class ChatWithFriendAdapter(private var user: List<User>) :
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
+
                     }
 
                 })

@@ -65,7 +65,6 @@ class ChatWithFriendAdapterCircle(private var friends:List<User>): RecyclerView.
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
                     }
 
                 })

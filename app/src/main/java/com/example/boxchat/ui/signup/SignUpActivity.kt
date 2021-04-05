@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
@@ -16,10 +17,9 @@ import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.ui.login.LoginActivity
 import com.google.firebase.auth.FirebaseUser
 
-class SignUpActivity : BaseActivity() {
+class SignUpActivity : AppCompatActivity() {
 
     private lateinit var btnSignUp: Button
-    private lateinit var btnLogin: Button
     private lateinit var mEdtName: EditText
     private lateinit var mEdtEmail: EditText
     private lateinit var mEdtPassWord: EditText
@@ -27,10 +27,10 @@ class SignUpActivity : BaseActivity() {
     private lateinit var mSignUpViewModel: SignUpViewModel
     private lateinit var mProgressDialog: ProgressDialog
 
-    override fun getLayoutID() = R.layout.activity_sign_up
-    override fun onCreateActivity(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_sign_up)
         btnSignUp = findViewById(R.id.mBtnSignUp)
-        btnLogin = findViewById(R.id.mBtnLogin)
         mEdtName = findViewById(R.id.mNameSignUp)
         mEdtEmail = findViewById(R.id.mEmailSignUp)
         mEdtPassWord = findViewById(R.id.mPassWordSignUp)
@@ -69,12 +69,6 @@ class SignUpActivity : BaseActivity() {
                 Toast.makeText(this, "Connect Internet", Toast.LENGTH_SHORT).show()
             }
 
-        }
-
-        btnLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
         }
     }
 
