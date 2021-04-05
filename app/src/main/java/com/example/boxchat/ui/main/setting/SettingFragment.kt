@@ -33,13 +33,15 @@ class SettingFragment : BaseFragment() {
         mSettingViewModel = ViewModelProvider(this).get(SettingViewModel::class.java)
 
         mSignOut.setOnClickListener {
+            status("offline")
             auth.signOut()
-            startActivity(Intent(context, LoginActivity::class.java))
             mSettingViewModel.apply {
                 deleteAllFriendLocal()
                 deleteAllUserLocal()
                 deleteAllYourself()
             }
+
+            startActivity(Intent(context, LoginActivity::class.java))
         }
 
         if (checkNetwork()) {
