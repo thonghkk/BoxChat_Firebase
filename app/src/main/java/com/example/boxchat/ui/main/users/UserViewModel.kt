@@ -107,7 +107,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun getUsersList() {
         val userId = Firebase.auth.uid
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/$userId")
+      //  FirebaseMessaging.getInstance().subscribeToTopic("/topics/$userId")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 userList.clear()

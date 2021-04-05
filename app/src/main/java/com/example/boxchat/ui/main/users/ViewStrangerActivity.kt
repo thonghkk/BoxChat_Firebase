@@ -4,15 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
+import com.example.boxchat.commom.Constants.Companion.CHANNEL_ADD_FRIEND
 import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
 import com.example.boxchat.utils.CheckNetwork.Companion.context
 import com.example.boxchat.commom.Firebase.Companion.auth
@@ -26,6 +24,7 @@ import com.example.boxchat.model.Notification
 import com.example.boxchat.model.PushNotification
 import com.example.boxchat.model.User
 import com.example.boxchat.network.RetrofitInstance
+import com.example.boxchat.ui.main.MainActivity
 import com.example.boxchat.ui.main.chat.ChatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -46,8 +45,10 @@ class ViewStrangerActivity : BaseActivity() {
     private lateinit var mBtnAddFriend: Button
     private lateinit var mBtnCancelFriend: Button
     private lateinit var mUserViewModel: UserViewModel
+    private lateinit var mBtnBackStranger: ImageView
     private var mCurrentState = "NOTHING_HAPPEN"
     var topic = ""
+    val userList = mutableListOf<User>()
 
     override fun getLayoutID() = R.layout.activity_view_stranger
     override fun onCreateActivity(savedInstanceState: Bundle?) {
@@ -58,24 +59,45 @@ class ViewStrangerActivity : BaseActivity() {
         mViewBirthDay = findViewById(R.id.mViewBirthDay)
         mViewHomeTown = findViewById(R.id.mViewHomeTown)
         mViewEnglishCertificate = findViewById(R.id.mViewEnglishCertificate)
+        mBtnBackStranger = findViewById(R.id.mBtnBackStranger)
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         val strangerId = intent.getStringExtra("userId")
-        val strangerName = intent.getStringExtra("userName")
-        val strangerImage = intent.getStringExtra("userImage")
-        val strangerHomeTown = intent.getStringExtra("userHomeTown")
-        val strangerBirthDay = intent.getStringExtra("userBirthDay")
-        val strangerEnglishCertificate = intent.getStringExtra("userEnglishCertificate")
+
+        mBtnBackStranger.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
 
         if (checkNetwork()) {
-            getInfoStranger(strangerId!!)
-            mBtnAddFriend.setOnClickListener {
-                mPerformActions(strangerId, strangerName!!, strangerImage!!)
-                mSendSMS(strangerId, strangerName, strangerImage)
-            }
-            mBtnCancelFriend.setOnClickListener {
-                mUnFriend(strangerId)
-            }
+            //get user info
+            mUserViewModel.users.observe(this, Observer { user ->
+                for (i in user) {
+                    if (i.userId == strangerId) {
+                        userList.add(i)
+                    }
+                }
+                for (i in userList) {
+                    mNameStranger.text = i.userName
+                    mViewBirthDay.text = i.userBirthDay
+                    mViewHomeTown.text = i.userHomeTown
+                    mViewEnglishCertificate.text = i.userEnglishCertificate
+                    if (i.userProfileImage == "") {
+                        mAvatarStranger.setImageResource(R.mipmap.ic_avatar)
+                    } else {
+                        Glide.with(this@ViewStrangerActivity)
+                            .load(i.userProfileImage)
+                            .fitCenter()
+                            .into(mAvatarStranger)
+                    }
+                    mBtnAddFriend.setOnClickListener {
+                        mPerformActions(strangerId!!, i.userName, i.userProfileImage)
+                        mSendSMS(strangerId, i.userName, i.userProfileImage)
+                    }
+                    mBtnCancelFriend.setOnClickListener {
+                        mUnFriend(strangerId!!)
+                    }
+                }
+            })
         } else {
             getStrangerLocal(strangerId!!)
             mAvatarStranger.setImageResource(R.mipmap.ic_avatar)
@@ -86,53 +108,12 @@ class ViewStrangerActivity : BaseActivity() {
                 Toast.makeText(this, "Let Connect Internet", Toast.LENGTH_SHORT).show()
             }
         }
-        mCheckUserExistence(strangerId)
-    }
-
-    private fun getInfoStranger(strangerId: String) {
-        mUserViewModel.databaseReference.child(strangerId)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val stranger = snapshot.getValue(User::class.java)
-                    mNameStranger.text = stranger!!.userName
-
-                    if (stranger.userBirthDay == null) {
-                        mViewBirthDay.text = ""
-                    } else {
-                        mViewBirthDay.text = stranger.userBirthDay
-                    }
-                    if (stranger.userHomeTown == null) {
-                        mViewHomeTown.text = ""
-                    } else {
-                        mViewHomeTown.text = stranger.userHomeTown
-                    }
-                    if (stranger.userEnglishCertificate == null) {
-                        mViewEnglishCertificate.text = ""
-                    } else {
-                        mViewEnglishCertificate.text = stranger.userEnglishCertificate
-
-                    }
-                    if (stranger.userProfileImage == "") {
-                        mAvatarStranger.setImageResource(R.mipmap.ic_avatar)
-                        Log.d("Test", stranger.userProfileImage)
-                    } else {
-                        Glide.with(this@ViewStrangerActivity)
-                            .load(stranger.userProfileImage)
-                            .fitCenter()
-                            .into(mAvatarStranger)
-                    }
-                    Log.d("NameStranger", stranger.userName)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
-
+        mCheckUserExistence(strangerId!!)
     }
 
     private fun mCheckUserExistence(strangerId: String) {
         //if it was friend , show below
-        mUserViewModel.friendRef.child(strangerId).child(user?.uid!!)
+        mUserViewModel.friendRef.child(strangerId).child(auth?.uid!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -182,7 +163,6 @@ class ViewStrangerActivity : BaseActivity() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
                 }
             })
 
@@ -212,7 +192,7 @@ class ViewStrangerActivity : BaseActivity() {
                         PushNotification(
                             Notification(
                                 strangerName,
-                                "Send friend request", auth.uid!!
+                                "Send friend request", auth.uid!!, CHANNEL_ADD_FRIEND
                             ), topic
                         ).also {
                             sendNotification(it)
@@ -374,6 +354,7 @@ class ViewStrangerActivity : BaseActivity() {
 //                Toast.makeText(this@ChatActivity, "${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
+
 
 }
 

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
+import com.example.boxchat.commom.Constants.Companion.CHANNEL_CHAT
 import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.commom.Firebase.Companion.user
 import com.example.boxchat.model.Chat
@@ -63,8 +64,8 @@ class ChatActivity : BaseActivity() {
         mEnterMessage = findViewById(R.id.mEnterMessage)
         mChatRecycleView = findViewById(R.id.mRecycleChat)
         mChatViewModel = ViewModelProvider(this).get(ChatViewModel::class.java)
-
         mLinearLayoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+
         mChatRecycleView.layoutManager = mLinearLayoutManager
         FirebaseMessaging.getInstance().subscribeToTopic("/topics/${user?.uid}")
         //get value SharedPreferences
@@ -128,7 +129,7 @@ class ChatActivity : BaseActivity() {
                 sendMessage(auth.uid!!, userId, message)
                 mEnterMessage.setText("")
                 topic = "/topics/$userId"
-                PushNotification(Notification(userName, message, auth.uid!!), topic).also {
+                PushNotification(Notification(userName, message, auth.uid!!,CHANNEL_CHAT), topic).also {
                     sendNotification(it)
                 }
 

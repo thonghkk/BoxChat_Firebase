@@ -79,6 +79,6 @@ class StrangerFragment : BaseFragment() {
                 return false
             }
         })
-
     }
+
 }
