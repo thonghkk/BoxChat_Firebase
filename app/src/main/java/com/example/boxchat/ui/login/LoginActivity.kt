@@ -3,11 +3,13 @@ package com.example.boxchat.ui.login
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.boxchat.ui.main.MainActivity
 import com.example.boxchat.R
@@ -25,7 +27,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 
 const val RC_SIGN_IN = 120
 
-class LoginActivity : BaseActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var mBtnLogin: Button
     private lateinit var mBtnSignUp: Button
@@ -36,9 +38,9 @@ class LoginActivity : BaseActivity() {
     private lateinit var mProgressDialog: ProgressDialog
     private lateinit var googleSignInClient: GoogleSignInClient
 
-
-    override fun getLayoutID() = R.layout.activity_login
-    override fun onCreateActivity(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
         mBtnLogin = findViewById(R.id.mBtnLogin_2)
         mBtnSignUp = findViewById(R.id.mBtnSignUp_2)
         mEdtEmailLogin = findViewById(R.id.mEmailLogin)
@@ -167,11 +169,7 @@ class LoginActivity : BaseActivity() {
         hashMap["userId"] = userId
         hashMap["userName"] = userCurr.displayName
         hashMap["email"] = userCurr.email
-        hashMap["userProfileImage"] = ""
-        hashMap["userHomeTown"] = ""
-        hashMap["userBirthDay"] = ""
-        hashMap["userEnglishCertificate"] = ""
-        mLoginViewModel.databaseReference.child(userId).setValue(hashMap)
+        mLoginViewModel.databaseReference.child(userId).updateChildren(hashMap as Map<String, Any>)
             .addOnCompleteListener(this) {
                 if (it.isSuccessful) {
                     mProgressDialog = ProgressDialog(this)

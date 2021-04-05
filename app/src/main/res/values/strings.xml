@@ -1,18 +1,19 @@
 <resources>
     <string name="app_name">Learning English Together</string>
-    <string name="sign_up">Sign Up</string>
+    <string name="sign_up">Register</string>
     <string name="enter_name">Enter Name</string>
     <string name="enter_message">Enter Message…</string>
-    <string name="enter_email">Enter Email</string>
-    <string name="enter_password">Enter PassWord</string>
-    <string name="enter_confirm_password">Enter Confirm PassWord</string>
+    <string name="enter_email">Email</string>
+    <string name="enter_password">PassWord</string>
+    <string name="enter_confirm_password">Confirm PassWord</string>
     <string name="btn_sign_up">Sign Up</string>
-    <string name="btn_login">Login</string>
+    <string name="txt_login">Login</string>
     <string name="btn_save_profile">Save</string>
     <string name="txt_profile">Profile</string>
     <string name="txt_your_avatar">Your Avatar</string>
     <string name="txt_message">Message</string>
     <string name="txt_edit_profile">Edit Profile</string>
+    <string name="txt_profile_stranger">Profile Stranger</string>
     <string name="view_image">View Profile Picture</string>
     <string name="view_camera">Camera</string>
     <string name="change_profile_image">Change Profile Picture</string>
@@ -31,6 +32,9 @@
     <string name="txt_home_town">Home Town</string>
     <string name="txt_birth_day">BirthDay</string>
     <string name="txt_english_certificate">English Certificate</string>
+    <string name="txt_welcome">Welcome !!!</string>
+    <string name="txt_or">Or</string>
+    <string name="txt_login_with_google">Login With Google</string>
 
     //menu
     <string name="txt_chat">Chat</string>
