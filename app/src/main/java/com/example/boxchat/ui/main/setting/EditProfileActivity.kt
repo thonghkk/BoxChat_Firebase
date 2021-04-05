@@ -1,5 +1,8 @@
 package com.example.boxchat.ui.main.setting
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
@@ -10,18 +13,19 @@ import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
 import com.example.boxchat.commom.Firebase
 import com.example.boxchat.ui.main.profile.ProfileViewModel
+import java.util.*
+import kotlin.collections.HashMap
 
 class EditProfileActivity : BaseActivity() {
 
     private lateinit var mBtnBackProfile: ImageView
     private lateinit var mEdtHomeTown: EditText
-    private lateinit var mEdtBirthDay: EditText
+    private lateinit var mEdtBirthDay: TextView
     private lateinit var mEdtEnglishCertificate: EditText
     private lateinit var mBtnSaveInfo: Button
     private lateinit var mSettingViewModel: SettingViewModel
 
-
-    override fun getLayoutID() = R.layout.fragment_edit_profile
+    override fun getLayoutID() = R.layout.activity_edit_profile
     override fun onCreateActivity(savedInstanceState: Bundle?) {
 
         mEdtBirthDay = findViewById(R.id.mEdtBirthDay)
@@ -31,10 +35,22 @@ class EditProfileActivity : BaseActivity() {
         mBtnBackProfile = findViewById(R.id.mBtnBackProfile)
         mSettingViewModel = ViewModelProvider(this).get(SettingViewModel::class.java)
 
-
+        mEdtBirthDay.setOnClickListener{
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+            val datePickerDialog = DatePickerDialog(this,object : DatePickerDialog.OnDateSetListener {
+                @SuppressLint("SetTextI18n")
+                override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+                    mEdtBirthDay.text = "$day / $month / $year"
+                }
+            },year,month,day)
+            datePickerDialog.show()
+        }
         getYourself()
         mBtnBackProfile.setOnClickListener {
-            onBackPressed()
+           onBackPressed()
         }
         mBtnSaveInfo.setOnClickListener {
             updateProfile()
