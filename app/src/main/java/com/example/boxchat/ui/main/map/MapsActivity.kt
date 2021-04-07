@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.boxchat.R
+import com.example.boxchat.SplashActivity
 import com.example.boxchat.base.BaseActivity
 import com.example.boxchat.commom.Firebase
 import com.example.boxchat.commom.Firebase.Companion.auth
@@ -46,7 +47,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     private lateinit var mMap: GoogleMap
     private lateinit var mMarker: Marker
     private var mUserLocation = mutableListOf<MapLocation>()
-    private val userList = mutableListOf<User>()
 
     override fun getLayoutID() = R.layout.activity_maps
     override fun onCreateActivity(savedInstanceState: Bundle?) {
@@ -54,8 +54,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         client = LocationServices.getFusedLocationProviderClient(this)
         mMapViewModel = ViewModelProvider(this).get(MapModel::class.java)
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-        //get Location of user
-        getLocation()
+
         //getCurrentLocation()
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -118,25 +117,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         }
     }
 
-    private fun getLocation() {
-        mMapViewModel.mUserOnReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val mLocation = dataSnapShot.getValue(MapLocation::class.java)
-                    if (mLocation!!.userId != auth.uid) {
-                        mUserLocation.add(mLocation)
-                        mMapViewModel.addDriverAvailable(mUserLocation)
-
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-        })
-    }
-
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap!!
         mMapViewModel.driverAvailable.observe(this@MapsActivity, Observer { driver ->
@@ -160,23 +140,14 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             clickCount.let {
                 val newClickCount = it + 1
                 marker.tag = newClickCount
-
-                mMapViewModel.mUser.observe(this, Observer { user ->
-                    for (i in user) {
-                        if (marker.title == i.userId) {
-                            val intent = Intent(this, ViewStrangerActivity::class.java)
-                            intent.putExtra("userId", i.userId)
-                            intent.putExtra("userName", i.userName)
-                            intent.putExtra("userImage", i.userProfileImage)
-                            startActivity(intent)
-                        }
-                    }
+                //custom open new activity
+                startActivity(Intent(this, ViewStrangerActivity::class.java).apply {
+                    putExtra("userId", marker.title)
                 })
             }
-        }catch (e:Exception){
-            Toast.makeText(this,"That Are You !!!",Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, "That Are You !!!", Toast.LENGTH_SHORT).show()
         }
         return true
     }
 }
-
