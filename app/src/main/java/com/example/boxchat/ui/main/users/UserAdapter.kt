@@ -31,11 +31,6 @@ class UserAdapter(private var user: List<User>) : RecyclerView.Adapter<UserAdapt
             mLayoutUser.setOnClickListener {
                 val intent = Intent(itemView.context, ViewStrangerActivity::class.java)
                 intent.putExtra("userId", user.userId)
-                intent.putExtra("userName", user.userName)
-                intent.putExtra("userImage", user.userProfileImage)
-                intent.putExtra("userHomeTown", user.userHomeTown)
-                intent.putExtra("userBirthDay", user.userBirthDay)
-                intent.putExtra("userEnglishCertificate", user.userEnglishCertificate)
                 itemView.context.startActivity(intent)
             }
         }

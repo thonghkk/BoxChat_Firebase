@@ -73,28 +73,25 @@ class ViewStrangerActivity : BaseActivity() {
             mUserViewModel.users.observe(this, Observer { user ->
                 for (i in user) {
                     if (i.userId == strangerId) {
-                        userList.add(i)
-                    }
-                }
-                for (i in userList) {
-                    mNameStranger.text = i.userName
-                    mViewBirthDay.text = i.userBirthDay
-                    mViewHomeTown.text = i.userHomeTown
-                    mViewEnglishCertificate.text = i.userEnglishCertificate
-                    if (i.userProfileImage == "") {
-                        mAvatarStranger.setImageResource(R.mipmap.ic_avatar)
-                    } else {
-                        Glide.with(this@ViewStrangerActivity)
-                            .load(i.userProfileImage)
-                            .fitCenter()
-                            .into(mAvatarStranger)
-                    }
-                    mBtnAddFriend.setOnClickListener {
-                        mPerformActions(strangerId!!, i.userName, i.userProfileImage)
-                        mSendSMS(strangerId, i.userName, i.userProfileImage)
-                    }
-                    mBtnCancelFriend.setOnClickListener {
-                        mUnFriend(strangerId!!)
+                        mNameStranger.text = i.userName
+                        mViewBirthDay.text = i.userBirthDay
+                        mViewHomeTown.text = i.userHomeTown
+                        mViewEnglishCertificate.text = i.userEnglishCertificate
+                        if (i.userProfileImage == "") {
+                            mAvatarStranger.setImageResource(R.mipmap.ic_avatar)
+                        } else {
+                            Glide.with(this@ViewStrangerActivity)
+                                .load(i.userProfileImage)
+                                .fitCenter()
+                                .into(mAvatarStranger)
+                        }
+                        mBtnAddFriend.setOnClickListener {
+                            mPerformActions(strangerId, i.userName, i.userProfileImage)
+                            mSendSMS(strangerId, i.userName, i.userProfileImage)
+                        }
+                        mBtnCancelFriend.setOnClickListener {
+                            mUnFriend(strangerId)
+                        }
                     }
                 }
             })
@@ -112,23 +109,8 @@ class ViewStrangerActivity : BaseActivity() {
     }
 
     private fun mCheckUserExistence(strangerId: String) {
-        //if it was friend , show below
-        mUserViewModel.friendRef.child(strangerId).child(auth?.uid!!)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        mCurrentState = FRIEND
-                        mBtnAddFriend.text = resources.getText(R.string.txt_send_sms)
-                        mBtnCancelFriend.text = resources.getText(R.string.txt_un_friend)
-                        mBtnCancelFriend.visibility = View.VISIBLE
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
-
+        //status after send make friend
+        //sender side
         mUserViewModel.requestRef.child(auth.uid!!).child(strangerId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -145,10 +127,11 @@ class ViewStrangerActivity : BaseActivity() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+
                 }
             })
 
+        //receiver side
         mUserViewModel.requestRef.child(strangerId).child(auth.uid!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -166,6 +149,23 @@ class ViewStrangerActivity : BaseActivity() {
                 }
             })
 
+        //if it was friend , show below
+        mUserViewModel.friendRef.child(strangerId).child(auth.uid!!)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        mCurrentState = FRIEND
+                        mBtnAddFriend.text = resources.getText(R.string.txt_send_sms)
+                        mBtnCancelFriend.text = resources.getText(R.string.txt_un_friend)
+                        mBtnCancelFriend.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+            })
+
         if (mCurrentState == CURRENT_STATE) {
             mCurrentState = CURRENT_STATE
             mBtnAddFriend.text = resources.getText(R.string.txt_send_friend_request)
@@ -175,7 +175,7 @@ class ViewStrangerActivity : BaseActivity() {
 
     //handling add friend :(
     private fun mPerformActions(strangerId: String, strangerName: String, strangerImage: String) {
-        //add request friend
+        //send make friend request
         if (mCurrentState == CURRENT_STATE) {
             val hashMap: HashMap<String, String> = HashMap()
             hashMap["status"] = PENDING
@@ -221,7 +221,7 @@ class ViewStrangerActivity : BaseActivity() {
                     }
                 }
         }
-        //My List friend
+        //if receiver accept , do below
         if (mCurrentState == RECEIVER) {
             mUserViewModel.requestRef.child(strangerId).child(auth.uid!!).removeValue()
                 .addOnCompleteListener { task ->
@@ -252,7 +252,6 @@ class ViewStrangerActivity : BaseActivity() {
                             .addValueEventListener(object : ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
                                     val mUser = snapshot.getValue(User::class.java)
-
                                     val hashMap2: HashMap<String, String> = HashMap()
                                     hashMap2["userId"] = mUser?.userId!!
                                     hashMap2["userName"] = mUser.userName

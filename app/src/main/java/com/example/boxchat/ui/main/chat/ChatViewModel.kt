@@ -21,9 +21,14 @@ class ChatViewModel:ViewModel() {
     val friend = MutableLiveData<List<User>>()
     private var friendList = mutableListOf<User>()
     val friendRef = getFriendReference()
+    var databaseReferenceProfile = getUserId()
+    val me = MutableLiveData<List<User>>()
+    private var yourSelfList = mutableListOf<User>()
+
 
     init {
         getFriendList()
+        getProfile()
     }
 
     private fun getChatReference(): DatabaseReference {
@@ -32,6 +37,11 @@ class ChatViewModel:ViewModel() {
     private fun getFriendReference(): DatabaseReference {
         return firebaseDatabase.getReference("Friends")
     }
+
+    private fun getUserId(): DatabaseReference {
+        return firebaseDatabase.getReference("Users")
+    }
+
 
     fun addListFriend(user: List<User>) {
         friend.value = user
@@ -55,6 +65,24 @@ class ChatViewModel:ViewModel() {
                     Toast.makeText(CheckNetwork.context, error.message, Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+
+    fun addMe(yourSelf: List<User>) {
+        me.value = yourSelf
+    }
+    private fun getProfile() {
+        databaseReferenceProfile.child(auth.uid!!).addValueEventListener(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(User::class.java)
+                yourSelfList.add(user!!)
+                addMe(yourSelfList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(CheckNetwork.context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
 

@@ -112,7 +112,12 @@ class ChatActivity : BaseActivity() {
                             .fitCenter()
                             .into(mAvatarChat)
                     }
-                    sendMessage(j.userId, j.userName)
+                    mChatViewModel.me.observe(this, Observer { me ->
+                        for (i in me) {
+                            sendMessage(j.userId, i.userName)
+                        }
+                    })
+
                 }
             }
         })
@@ -129,14 +134,16 @@ class ChatActivity : BaseActivity() {
                 sendMessage(auth.uid!!, userId, message)
                 mEnterMessage.setText("")
                 topic = "/topics/$userId"
-                PushNotification(Notification(userName, message, auth.uid!!,CHANNEL_CHAT), topic).also {
+                PushNotification(
+                    Notification(userName, message, auth.uid!!, CHANNEL_CHAT),
+                    topic
+                ).also {
                     sendNotification(it)
                 }
 
             }
         }
     }
-
 
     private fun sendMessage(senderId: String, receiverId: String, message: String) {
         val hashMap: HashMap<String, String> = HashMap()
@@ -197,5 +204,4 @@ class ChatActivity : BaseActivity() {
         super.onBackPressed()
         startActivity(Intent(this, MainActivity::class.java))
     }
-
 }
