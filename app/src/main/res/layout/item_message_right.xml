@@ -17,21 +17,38 @@
         android:layout_gravity="center"
         android:layout_weight="70"
         android:gravity="right|center"
+        android:weightSum="100"
+        android:orientation="horizontal"
         tools:ignore="RtlHardcoded">
-
-        <TextView
-            android:id="@+id/mMessageRight"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|center"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/item_right_message_background"
-            android:padding="10dp"
-            android:textColor="@color/white"
-            android:text="@string/txt_name_user"
-            android:autoLink="all"
-            android:textColorLink="@color/white"
-            tools:ignore="RtlHardcoded" />
+            android:layout_weight="90"
+            android:gravity="right|center"
+            tools:ignore="NestedWeights">
+            <TextView
+                android:id="@+id/mTxtMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/item_right_message_background"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:text="@string/txt_name_user"
+                android:autoLink="all"
+                android:textColorLink="@color/white"
+                tools:ignore="RtlHardcoded" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imgAvatar"
+            android:layout_width="0dp"
+            android:layout_weight="10"
+            android:layout_gravity="bottom"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_profile"
+            tools:ignore="NestedWeights" />
 
     </LinearLayout>
 

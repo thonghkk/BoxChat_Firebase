@@ -2,21 +2,15 @@ package com.example.boxchat.ui.main.chat
 
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.boxchat.commom.Firebase
 import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.commom.Firebase.Companion.firebaseDatabase
-import com.example.boxchat.commom.Firebase.Companion.user
-import com.example.boxchat.model.Chat
 import com.example.boxchat.model.User
 import com.example.boxchat.utils.CheckNetwork
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 
-class ChatViewModel:ViewModel() {
+class ChatViewModel : ViewModel() {
     val refChat = getChatReference()
     val friend = MutableLiveData<List<User>>()
     private var friendList = mutableListOf<User>()
@@ -24,7 +18,6 @@ class ChatViewModel:ViewModel() {
     var databaseReferenceProfile = getUserId()
     val me = MutableLiveData<List<User>>()
     private var yourSelfList = mutableListOf<User>()
-
 
     init {
         getFriendList()
@@ -34,6 +27,7 @@ class ChatViewModel:ViewModel() {
     private fun getChatReference(): DatabaseReference {
         return firebaseDatabase.getReference("Chat")
     }
+
     private fun getFriendReference(): DatabaseReference {
         return firebaseDatabase.getReference("Friends")
     }
@@ -70,6 +64,7 @@ class ChatViewModel:ViewModel() {
     fun addMe(yourSelf: List<User>) {
         me.value = yourSelf
     }
+
     private fun getProfile() {
         databaseReferenceProfile.child(auth.uid!!).addValueEventListener(object :
             ValueEventListener {
@@ -84,6 +79,4 @@ class ChatViewModel:ViewModel() {
             }
         })
     }
-
-
 }

@@ -83,20 +83,7 @@ class ChatActivity : BaseActivity() {
 
         mAvatarChat.setOnClickListener {
             val intent = Intent(this, ViewStrangerActivity::class.java)
-            intent.apply {
-                putExtra("userId", userId)
-                mChatViewModel.friend.observe(this@ChatActivity, Observer { friend ->
-                    for (i in friend) {
-                        if (i.userId == userId) {
-                            putExtra("userName", i.userName)
-                            putExtra("userImage", i.userProfileImage)
-                            putExtra("userHomeTown", i.userHomeTown)
-                            putExtra("userBirthDay", i.userBirthDay)
-                            putExtra("userEnglishCertificate", i.userEnglishCertificate)
-                        }
-                    }
-                })
-            }
+            intent.putExtra("userId", userId)
             startActivity(intent)
         }
 
@@ -131,7 +118,7 @@ class ChatActivity : BaseActivity() {
                 Toast.makeText(this, "Enter Message", Toast.LENGTH_SHORT).show()
                 mEnterMessage.setText("")
             } else {
-                sendMessage(auth.uid!!, userId, message)
+                pushMessage(auth.uid!!, userId, message)
                 mEnterMessage.setText("")
                 topic = "/topics/$userId"
                 PushNotification(
@@ -145,7 +132,7 @@ class ChatActivity : BaseActivity() {
         }
     }
 
-    private fun sendMessage(senderId: String, receiverId: String, message: String) {
+    private fun pushMessage(senderId: String, receiverId: String, message: String) {
         val hashMap: HashMap<String, String> = HashMap()
         hashMap["senderId"] = senderId
         hashMap["receiverId"] = receiverId
