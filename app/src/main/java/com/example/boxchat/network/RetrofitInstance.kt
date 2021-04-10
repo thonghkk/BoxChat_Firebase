@@ -7,6 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RetrofitInstance {
     companion object {
         var notificationApi: NotificationApi
+
         init {
             val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)

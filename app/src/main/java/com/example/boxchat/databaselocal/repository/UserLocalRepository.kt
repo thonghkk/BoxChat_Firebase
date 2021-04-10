@@ -7,7 +7,6 @@ import com.example.boxchat.databaselocal.entity.UserLocal
 
 class UserLocalRepository(private val userLocalDao: UserLocalDao) {
     val readAllData: LiveData<List<UserLocal>> = userLocalDao.readAllDataFromUser()
-
     suspend fun addUser(userLocal: UserLocal) {
         userLocalDao.addUserLocal(userLocal)
     }

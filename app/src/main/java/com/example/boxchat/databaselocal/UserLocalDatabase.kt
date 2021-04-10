@@ -10,7 +10,6 @@ import com.example.boxchat.databaselocal.entity.UserLocal
 
 @Database(entities = [UserLocal::class], version = 1, exportSchema = false)
 abstract class UserLocalDatabase : RoomDatabase() {
-
     abstract fun userLocalDao(): UserLocalDao
 
     companion object {
@@ -31,7 +30,6 @@ abstract class UserLocalDatabase : RoomDatabase() {
                 INSTANCE = instance
                 return instance
             }
-
         }
     }
 }

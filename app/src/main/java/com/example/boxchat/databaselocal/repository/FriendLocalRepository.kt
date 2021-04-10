@@ -5,13 +5,12 @@ import com.example.boxchat.databaselocal.dao.FriendLocalDao
 import com.example.boxchat.databaselocal.entity.FriendLocal
 
 class FriendLocalRepository(private val friendLocalDao: FriendLocalDao) {
-    val readAllDataFromFriend : LiveData<List<FriendLocal>> = friendLocalDao.readAllDataFromFriend()
-
+    val readAllDataFromFriend: LiveData<List<FriendLocal>> = friendLocalDao.readAllDataFromFriend()
     suspend fun addFriend(friendLocal: FriendLocal) {
         friendLocalDao.addFriendLocal(friendLocal)
     }
 
-    suspend fun deleteAllFriend(){
+    suspend fun deleteAllFriend() {
         friendLocalDao.deleteAllFriend()
     }
 }

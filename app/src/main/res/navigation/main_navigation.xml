@@ -13,7 +13,7 @@
         />
     <fragment
         android:id="@+id/strangerFragment"
-        android:name="com.example.boxchat.ui.main.users.StrangerFragment"
+        android:name="com.example.boxchat.ui.main.stranger.StrangerFragment"
         android:label="StrangerFragment"
         tools:layout="@layout/fragment_stranger"
         />

@@ -11,17 +11,11 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.boxchat.R
-import com.example.boxchat.SplashActivity
 import com.example.boxchat.base.BaseActivity
-import com.example.boxchat.commom.Firebase
 import com.example.boxchat.commom.Firebase.Companion.auth
-import com.example.boxchat.commom.Firebase.Companion.user
 import com.example.boxchat.model.MapLocation
-import com.example.boxchat.model.User
-import com.example.boxchat.ui.main.MainActivity
-import com.example.boxchat.ui.main.users.StrangerFragment
-import com.example.boxchat.ui.main.users.UserViewModel
-import com.example.boxchat.ui.main.users.ViewStrangerActivity
+import com.example.boxchat.ui.main.stranger.StrangerViewModel
+import com.example.boxchat.ui.main.stranger.ViewStrangerActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -32,10 +26,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.messaging.FirebaseMessaging
 
 const val REQUEST_CODE = 101
 
@@ -43,7 +33,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     private lateinit var client: FusedLocationProviderClient
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var mMapViewModel: MapModel
-    private lateinit var mUserViewModel: UserViewModel
+    private lateinit var mStrangerViewModel: StrangerViewModel
     private lateinit var mMap: GoogleMap
     private lateinit var mMarker: Marker
     private var mUserLocation = mutableListOf<MapLocation>()
@@ -53,7 +43,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         client = LocationServices.getFusedLocationProviderClient(this)
         mMapViewModel = ViewModelProvider(this).get(MapModel::class.java)
-        mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        mStrangerViewModel = ViewModelProvider(this).get(StrangerViewModel::class.java)
 
         //getCurrentLocation()
         if (ActivityCompat.checkSelfPermission(

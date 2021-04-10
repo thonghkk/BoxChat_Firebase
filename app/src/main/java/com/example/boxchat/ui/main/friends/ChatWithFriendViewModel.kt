@@ -38,7 +38,6 @@ class ChatWithFriendViewModel(application: Application) : AndroidViewModel(appli
         val friendLocalDao = FriendLocalDatabase.getFriendFromDatabase(application).friendLocalDao()
         repository = FriendLocalRepository(friendLocalDao)
         readAllDataFromFriend = repository.readAllDataFromFriend
-
         //get data
         getFriendList()
         addFriendLocal()
@@ -47,6 +46,7 @@ class ChatWithFriendViewModel(application: Application) : AndroidViewModel(appli
     private fun getFriendReference(): DatabaseReference {
         return Firebase.firebaseDatabase.getReference("Friends")
     }
+
     private fun getUserReference(): DatabaseReference {
         return Firebase.firebaseDatabase.getReference("Users")
     }

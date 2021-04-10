@@ -23,10 +23,10 @@
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:layout_margin="5dp"
                 android:layout_gravity="top|center"
-                >
+                android:layout_margin="5dp"
+                android:layout_weight="3">
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/mAvatarFriend"
                     android:layout_width="match_parent"
@@ -38,13 +38,14 @@
                     android:id="@+id/mImgStatusOn"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:src="@color/status_user"
-                    app:civ_border_color="@color/white"
-                    app:civ_border_width="1dp"
-                    android:visibility="gone"
                     android:layout_gravity="bottom|right"
                     android:layout_marginRight="30dp"
+                    android:src="@color/status_user"
+                    android:visibility="gone"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="1dp"
                     tools:ignore="NotSibling,RtlHardcoded" />
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/mImgStatusOff"
                     android:layout_width="15dp"
@@ -55,7 +56,6 @@
                     tools:ignore="NotSibling" />
 
             </FrameLayout>
-
 
             <LinearLayout
                 android:id="@+id/l1"
@@ -78,11 +78,10 @@
                     android:id="@+id/mMessageLast"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:maxLines="1"
+                    android:layout_marginEnd="40dp"
                     android:layout_weight="5"
                     android:ellipsize="end"
-                    android:layout_marginEnd="40dp"
-                    />
+                    android:maxLines="1" />
             </LinearLayout>
 
         </LinearLayout>

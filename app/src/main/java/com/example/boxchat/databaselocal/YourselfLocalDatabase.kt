@@ -32,7 +32,6 @@ abstract class YourselfLocalDatabase : RoomDatabase() {
             }
         }
     }
-
 }
 
 

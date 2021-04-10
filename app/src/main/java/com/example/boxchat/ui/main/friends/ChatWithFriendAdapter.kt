@@ -74,7 +74,6 @@ class ChatWithFriendAdapter(private var user: List<User>) :
                     override fun onCancelled(error: DatabaseError) {
 
                     }
-
                 })
         }
 
@@ -128,7 +127,6 @@ class ChatWithFriendAdapter(private var user: List<User>) :
                     }
                     user = list
                 }
-
                 val filterResult = FilterResults()
                 filterResult.values = user
                 return filterResult
@@ -141,6 +139,4 @@ class ChatWithFriendAdapter(private var user: List<User>) :
 
         }
     }
-
-
 }

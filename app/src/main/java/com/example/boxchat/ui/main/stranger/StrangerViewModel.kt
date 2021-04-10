@@ -1,4 +1,4 @@
-package com.example.boxchat.ui.main.users
+package com.example.boxchat.ui.main.stranger
 
 import android.app.Application
 import android.util.Log
@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.boxchat.utils.CheckNetwork.Companion.context
 import com.example.boxchat.commom.Firebase
 import com.example.boxchat.commom.Firebase.Companion.firebaseDatabase
-import com.example.boxchat.commom.Firebase.Companion.user
 import com.example.boxchat.databaselocal.FriendLocalDatabase
 import com.example.boxchat.databaselocal.repository.UserLocalRepository
 import com.example.boxchat.databaselocal.UserLocalDatabase
@@ -22,11 +21,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class UserViewModel(application: Application) : AndroidViewModel(application) {
+class StrangerViewModel(application: Application) : AndroidViewModel(application) {
 
     var databaseReference = getUserId()
     val requestRef = getRequestReference()
@@ -36,12 +34,10 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     val readAllDataFromFriend: LiveData<List<FriendLocal>>
     private val repositoryFriendLocal: FriendLocalRepository
 
-
     val users = MutableLiveData<List<User>>()
     val friends = MutableLiveData<List<User>>()
     private var friendList = mutableListOf<User>()
     private val userList = mutableListOf<User>()
-
 
     init {
         //initialization user on local
@@ -55,7 +51,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         //init friend
         getFriendList()
         getUsersList()
-        getAddUserLocal()
     }
 
     fun addUser(userLocal: UserLocal) {
@@ -79,7 +74,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun addListUser(user: List<User>) {
         users.value = user
     }
-
 
     fun addListFriend(user: List<User>) {
         friends.value = user
@@ -107,7 +101,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun getUsersList() {
         val userId = Firebase.auth.uid
-      //  FirebaseMessaging.getInstance().subscribeToTopic("/topics/$userId")
+        //  FirebaseMessaging.getInstance().subscribeToTopic("/topics/$userId")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 userList.clear()
@@ -125,26 +119,4 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             }
         })
     }
-
-    private fun getAddUserLocal() {
-        databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val mUser = dataSnapShot.getValue(UserLocal::class.java)
-                    Log.d("userLocal", "User: $user ")
-                    if (mUser?.userId != Firebase.auth.uid) {
-                        val userLocal =
-                            UserLocal(mUser?.userId!!, mUser.userName, mUser.userProfileImage)
-                        addUser(userLocal)
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-
 }

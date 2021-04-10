@@ -16,7 +16,8 @@ import com.example.boxchat.databaselocal.entity.FriendLocal
 import com.example.boxchat.model.User
 import com.example.boxchat.ui.main.chat.ChatActivity
 
-class FriendLocalAdapter(private val user: List<FriendLocal>) : RecyclerView.Adapter<FriendLocalAdapter.ViewHolder>() {
+class FriendLocalAdapter(private val user: List<FriendLocal>) :
+    RecyclerView.Adapter<FriendLocalAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val txtUserName: TextView = itemView.findViewById(R.id.mNameFriends)
@@ -25,8 +26,8 @@ class FriendLocalAdapter(private val user: List<FriendLocal>) : RecyclerView.Ada
 
         fun bindUser(friend: FriendLocal) {
             txtUserName.text = friend.userName
-            Log.d("MEO",friend.userName)
-            Log.d("MEO",friend.userId)
+            Log.d("MEO", friend.userName)
+            Log.d("MEO", friend.userId)
             val url = friend.userProfileImage
 
             Glide.with(itemView)
@@ -38,7 +39,8 @@ class FriendLocalAdapter(private val user: List<FriendLocal>) : RecyclerView.Ada
             Log.d("test", url)
 
             mLayoutUser.setOnClickListener {
-                Toast.makeText(itemView.context,"Internet access for text",Toast.LENGTH_SHORT).show()
+                Toast.makeText(itemView.context, "Internet access for text", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

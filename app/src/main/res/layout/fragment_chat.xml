@@ -14,6 +14,15 @@
         android:textSize="20sp"
         android:textStyle="bold|normal"
         tools:ignore="RtlHardcoded,RtlSymmetry" />
+    <TextView
+        android:id="@+id/mTxtConnectChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_not_internet"
+        android:textColor="@color/color_red"
+        android:gravity="center"
+        android:visibility="gone"
+        />
 
     <android.widget.SearchView
         android:id="@+id/mSearchFriends"
@@ -64,7 +73,7 @@
             android:layout_height="90dp"
             android:gravity="center"
             android:layout_weight="80"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             />
 
     </LinearLayout>

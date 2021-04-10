@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/mL1"
         android:layout_below="@+id/mCard"
-        tools:context=".ui.main.users.UsersActivity" />
+        tools:context=".ui.main.stranger.UsersActivity" />
     <LinearLayout
         android:id="@+id/mL1"
         android:layout_width="match_parent"

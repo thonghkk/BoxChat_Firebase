@@ -23,11 +23,7 @@ import com.example.boxchat.model.User
 import com.example.boxchat.network.FirebaseService
 import com.example.boxchat.network.RetrofitInstance
 import com.example.boxchat.ui.main.MainActivity
-import com.example.boxchat.ui.main.friends.ChatWithFriendViewModel
-import com.example.boxchat.ui.main.users.ViewStrangerActivity
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.example.boxchat.ui.main.stranger.ViewStrangerActivity
 import com.google.firebase.database.*
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
@@ -35,9 +31,7 @@ import com.google.gson.Gson
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import java.lang.Exception
 
 class ChatActivity : BaseActivity() {
@@ -74,12 +68,11 @@ class ChatActivity : BaseActivity() {
             FirebaseService.token = it.result.token
             Log.d("token", it.result.token)
         }
+        val userId = intent.getStringExtra("userId")
 
         mBtnBackMessageFriend.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
-
-        val userId = intent.getStringExtra("userId")
 
         mAvatarChat.setOnClickListener {
             val intent = Intent(this, ViewStrangerActivity::class.java)
@@ -104,7 +97,6 @@ class ChatActivity : BaseActivity() {
                             sendMessage(j.userId, i.userName)
                         }
                     })
-
                 }
             }
         })
@@ -127,7 +119,6 @@ class ChatActivity : BaseActivity() {
                 ).also {
                     sendNotification(it)
                 }
-
             }
         }
     }

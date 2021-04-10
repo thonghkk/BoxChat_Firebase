@@ -1,4 +1,4 @@
-package com.example.boxchat.ui.main.users
+package com.example.boxchat.ui.main.stranger
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,7 +14,6 @@ import com.example.boxchat.commom.Constants.Companion.CHANNEL_ADD_FRIEND
 import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
 import com.example.boxchat.utils.CheckNetwork.Companion.context
 import com.example.boxchat.commom.Firebase.Companion.auth
-import com.example.boxchat.commom.Firebase.Companion.user
 import com.example.boxchat.commom.KeyAddFriend.Companion.CURRENT_STATE
 import com.example.boxchat.commom.KeyAddFriend.Companion.FRIEND
 import com.example.boxchat.commom.KeyAddFriend.Companion.NOT_SUBMIT_PENDING
@@ -24,7 +23,6 @@ import com.example.boxchat.model.Notification
 import com.example.boxchat.model.PushNotification
 import com.example.boxchat.model.User
 import com.example.boxchat.network.RetrofitInstance
-import com.example.boxchat.ui.main.MainActivity
 import com.example.boxchat.ui.main.chat.ChatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -42,9 +40,10 @@ class ViewStrangerActivity : BaseActivity() {
     private lateinit var mViewHomeTown: TextView
     private lateinit var mViewBirthDay: TextView
     private lateinit var mViewEnglishCertificate: TextView
+    private lateinit var mTxtDescription: TextView
     private lateinit var mBtnAddFriend: Button
     private lateinit var mBtnCancelFriend: Button
-    private lateinit var mUserViewModel: UserViewModel
+    private lateinit var mStrangerViewModel: StrangerViewModel
     private lateinit var mBtnBackStranger: ImageView
     private var mCurrentState = "NOTHING_HAPPEN"
     var topic = ""
@@ -58,25 +57,32 @@ class ViewStrangerActivity : BaseActivity() {
         mBtnCancelFriend = findViewById(R.id.mBtnCancelFriend)
         mViewBirthDay = findViewById(R.id.mViewBirthDay)
         mViewHomeTown = findViewById(R.id.mViewHomeTown)
+        mTxtDescription = findViewById(R.id.mTxtDescription)
         mViewEnglishCertificate = findViewById(R.id.mViewEnglishCertificate)
         mBtnBackStranger = findViewById(R.id.mBtnBackStranger)
-        mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        mStrangerViewModel = ViewModelProvider(this).get(StrangerViewModel::class.java)
 
         val strangerId = intent.getStringExtra("userId")
 
         mBtnBackStranger.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            onBackPressed()
         }
 
         if (checkNetwork()) {
             //get user info
-            mUserViewModel.users.observe(this, Observer { user ->
+            mStrangerViewModel.users.observe(this, Observer { user ->
                 for (i in user) {
                     if (i.userId == strangerId) {
                         mNameStranger.text = i.userName
-                        mViewBirthDay.text = i.userBirthDay
                         mViewHomeTown.text = i.userHomeTown
                         mViewEnglishCertificate.text = i.userEnglishCertificate
+                        mViewBirthDay.text = i.userBirthDay
+
+                        if (i.userDescription == "") {
+                            mTxtDescription.text = getString(R.string.txt_description_yourself)
+                        } else {
+                            mTxtDescription.text = i.userDescription
+                        }
                         if (i.userProfileImage == "") {
                             mAvatarStranger.setImageResource(R.mipmap.ic_avatar)
                         } else {
@@ -111,7 +117,7 @@ class ViewStrangerActivity : BaseActivity() {
     private fun mCheckUserExistence(strangerId: String) {
         //status after send make friend
         //sender side
-        mUserViewModel.requestRef.child(auth.uid!!).child(strangerId)
+        mStrangerViewModel.requestRef.child(auth.uid!!).child(strangerId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -132,7 +138,7 @@ class ViewStrangerActivity : BaseActivity() {
             })
 
         //receiver side
-        mUserViewModel.requestRef.child(strangerId).child(auth.uid!!)
+        mStrangerViewModel.requestRef.child(strangerId).child(auth.uid!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -150,7 +156,7 @@ class ViewStrangerActivity : BaseActivity() {
             })
 
         //if it was friend , show below
-        mUserViewModel.friendRef.child(strangerId).child(auth.uid!!)
+        mStrangerViewModel.friendRef.child(strangerId).child(auth.uid!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -179,7 +185,7 @@ class ViewStrangerActivity : BaseActivity() {
         if (mCurrentState == CURRENT_STATE) {
             val hashMap: HashMap<String, String> = HashMap()
             hashMap["status"] = PENDING
-            mUserViewModel.requestRef.child(auth.uid!!).child(strangerId).setValue(hashMap)
+            mStrangerViewModel.requestRef.child(auth.uid!!).child(strangerId).setValue(hashMap)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         Toast.makeText(this, "You have send Friend request", Toast.LENGTH_SHORT)
@@ -205,7 +211,7 @@ class ViewStrangerActivity : BaseActivity() {
         }
         //unFriend Request
         if ((mCurrentState == NOT_SUBMIT_PENDING)) {
-            mUserViewModel.requestRef.child(auth.uid!!).child(strangerId).removeValue()
+            mStrangerViewModel.requestRef.child(auth.uid!!).child(strangerId).removeValue()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         Toast.makeText(
@@ -223,7 +229,7 @@ class ViewStrangerActivity : BaseActivity() {
         }
         //if receiver accept , do below
         if (mCurrentState == RECEIVER) {
-            mUserViewModel.requestRef.child(strangerId).child(auth.uid!!).removeValue()
+            mStrangerViewModel.requestRef.child(strangerId).child(auth.uid!!).removeValue()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val hashMap: HashMap<String, String> = HashMap()
@@ -231,7 +237,7 @@ class ViewStrangerActivity : BaseActivity() {
                         hashMap["userName"] = strangerName
                         hashMap["userProfileImage"] = strangerImage
                         hashMap["status"] = FRIEND
-                        mUserViewModel.friendRef.child(auth.uid!!).child(strangerId)
+                        mStrangerViewModel.friendRef.child(auth.uid!!).child(strangerId)
                             .setValue(hashMap)
                             .addOnCompleteListener {
                                 if (it.isSuccessful) {
@@ -248,7 +254,7 @@ class ViewStrangerActivity : BaseActivity() {
                                 }
                             }
 
-                        mUserViewModel.databaseReference.child(auth.uid!!)
+                        mStrangerViewModel.databaseReference.child(auth.uid!!)
                             .addValueEventListener(object : ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
                                     val mUser = snapshot.getValue(User::class.java)
@@ -258,7 +264,7 @@ class ViewStrangerActivity : BaseActivity() {
                                     hashMap2["userProfileImage"] =
                                         mUser.userProfileImage
                                     hashMap2["status"] = FRIEND
-                                    mUserViewModel.friendRef.child(strangerId)
+                                    mStrangerViewModel.friendRef.child(strangerId)
                                         .child(auth.uid!!).setValue(hashMap2)
                                 }
 
@@ -274,7 +280,7 @@ class ViewStrangerActivity : BaseActivity() {
     private fun mUnFriend(strangerId: String) {
         //cancel friend from receiver
         if (mCurrentState == FRIEND) {
-            mUserViewModel.friendRef.child(auth.uid!!).child(strangerId).removeValue()
+            mStrangerViewModel.friendRef.child(auth.uid!!).child(strangerId).removeValue()
                 .addOnCompleteListener {
                     Toast.makeText(
                         this,
@@ -287,7 +293,7 @@ class ViewStrangerActivity : BaseActivity() {
                 }
         }
         //cancel friend from sender
-        mUserViewModel.friendRef.child(strangerId).child(auth.uid!!).removeValue()
+        mStrangerViewModel.friendRef.child(strangerId).child(auth.uid!!).removeValue()
             .addOnCompleteListener {
                 Toast.makeText(
                     this,
@@ -301,7 +307,7 @@ class ViewStrangerActivity : BaseActivity() {
 
         //Not accept add friend
         if (mCurrentState == RECEIVER) {
-            mUserViewModel.requestRef.child(strangerId).child(auth.uid!!).removeValue()
+            mStrangerViewModel.requestRef.child(strangerId).child(auth.uid!!).removeValue()
                 .addOnCompleteListener {
                     mCurrentState = CURRENT_STATE
                     mBtnAddFriend.text = resources.getString(R.string.txt_send_friend_request)
@@ -311,7 +317,7 @@ class ViewStrangerActivity : BaseActivity() {
     }
 
     private fun getStrangerLocal(strangerId: String) {
-        mUserViewModel.readAllData.observe(this, Observer { stranger ->
+        mStrangerViewModel.readAllData.observe(this, Observer { stranger ->
             Log.d("stranger", "$stranger")
             for (i in stranger) {
                 if (i.userId == strangerId) {
@@ -353,7 +359,5 @@ class ViewStrangerActivity : BaseActivity() {
 //                Toast.makeText(this@ChatActivity, "${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
-
-
 }
 

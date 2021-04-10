@@ -1,6 +1,5 @@
 package com.example.boxchat.ui.main.setting
 
-import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.ImageView
@@ -22,6 +21,7 @@ class SettingFragment : BaseFragment() {
     private lateinit var mAvatarSetting: CircleImageView
     private lateinit var mNameSetting: TextView
     private lateinit var mSettingProfile: LinearLayout
+    private lateinit var mInfo: LinearLayout
     private lateinit var mSettingViewModel: SettingViewModel
 
     override fun getLayoutID() = R.layout.fragment_setting
@@ -30,6 +30,7 @@ class SettingFragment : BaseFragment() {
         mAvatarSetting = view.findViewById(R.id.mAvatarSetting)
         mNameSetting = view.findViewById(R.id.mNameSetting)
         mSettingProfile = view.findViewById(R.id.mSettingProfile)
+        mInfo = view.findViewById(R.id.mInfo)
         mSettingViewModel = ViewModelProvider(this).get(SettingViewModel::class.java)
 
         mSignOut.setOnClickListener {
@@ -42,6 +43,9 @@ class SettingFragment : BaseFragment() {
             }
 
             startActivity(Intent(context, LoginActivity::class.java))
+        }
+        mInfo.setOnClickListener {
+            startActivity(Intent(context, InfoAppActivity::class.java))
         }
 
         if (checkNetwork()) {
@@ -91,5 +95,4 @@ class SettingFragment : BaseFragment() {
                 }
             })
     }
-
 }

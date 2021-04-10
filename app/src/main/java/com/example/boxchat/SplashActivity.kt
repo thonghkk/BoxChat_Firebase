@@ -18,10 +18,6 @@ class SplashActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
-        }, 1500)
-
-        val progressBar = findViewById<ProgressBar>(R.id.spin_kit)
-        val doubleBounce = ThreeBounce()
-        progressBar.indeterminateDrawable = doubleBounce
+        }, 1000)
     }
 }

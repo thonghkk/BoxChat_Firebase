@@ -36,7 +36,7 @@ class ChatAdapter(private val chat: List<Chat>) :
                                 if (users.userProfileImage == "") {
                                     imgAvatar.setImageResource(R.mipmap.ic_avatar)
                                 } else {
-                                    Glide.with(itemView.context)
+                                    Glide.with(itemView.context.applicationContext)
                                         .load(users.userProfileImage)
                                         .fitCenter()
                                         .circleCrop()

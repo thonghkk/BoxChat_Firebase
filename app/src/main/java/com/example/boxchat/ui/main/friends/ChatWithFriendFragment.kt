@@ -1,23 +1,17 @@
 package com.example.boxchat.ui.main.friends
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseFragment
-import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
-import com.example.boxchat.model.User
-import okhttp3.internal.notify
-import java.util.*
-import kotlin.collections.HashMap
 
 class ChatWithFriendFragment : BaseFragment() {
     private lateinit var mFriendRecycleView: RecyclerView
@@ -26,24 +20,27 @@ class ChatWithFriendFragment : BaseFragment() {
     private lateinit var mSearchFriends: SearchView
     private lateinit var friendAdapter: ChatWithFriendAdapter
     private lateinit var friendAdapterCircle: ChatWithFriendAdapterCircle
+    private lateinit var mTxtConnectChat: TextView
 
     override fun getLayoutID() = R.layout.fragment_chat
 
     @SuppressLint("WrongConstant")
     override fun onViewReady(view: View) {
         mFriendRecycleView = view.findViewById(R.id.mFriendRecycleView)
+        mTxtConnectChat = view.findViewById(R.id.mTxtConnectChat)
         mFriendRecycleViewCircle = view.findViewById(R.id.mFriendRecycleViewCircle)
         mSearchFriends = view.findViewById(R.id.mSearchFriends)
         mFriendRecycleView.layoutManager =
             LinearLayoutManager(context, LinearLayout.VERTICAL, false)
         mFriendRecycleViewCircle.layoutManager =
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+            LinearLayoutManager(context, LinearLayout.HORIZONTAL, false)
         mFriendFragmentViewModel = ViewModelProvider(this).get(ChatWithFriendViewModel::class.java)
 
         if (checkNetwork()) {
             getFriend()
         } else {
             getFriendLocal()
+            mTxtConnectChat.visibility = View.VISIBLE
         }
     }
 
@@ -59,7 +56,6 @@ class ChatWithFriendFragment : BaseFragment() {
             friendAdapter.notifyDataSetChanged()
             friendAdapterCircle.notifyDataSetChanged()
         })
-
     }
 
     private fun getFriendLocal() {
@@ -90,5 +86,4 @@ class ChatWithFriendFragment : BaseFragment() {
             }
         })
     }
-
 }

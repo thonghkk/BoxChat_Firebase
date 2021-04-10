@@ -7,24 +7,12 @@
     android:background="@drawable/background_splash"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".SplashActivity"
-    >
+    tools:context=".SplashActivity">
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/logo_app_splash" />
-
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/spin_kit"
-        style="@style/SpinKitView.Large.Circle"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom|center"
-        android:adjustViewBounds="true"
-        app:SpinKit_Color="@color/white"
-        android:layout_margin="20dp"
-        />
 
 </FrameLayout>

@@ -1,4 +1,4 @@
-package com.example.boxchat.ui.main.users
+package com.example.boxchat.ui.main.stranger
 
 import android.content.Intent
 import android.util.Log
@@ -9,12 +9,11 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
-import com.example.boxchat.databaselocal.entity.UserLocal
 import com.example.boxchat.model.User
-import com.example.boxchat.ui.main.chat.ChatActivity
 
-class UserAdapter(private var user: List<User>) : RecyclerView.Adapter<UserAdapter.ViewHolder>(),Filterable {
+class StrangerAdapter(private var user: List<User>) : RecyclerView.Adapter<StrangerAdapter.ViewHolder>(), Filterable {
     private val userOld: List<User> = user
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val txtUserName: TextView = itemView.findViewById(R.id.mNameUser)
         private val imgAvatar: ImageView = itemView.findViewById(R.id.mAvatar)
@@ -61,7 +60,6 @@ class UserAdapter(private var user: List<User>) : RecyclerView.Adapter<UserAdapt
                     }
                     user = list
                 }
-
                 val filterResult = FilterResults()
                 filterResult.values = user
                 return filterResult
@@ -71,8 +69,6 @@ class UserAdapter(private var user: List<User>) : RecyclerView.Adapter<UserAdapt
                 user = results?.values as List<User>
                 notifyDataSetChanged()
             }
-
         }
     }
-
 }

@@ -3,7 +3,6 @@ package com.example.boxchat.ui.login
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
@@ -13,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.boxchat.ui.main.MainActivity
 import com.example.boxchat.R
-import com.example.boxchat.base.BaseActivity
 import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
 import com.example.boxchat.utils.CheckNetwork.Companion.getContextThis
 import com.example.boxchat.commom.Firebase.Companion.auth
@@ -46,7 +44,6 @@ class LoginActivity : AppCompatActivity() {
         mEdtEmailLogin = findViewById(R.id.mEmailLogin)
         mEdtPassWordLogin = findViewById(R.id.mPassWordLogin)
         btnLoginWithGoogle = findViewById(R.id.btnLoginWithGoogle)
-
         mLoginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         //login with Email

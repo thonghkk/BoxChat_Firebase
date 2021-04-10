@@ -35,6 +35,10 @@
     <string name="txt_welcome">Welcome !!!</string>
     <string name="txt_or">Or</string>
     <string name="txt_login_with_google">Login With Google</string>
+    <string name="txt_description_yourself">Describe more about yourself...</string>
+    <string name="txt_not_internet">No Internet Connection</string>
+    <string name="txt_info">Information Application</string>
+    <string name="txt_version">Version : AD 1.0</string>
 
     //menu
     <string name="txt_chat">Chat</string>

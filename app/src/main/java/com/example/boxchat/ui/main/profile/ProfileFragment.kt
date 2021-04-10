@@ -1,7 +1,7 @@
 package com.example.boxchat.ui.main.profile
 
+import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -26,11 +26,9 @@ import java.lang.Exception
 import java.util.*
 import kotlin.collections.HashMap
 
-const val PICK_IMAGE_REQUEST = 99
-const val PICTURE = 999
+const val PICK_IMAGE_REQUEST = 88
 
 class ProfileFragment : BaseFragment() {
-
     //import to read/write data from firebase
     private lateinit var storage: FirebaseStorage
     private lateinit var storageRef: StorageReference
@@ -42,6 +40,7 @@ class ProfileFragment : BaseFragment() {
     private lateinit var mProgress: ProgressBar
     private lateinit var mHomeTown: TextView
     private lateinit var mBirthDay: TextView
+    private lateinit var mTxtDescriptionProfile: TextView
     private lateinit var mEnglishCertificate: TextView
 
     override fun getLayoutID() = R.layout.fragment_profile
@@ -52,6 +51,7 @@ class ProfileFragment : BaseFragment() {
         mProgress = view.findViewById(R.id.mProgressLoadProfile)
         mHomeTown = view.findViewById(R.id.mTxtHomeTown)
         mBirthDay = view.findViewById(R.id.mTxtBirthDay)
+        mTxtDescriptionProfile = view.findViewById(R.id.mTxtDescriptionProfile)
         mEnglishCertificate = view.findViewById(R.id.mTxtEnglishCertificate)
         mProfileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         storage = FirebaseStorage.getInstance()
@@ -68,15 +68,12 @@ class ProfileFragment : BaseFragment() {
             getYourselfLocal()
         }
 
-        mUserAvatar.setOnClickListener {
-            // chooseImage()
-            dialogViewProfile()
-        }
         mBtnSaveProfile.setOnClickListener {
             uploadImage()
         }
-
-
+        mUserAvatar.setOnClickListener {
+            dialogViewProfile()
+        }
     }
 
     private fun getYourself() {
@@ -85,11 +82,11 @@ class ProfileFragment : BaseFragment() {
                 mUserName.text = i.userName
                 mHomeTown.text = i.userHomeTown
                 mBirthDay.text = i.userBirthDay
-                mEnglishCertificate.text = i.userEnglishCertificate
+                mTxtDescriptionProfile.text = i.userDescription
                 if (i.userProfileImage == "") {
                     mUserAvatar.setImageResource(R.mipmap.ic_avatar)
                 } else {
-                    Glide.with(this)
+                    Glide.with(requireContext())
                         .load(i.userProfileImage)
                         .fitCenter()
                         .circleCrop()
@@ -127,7 +124,7 @@ class ProfileFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
             filePath = data?.data
             try {
                 val bitmap: Bitmap =
@@ -137,13 +134,6 @@ class ProfileFragment : BaseFragment() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        } else if (requestCode == PICTURE) {
-
-            val picture: Bitmap? = data?.getParcelableExtra("data")
-            mUserAvatar.setImageBitmap(picture)
-
-            mBtnSaveProfile.visibility = View.VISIBLE
-
         }
     }
 
@@ -185,9 +175,8 @@ class ProfileFragment : BaseFragment() {
             requireContext(), R.style.BottomSheetDialogTheme
         )
         val mLinearLayout = view?.findViewById<LinearLayout>(R.id.mDialog)
-
         val mDialogView =
-            LayoutInflater.from(context).inflate(R.layout.view_profile_image, mLinearLayout)
+            LayoutInflater.from(context).inflate(R.layout.dialog_change_profile_image, mLinearLayout)
         bottomSheetDialog.setContentView(mDialogView)
         bottomSheetDialog.show()
 
@@ -228,16 +217,6 @@ class ProfileFragment : BaseFragment() {
                 Toast.makeText(context, "Connect Internet To View !", Toast.LENGTH_SHORT).show()
             }
         }
-
-        //camera
-
-        mDialogView.findViewById<LinearLayout>(R.id.mDialogCameraPicture).setOnClickListener {
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(intent, PICTURE)
-            bottomSheetDialog.dismiss()
-        }
-
     }
-
 }
 

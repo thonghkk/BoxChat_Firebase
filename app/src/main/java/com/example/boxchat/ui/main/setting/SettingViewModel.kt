@@ -26,10 +26,9 @@ import kotlinx.coroutines.launch
 class SettingViewModel(application: Application) : AndroidViewModel(application) {
 
     var databaseReferenceProfile = getUserId()
-    private var yourSelfList = mutableListOf<User>()
     val me = MutableLiveData<List<User>>()
-
     val readAllDataFromMe: LiveData<List<YourselfLocal>>
+    private var yourSelfList = mutableListOf<User>()
     private val repository: FriendLocalRepository
     private val repositoryUser: UserLocalRepository
     private val repositoryYourSelf: YourselfLocalRepository
@@ -40,10 +39,11 @@ class SettingViewModel(application: Application) : AndroidViewModel(application)
         repository = FriendLocalRepository(friendLocalDao)
         val userLocalDao = UserLocalDatabase.getDatabase(application).userLocalDao()
         repositoryUser = UserLocalRepository(userLocalDao)
-        val youSelfLocalDao = YourselfLocalDatabase.getDatabaseFromMe(application).yourselfLocalDao()
+        val youSelfLocalDao =
+            YourselfLocalDatabase.getDatabaseFromMe(application).yourselfLocalDao()
         repositoryYourSelf = YourselfLocalRepository(youSelfLocalDao)
         readAllDataFromMe = repositoryYourSelf.readAllDataFromMe
-
+        //get info of me
         getProfile()
     }
 
@@ -70,22 +70,21 @@ class SettingViewModel(application: Application) : AndroidViewModel(application)
         })
     }
 
-    fun deleteAllFriendLocal(){
-        viewModelScope.launch(Dispatchers.IO){
+    fun deleteAllFriendLocal() {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllFriend()
         }
     }
 
-    fun deleteAllUserLocal(){
-        viewModelScope.launch(Dispatchers.IO){
+    fun deleteAllUserLocal() {
+        viewModelScope.launch(Dispatchers.IO) {
             repositoryUser.deleteAllUser()
         }
     }
 
-    fun deleteAllYourself(){
-        viewModelScope.launch(Dispatchers.IO){
+    fun deleteAllYourself() {
+        viewModelScope.launch(Dispatchers.IO) {
             repositoryYourSelf.deleteAllYourself()
         }
     }
-
 }

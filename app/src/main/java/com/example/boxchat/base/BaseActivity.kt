@@ -34,6 +34,5 @@ abstract class BaseActivity : AppCompatActivity() {
         }catch (e:Exception){
             startActivity(Intent(this, LoginActivity::class.java))
         }
-
     }
 }

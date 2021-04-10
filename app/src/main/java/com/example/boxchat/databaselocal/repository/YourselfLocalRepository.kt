@@ -6,8 +6,8 @@ import com.example.boxchat.databaselocal.entity.UserLocal
 import com.example.boxchat.databaselocal.entity.YourselfLocal
 
 class YourselfLocalRepository(private val yourselfLocalDao: YourselfLocalDao) {
-
-    val readAllDataFromMe: LiveData<List<YourselfLocal>> = yourselfLocalDao.readAllDataFromYourself()
+    val readAllDataFromMe: LiveData<List<YourselfLocal>> =
+        yourselfLocalDao.readAllDataFromYourself()
 
     suspend fun addYourself(yourselfLocal: YourselfLocal) {
         yourselfLocalDao.addYourselfLocal(yourselfLocal)

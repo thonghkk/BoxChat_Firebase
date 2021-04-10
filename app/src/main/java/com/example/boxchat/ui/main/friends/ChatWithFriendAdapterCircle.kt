@@ -16,19 +16,18 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 
-class ChatWithFriendAdapterCircle(private var friends:List<User>): RecyclerView.Adapter<ChatWithFriendAdapterCircle.ViewHolder>() ,Filterable {
-
+class ChatWithFriendAdapterCircle(private var friends: List<User>) :
+    RecyclerView.Adapter<ChatWithFriendAdapterCircle.ViewHolder>(), Filterable {
     private val userOld: List<User> = friends
-    class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
 
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imgAvatar: ImageView = itemView.findViewById(R.id.mImgIcon)
         private val mNameFriend: TextView = itemView.findViewById(R.id.mNameFriend)
         private val mLineaLayout: LinearLayout = itemView.findViewById(R.id.mLineaLayout)
-        private val mImgStatusOnCircle:ImageView = itemView.findViewById(R.id.mImgStatusOnCircle)
+        private val mImgStatusOnCircle: ImageView = itemView.findViewById(R.id.mImgStatusOnCircle)
         private val userList = mutableListOf<User>()
-        //private val mChatWithFriendViewModel :ChatWithFriendViewModel = ViewModelProvider(itemView.context).get(ChatWithFriendViewModel::class.java)
 
-        fun bindItems(friend:User){
+        fun bindItems(friend: User) {
             mNameFriend.text = friend.userName
             val url = friend.userProfileImage
             Glide.with(itemView)
@@ -40,9 +39,9 @@ class ChatWithFriendAdapterCircle(private var friends:List<User>): RecyclerView.
 
             mLineaLayout.setOnClickListener {
                 val intent = Intent(itemView.context, ChatActivity::class.java)
-                intent.putExtra("userId",friend.userId)
-                intent.putExtra("userName",friend.userName)
-                intent.putExtra("userImage",friend.userProfileImage)
+                intent.putExtra("userId", friend.userId)
+                intent.putExtra("userName", friend.userName)
+                intent.putExtra("userImage", friend.userProfileImage)
                 itemView.context.startActivity(intent)
             }
 
@@ -59,26 +58,24 @@ class ChatWithFriendAdapterCircle(private var friends:List<User>): RecyclerView.
                         for (i in userList) {
                             if (i.statusExist == "online") {
                                 mImgStatusOnCircle.visibility = View.VISIBLE
-
                             }
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
                     }
-
                 })
-
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.items_friend_circle,parent,false)
+        val v =
+            LayoutInflater.from(parent.context).inflate(R.layout.items_friend_circle, parent, false)
         return ViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       holder.bindItems(friends[position])
+        holder.bindItems(friends[position])
     }
 
     override fun getItemCount() = friends.size
@@ -108,7 +105,6 @@ class ChatWithFriendAdapterCircle(private var friends:List<User>): RecyclerView.
                 friends = results?.values as List<User>
                 notifyDataSetChanged()
             }
-
         }
     }
 }

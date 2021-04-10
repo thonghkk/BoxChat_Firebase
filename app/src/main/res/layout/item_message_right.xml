@@ -23,7 +23,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="90"
+            android:layout_weight="100"
             android:gravity="right|center"
             tools:ignore="NestedWeights">
             <TextView
@@ -44,7 +44,7 @@
         <ImageView
             android:id="@+id/imgAvatar"
             android:layout_width="0dp"
-            android:layout_weight="10"
+            android:layout_weight="0"
             android:layout_gravity="bottom"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_profile"

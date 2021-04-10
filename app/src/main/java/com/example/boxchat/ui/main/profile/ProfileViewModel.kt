@@ -19,7 +19,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(application: Application) : AndroidViewModel(application) {
-
     var databaseReferenceProfile = getUserId()
     val me = MutableLiveData<List<User>>()
     private var yourSelfList = mutableListOf<User>()
@@ -37,7 +36,6 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         getProfile()
     }
 
-
     fun addProfile(yourselfLocal: YourselfLocal) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addYourself(yourselfLocal)
@@ -53,7 +51,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val mYourself = dataSnapShot.getValue(YourselfLocal::class.java)
-                    if (mYourself?.userId == user?.uid){
+                    if (mYourself?.userId == user?.uid) {
                         addProfile(mYourself!!)
                     }
                 }
@@ -83,5 +81,4 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             }
         })
     }
-
 }

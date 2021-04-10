@@ -2,7 +2,6 @@ package com.example.boxchat.network
 
 import android.app.*
 import android.app.NotificationManager.IMPORTANCE_HIGH
-import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,36 +11,19 @@ import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.ViewModelProvider
 import com.example.boxchat.R
 import com.example.boxchat.commom.Constants.Companion.CHANNEL_ADD_FRIEND
 import com.example.boxchat.commom.Constants.Companion.CHANNEL_CHAT
-import com.example.boxchat.commom.Firebase
-import com.example.boxchat.commom.Firebase.Companion.auth
-import com.example.boxchat.model.User
-import com.example.boxchat.ui.main.MainActivity
 import com.example.boxchat.ui.main.chat.ChatActivity
-import com.example.boxchat.ui.main.friends.ChatWithFriendFragment
-import com.example.boxchat.ui.main.friends.ChatWithFriendViewModel
-import com.example.boxchat.ui.main.users.StrangerFragment
-import com.example.boxchat.ui.main.users.ViewStrangerActivity
-import com.example.boxchat.utils.CheckNetwork
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.messaging.FirebaseMessaging
+import com.example.boxchat.ui.main.stranger.ViewStrangerActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlin.random.Random
 
 class FirebaseService : FirebaseMessagingService() {
-
     val CHANGNEL_ID = "my_notification_channel"
-    val CHANGNEL_ID_ADD_FRIEND = "my_notification_channel_add_friend"
 
     companion object {
         var sharePref: SharedPreferences? = null
@@ -72,7 +54,6 @@ class FirebaseService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationId = 0
         val notificationAddFriend = Random.nextInt()
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotification(notificationManager)
@@ -123,7 +104,6 @@ class FirebaseService : FirebaseMessagingService() {
                 .build()
             notificationManager.notify(notificationAddFriend, notification)
         }
-
     }
 
     //Create a notification channel
@@ -141,8 +121,6 @@ class FirebaseService : FirebaseMessagingService() {
             lightColor = Color.WHITE
             setSound(uri, attribute)
         }
-
         notificationManager.createNotificationChannel(channel)
     }
-
 }
