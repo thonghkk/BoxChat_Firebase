@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_enter_message"
+        android:background="@drawable/bg_enter_message"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="27dp">

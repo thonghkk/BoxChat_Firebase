@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="20dp"
-    android:background="@drawable/background_setting_profile"
+    android:background="@drawable/bg_setting_profile"
     android:orientation="vertical"
     android:paddingRight="20dp"
     android:paddingLeft="20dp"

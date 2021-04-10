@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/enter_message"
             android:layout_weight="80"
-            android:background="@drawable/background_enter_message"
+            android:background="@drawable/bg_enter_message"
             android:padding="10dp"
             android:inputType="textMultiLine"
             />

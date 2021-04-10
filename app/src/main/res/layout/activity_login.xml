@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/background_login"
+    android:background="@drawable/bg_login"
     android:orientation="vertical"
     tools:context=".ui.login.LoginActivity"
     android:weightSum="100">
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="80"
-        android:background="@drawable/background_profile"
+        android:background="@drawable/bg_profile"
         android:gravity="top"
         android:orientation="vertical">
 
@@ -50,7 +50,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/background_edt_login"
+            android:background="@drawable/bg_edt_login"
             android:drawableEnd="@drawable/ic_mail2"
             android:hint="@string/enter_email"
             android:padding="10dp" />
@@ -62,7 +62,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/background_edt_login"
+            android:background="@drawable/bg_edt_login"
             android:drawableEnd="@drawable/ic_lock"
             android:hint="@string/enter_password"
             android:inputType="textPassword"
@@ -119,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:background="@drawable/background_btn_google"
+            android:background="@drawable/bg_btn_google"
             android:drawableStart="@mipmap/ic_google"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"

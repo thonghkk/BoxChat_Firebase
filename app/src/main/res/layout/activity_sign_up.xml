@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_login"
+    android:background="@drawable/bg_login"
     android:orientation="vertical"
     android:weightSum="100"
     tools:context=".ui.signup.SignUpActivity">
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="80"
-        android:background="@drawable/background_profile"
+        android:background="@drawable/bg_profile"
         android:gravity="top"
         android:orientation="vertical">
 
@@ -50,7 +50,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/background_edt_login"
+            android:background="@drawable/bg_edt_login"
             android:drawableEnd="@drawable/ic_profile2"
             android:hint="@string/enter_password"
             android:inputType="text"
@@ -63,7 +63,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/background_edt_login"
+            android:background="@drawable/bg_edt_login"
             android:drawableEnd="@drawable/ic_mail2"
             android:hint="@string/enter_email"
             android:padding="10dp" />
@@ -75,7 +75,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/background_edt_login"
+            android:background="@drawable/bg_edt_login"
             android:drawableEnd="@drawable/ic_lock"
             android:hint="@string/enter_password"
             android:inputType="textPassword"
@@ -88,7 +88,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/background_edt_login"
+            android:background="@drawable/bg_edt_login"
             android:drawableEnd="@drawable/ic_lock"
             android:hint="@string/enter_confirm_password"
             android:inputType="textPassword"

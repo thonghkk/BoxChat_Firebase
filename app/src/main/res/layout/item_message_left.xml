@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:autoLink="all"
-                android:background="@drawable/item_left_message_background"
+                android:background="@drawable/bg_left_message"
                 android:padding="10dp"
                 android:text="@string/txt_name_user"
                 android:textColor="@color/black"

@@ -63,7 +63,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="30"
-            android:background="@drawable/background_enter_message"
+            android:background="@drawable/bg_enter_message"
             android:orientation="vertical"
             android:weightSum="10"
             tools:ignore="NestedWeights">
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="@drawable/background_enter_message"
+                android:background="@drawable/bg_enter_message"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLength="20"
@@ -130,7 +130,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="80"
-                        android:background="@drawable/background_enter_message"
+                        android:background="@drawable/bg_enter_message"
                         android:textColor="@color/color_name_user"
                         android:textSize="15sp" />
                 </LinearLayout>
@@ -164,7 +164,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="80"
-                        android:background="@drawable/background_enter_message"
+                        android:background="@drawable/bg_enter_message"
                         android:textColor="@color/color_name_user"
                         android:textSize="15sp" />
                 </LinearLayout>
@@ -196,7 +196,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="80"
-                        android:background="@drawable/background_enter_message"
+                        android:background="@drawable/bg_enter_message"
                         android:textColor="@color/color_name_user"
                         android:textSize="15sp" />
                 </LinearLayout>
@@ -213,7 +213,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
-        android:background="@drawable/background_profile"
+        android:background="@drawable/bg_profile"
         android:gravity="top"
         android:hint="@string/txt_description_yourself"
         android:padding="5dp"
