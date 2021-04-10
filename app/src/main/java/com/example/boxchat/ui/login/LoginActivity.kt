@@ -29,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var mBtnLogin: Button
     private lateinit var mBtnSignUp: Button
-    private lateinit var btnLoginWithGoogle: Button
+    private lateinit var mBtnLoginWithGoogle: Button
     private lateinit var mEdtEmailLogin: EditText
     private lateinit var mEdtPassWordLogin: EditText
     private lateinit var mLoginViewModel: LoginViewModel
@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
         mBtnSignUp = findViewById(R.id.mBtnSignUp_2)
         mEdtEmailLogin = findViewById(R.id.mEmailLogin)
         mEdtPassWordLogin = findViewById(R.id.mPassWordLogin)
-        btnLoginWithGoogle = findViewById(R.id.btnLoginWithGoogle)
+        mBtnLoginWithGoogle = findViewById(R.id.mBtnLoginWithGoogle)
         mLoginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         //login with Email
@@ -104,8 +104,7 @@ class LoginActivity : AppCompatActivity() {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        btnLoginWithGoogle.setOnClickListener {
-
+        mBtnLoginWithGoogle.setOnClickListener {
             mProgressDialog = ProgressDialog(this)
             mProgressDialog.show()
             mProgressDialog.setContentView(R.layout.item_progressbar)
