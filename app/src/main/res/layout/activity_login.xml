@@ -38,7 +38,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="20dp"
-            android:text="@string/txt_login"
+            android:text="@string/textView.text.login"
             android:textColor="@color/color_icon"
             android:textSize="36sp"
             android:textStyle="bold" />
@@ -52,7 +52,7 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/bg_edt_login"
             android:drawableEnd="@drawable/ic_mail2"
-            android:hint="@string/enter_email"
+            android:hint="@string/editText.hint.enter_email"
             android:padding="10dp" />
 
         <EditText
@@ -64,7 +64,7 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/bg_edt_login"
             android:drawableEnd="@drawable/ic_lock"
-            android:hint="@string/enter_password"
+            android:hint="@string/editText.hint.enter_password"
             android:inputType="textPassword"
             android:padding="10dp" />
 
@@ -87,7 +87,7 @@
                 android:background="@drawable/btn_send_message"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="@string/txt_login"
+                android:text="@string/textView.text.login"
                 android:textColor="#ffff" />
 
             <Button
@@ -99,7 +99,7 @@
                 android:background="@drawable/btn_send_message"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="@string/sign_up"
+                android:text="@string/textView.text.sign_up"
                 android:textColor="#ffff" />
         </LinearLayout>
 
@@ -108,7 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="@string/txt_or"
+            android:text="@string/textView.text.txt_or"
             android:textSize="20sp"
 
             />
@@ -123,7 +123,7 @@
             android:drawableStart="@mipmap/ic_google"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"
-            android:text="@string/txt_login_with_google" />
+            android:text="@string/textView.text.login_with_google" />
 
     </LinearLayout>
 

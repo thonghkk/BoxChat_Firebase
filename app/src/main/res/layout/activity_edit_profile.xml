@@ -48,7 +48,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="20"
                     android:gravity="center"
-                    android:text="@string/btn_save_profile" />
+                    android:text="@string/textView.text.save_profile" />
 
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
@@ -92,7 +92,6 @@
                 android:gravity="center"
                 android:maxLength="20"
                 android:scrollHorizontally="true"
-                android:text="@string/txt_name_user"
                 android:textColor="@color/color_name_user"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -207,7 +206,6 @@
 
     </LinearLayout>
 
-
     <EditText
         android:id="@+id/mEdtDescription"
         android:layout_width="match_parent"
@@ -215,7 +213,7 @@
         android:layout_margin="10dp"
         android:background="@drawable/bg_profile"
         android:gravity="top"
-        android:hint="@string/txt_description_yourself"
+        android:hint="@string/textView.text.description_yourself"
         android:padding="5dp"
         android:textColor="@color/color_name_user"
         android:maxLength="200"

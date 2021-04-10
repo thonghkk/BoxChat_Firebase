@@ -3,18 +3,18 @@
     <item
         android:id="@+id/chatFragment"
         android:icon="@drawable/ic_chat"
-        android:title="@string/txt_chat" />
+        android:title="@string/textView.text.chat" />
     <item
         android:id="@+id/strangerFragment"
         android:icon="@drawable/ic_people"
-        android:title="@string/txt_stranger" />
+        android:title="@string/textView.text.stranger" />
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_profile"
-        android:title="@string/txt_profile" />
+        android:title="@string/textView.text.profile" />
     <item
         android:id="@+id/settingFragment"
         android:icon="@drawable/ic_setting"
-        android:title="@string/txt_setting" />
+        android:title="@string/textView.text.setting" />
 
 </menu>

@@ -37,9 +37,8 @@
         android:id="@+id/mNameFriend"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:text="Nguyen Van Thong"
-        android:textSize="10sp"
+         android:textSize="10sp"
         android:gravity="center"
         android:layout_gravity="center"
-        />
+        tools:ignore="SmallSp" />
 </LinearLayout>

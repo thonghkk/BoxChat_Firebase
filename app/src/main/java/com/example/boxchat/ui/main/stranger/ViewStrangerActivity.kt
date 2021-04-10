@@ -79,7 +79,7 @@ class ViewStrangerActivity : BaseActivity() {
                         mViewBirthDay.text = i.userBirthDay
 
                         if (i.userDescription == "") {
-                            mTxtDescription.text = getString(R.string.txt_description_yourself)
+                            mTxtDescription.text = getString(R.string.textView_text_description_yourself)
                         } else {
                             mTxtDescription.text = i.userDescription
                         }
@@ -125,7 +125,7 @@ class ViewStrangerActivity : BaseActivity() {
                         if (snapshot.child("status").value.toString() == PENDING) {
                             mCurrentState = NOT_SUBMIT_PENDING
                             mBtnAddFriend.text =
-                                resources.getText(R.string.txt_cancel_request_friend)
+                                resources.getText(R.string.textView_text_cancel_request_friend)
                             mBtnCancelFriend.visibility = View.GONE
                         }
                         Log.d("status", snapshot.child("status").value.toString())
@@ -144,8 +144,8 @@ class ViewStrangerActivity : BaseActivity() {
                     if (snapshot.exists()) {
                         if (snapshot.child("status").value.toString() == PENDING) {
                             mCurrentState = RECEIVER
-                            mBtnAddFriend.text = resources.getText(R.string.txt_accept)
-                            mBtnCancelFriend.text = resources.getText(R.string.txt_cancel_friend)
+                            mBtnAddFriend.text = resources.getText(R.string.textView_text_accept)
+                            mBtnCancelFriend.text = resources.getText(R.string.textView_text_cancel_friend)
                             mBtnCancelFriend.visibility = View.VISIBLE
                         }
                     }
@@ -161,8 +161,8 @@ class ViewStrangerActivity : BaseActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         mCurrentState = FRIEND
-                        mBtnAddFriend.text = resources.getText(R.string.txt_send_sms)
-                        mBtnCancelFriend.text = resources.getText(R.string.txt_un_friend)
+                        mBtnAddFriend.text = resources.getText(R.string.textView_text_send_sms)
+                        mBtnCancelFriend.text = resources.getText(R.string.textView_text_un_friend)
                         mBtnCancelFriend.visibility = View.VISIBLE
                     }
                 }
@@ -174,7 +174,7 @@ class ViewStrangerActivity : BaseActivity() {
 
         if (mCurrentState == CURRENT_STATE) {
             mCurrentState = CURRENT_STATE
-            mBtnAddFriend.text = resources.getText(R.string.txt_send_friend_request)
+            mBtnAddFriend.text = resources.getText(R.string.textView_text_send_friend_request)
             mBtnCancelFriend.visibility = View.GONE
         }
     }
@@ -192,7 +192,7 @@ class ViewStrangerActivity : BaseActivity() {
                             .show()
                         mBtnCancelFriend.visibility = View.GONE
                         mCurrentState = NOT_SUBMIT_PENDING
-                        mBtnAddFriend.text = resources.getString(R.string.txt_cancel_request_friend)
+                        mBtnAddFriend.text = resources.getString(R.string.textView_text_cancel_request_friend)
                         //push notification
                         topic = "/topics/$strangerId"
                         PushNotification(
@@ -220,7 +220,7 @@ class ViewStrangerActivity : BaseActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                         mCurrentState = CURRENT_STATE
-                        mBtnAddFriend.text = resources.getString(R.string.txt_send_friend_request)
+                        mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
                         mBtnCancelFriend.visibility = View.GONE
                     } else {
                         Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
@@ -247,9 +247,9 @@ class ViewStrangerActivity : BaseActivity() {
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     mCurrentState = FRIEND
-                                    mBtnAddFriend.text = resources.getText(R.string.txt_send_sms)
+                                    mBtnAddFriend.text = resources.getText(R.string.textView_text_send_sms)
                                     mBtnCancelFriend.text =
-                                        resources.getString(R.string.txt_un_friend)
+                                        resources.getString(R.string.textView_text_un_friend)
                                     mBtnCancelFriend.visibility = View.VISIBLE
                                 }
                             }
@@ -288,7 +288,7 @@ class ViewStrangerActivity : BaseActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     mCurrentState = CURRENT_STATE
-                    mBtnAddFriend.text = resources.getString(R.string.txt_send_friend_request)
+                    mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
                     mBtnCancelFriend.visibility = View.GONE
                 }
         }
@@ -301,7 +301,7 @@ class ViewStrangerActivity : BaseActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
                 mCurrentState = CURRENT_STATE
-                mBtnAddFriend.text = resources.getString(R.string.txt_send_friend_request)
+                mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
                 mBtnCancelFriend.visibility = View.GONE
             }
 
@@ -310,7 +310,7 @@ class ViewStrangerActivity : BaseActivity() {
             mStrangerViewModel.requestRef.child(strangerId).child(auth.uid!!).removeValue()
                 .addOnCompleteListener {
                     mCurrentState = CURRENT_STATE
-                    mBtnAddFriend.text = resources.getString(R.string.txt_send_friend_request)
+                    mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
                     mBtnCancelFriend.visibility = View.GONE
                 }
         }

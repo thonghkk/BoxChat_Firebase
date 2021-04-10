@@ -42,7 +42,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="5dp"
                     android:layout_weight="80"
-                    android:text="@string/txt_profile_stranger"
+                    android:text="@string/textView.text.profile_stranger"
                     android:textStyle="normal|bold" />
 
             </LinearLayout>
@@ -77,7 +77,7 @@
             android:layout_height="0dp"
             android:layout_weight="6"
             android:gravity="center"
-            android:text="@string/txt_name_user"
+            android:text="@string/textView.text.name_user"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
@@ -100,7 +100,7 @@
                 android:layout_weight="7"
                 android:background="@drawable/btn_add_friend"
                 android:gravity="center"
-                android:text="@string/txt_add_friend"
+                android:text="@string/textView.text.add_friend"
                 android:textColor="#ffff" />
 
             <Button
@@ -111,7 +111,7 @@
                 android:layout_weight="3"
                 android:background="@drawable/btn_add_friend"
                 android:gravity="center"
-                android:text="@string/txt_send_sms"
+                android:text="@string/textView.text.send_sms"
                 android:textColor="#ffff" />
         </LinearLayout>
 
@@ -165,7 +165,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="70"
-                            android:text="@string/txt_home_town"
+                            android:text="@string/textView.text.home_town"
                             android:textColor="@color/color_name_user"
                             android:textSize="15sp" />
 
@@ -192,7 +192,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="70"
-                            android:text="@string/txt_birth_day"
+                            android:text="@string/textView.text.birth_day"
                             android:textColor="@color/color_name_user"
                             android:textSize="15sp" />
 
@@ -218,7 +218,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="70"
-                            android:text="@string/txt_english_certificate"
+                            android:text="@string/textView.text.english_certificate"
                             android:textColor="@color/color_name_user"
                             android:textSize="15sp" />
 
@@ -244,7 +244,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="50"
                 android:padding="10dp"
-                android:text="@string/btn_save_profile" />
+                android:text="@string/textView.text.description_yourself" />
 
         </androidx.cardview.widget.CardView>
 

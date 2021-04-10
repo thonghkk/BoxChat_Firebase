@@ -43,7 +43,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="70"
-                    android:text="@string/txt_info"
+                    android:text="@string/textView.text.info_app"
                     android:textStyle="normal|bold"
                     tools:ignore="RtlHardcoded" />
 
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="50dp"
-            android:text="@string/txt_version"
+            android:text="@string/textView.text.version"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />

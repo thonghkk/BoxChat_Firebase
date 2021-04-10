@@ -5,7 +5,7 @@
     <item
         android:id="@+id/mMenuProfile"
         android:icon="@mipmap/ic_avatar"
-        android:title="@string/txt_profile"
+        android:title="@string/textView.text.profile"
         app:showAsAction="ifRoom"
         />
 

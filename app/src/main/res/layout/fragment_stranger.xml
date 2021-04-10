@@ -11,7 +11,7 @@
         android:layout_height="70dp"
         android:gravity="center|left"
         android:paddingLeft="40dp"
-        android:text="@string/txt_search_stranger"
+        android:text="@string/textView.text.search_stranger"
         android:textSize="20sp"
         android:textStyle="bold|normal"
         tools:ignore="RtlHardcoded,RtlSymmetry" />
@@ -29,7 +29,7 @@
         android:id="@+id/mTxtConnect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/txt_not_internet"
+        android:text="@string/textView.text.not_internet"
         android:textColor="@color/color_red"
         android:gravity="center"
         android:visibility="gone"

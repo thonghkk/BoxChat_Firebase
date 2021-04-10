@@ -71,7 +71,7 @@
                         android:layout_height="0dp"
                         android:layout_gravity="center"
                         android:layout_weight="5"
-                        android:text="@string/txt_name_user"
+                        android:text="@string/textView.text.name_user"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         tools:ignore="NestedWeights" />
@@ -130,7 +130,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="6"
                     android:gravity="left|center"
-                    android:text="@string/txt_info"
+                    android:text="@string/textView.text.info_app"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     tools:ignore="NestedWeights,RtlHardcoded" />

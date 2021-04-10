@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center"
                 android:layout_weight="60"
-                android:text="@string/txt_your_avatar"
+                android:text="@string/textView.text.your_avatar"
                 android:textStyle="normal|bold"
                 tools:ignore="RtlHardcoded" />
 

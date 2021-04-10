@@ -44,7 +44,7 @@
                 android:autoLink="all"
                 android:background="@drawable/bg_left_message"
                 android:padding="10dp"
-                android:text="@string/txt_name_user"
+                android:text="@string/textView.text.name_user"
                 android:textColor="@color/black"
                 tools:ignore="RtlHardcoded" />
 

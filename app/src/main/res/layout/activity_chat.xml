@@ -51,7 +51,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="70"
                     android:layout_marginLeft="5dp"
-                    android:text="@string/txt_message"
+                    android:text="@string/textView.text.message"
                     android:textStyle="normal|bold"
                     tools:ignore="RtlHardcoded" />
 
@@ -79,7 +79,7 @@
             android:id="@+id/mEnterMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_message"
+            android:hint="@string/editText.hint.enter_message"
             android:layout_weight="80"
             android:background="@drawable/bg_enter_message"
             android:padding="10dp"
