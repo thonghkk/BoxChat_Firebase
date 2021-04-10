@@ -82,6 +82,7 @@ class ProfileFragment : BaseFragment() {
                 mUserName.text = i.userName
                 mHomeTown.text = i.userHomeTown
                 mBirthDay.text = i.userBirthDay
+                mEnglishCertificate.text = i.userEnglishCertificate
                 mTxtDescriptionProfile.text = i.userDescription
                 if (i.userProfileImage == "") {
                     mUserAvatar.setImageResource(R.mipmap.ic_avatar)
