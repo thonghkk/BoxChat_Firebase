@@ -39,39 +39,6 @@
             android:text="@string/textView.text.name_user"
             android:textColor="@color/white"
             android:textSize="20sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <Button
-                android:id="@+id/mBtnSaveProfile"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="7"
-                android:background="@drawable/btn_add_friend"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="@string/textView.text.save_profile"
-                android:textColor="#ffff"
-                android:visibility="gone" />
-
-            <ProgressBar
-                android:id="@+id/mProgressLoadProfile"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout

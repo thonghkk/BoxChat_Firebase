@@ -69,13 +69,28 @@
         android:layout_weight="93"
         android:src="@mipmap/ic_avatar" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/showImage2"
+    <FrameLayout
+        android:id="@+id/mFrame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center"
         android:layout_weight="93"
-        android:src="@mipmap/ic_avatar"
-        android:visibility="gone" />
+        android:visibility="gone">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/showImage2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_avatar"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/mProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
+
 
 </LinearLayout>

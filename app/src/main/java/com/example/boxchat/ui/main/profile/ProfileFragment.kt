@@ -37,8 +37,6 @@ class ProfileFragment : BaseFragment() {
     private lateinit var mProfileViewModel: ProfileViewModel
     private lateinit var mUserName: TextView
     private lateinit var mUserAvatar: CircleImageView
-    private lateinit var mBtnSaveProfile: Button
-    private lateinit var mProgress: ProgressBar
     private lateinit var mHomeTown: TextView
     private lateinit var mBirthDay: TextView
     private lateinit var mTxtDescriptionProfile: TextView
@@ -48,8 +46,6 @@ class ProfileFragment : BaseFragment() {
     override fun onViewReady(view: View) {
         mUserName = view.findViewById(R.id.mUserName)
         mUserAvatar = view.findViewById(R.id.mAvatarProfile)
-        mBtnSaveProfile = view.findViewById(R.id.mBtnSaveProfile)
-        mProgress = view.findViewById(R.id.mProgressLoadProfile)
         mHomeTown = view.findViewById(R.id.mTxtHomeTown)
         mBirthDay = view.findViewById(R.id.mTxtBirthDay)
         mTxtDescriptionProfile = view.findViewById(R.id.mTxtDescriptionProfile)
@@ -135,9 +131,8 @@ class ProfileFragment : BaseFragment() {
     }
 
     //upload image of use to database(Firebase)
-    private fun uploadImage() {
+    private fun uploadImage(dialog: Dialog) {
         if (filePath != null) {
-            mProgress.visibility = View.VISIBLE
             // Create a reference to "image/*"
             val ref: StorageReference = storageRef.child("image/*" + UUID.randomUUID().toString())
             ref.putFile(filePath!!)
@@ -145,13 +140,11 @@ class ProfileFragment : BaseFragment() {
                     ref.downloadUrl.addOnSuccessListener {
                         saveUser(it.toString())
                     }
-                    mProgress.visibility = View.GONE
+                    dialog.dismiss()
                     Toast.makeText(context, "Uploaded", Toast.LENGTH_SHORT).show()
-                    mBtnSaveProfile.visibility = View.GONE
                     Log.d("Link2", filePath.toString())
                 }
                 .addOnFailureListener {
-                    mProgress.visibility = View.GONE
                     Toast.makeText(context, "Error + ${it.message}", Toast.LENGTH_SHORT).show()
                 }
             Log.d("Link2", ref.toString())
@@ -225,10 +218,12 @@ class ProfileFragment : BaseFragment() {
         val btnBack = dialog.findViewById<ImageView>(R.id.mBtnBackZoom)
         val mTxtSaveProfile = dialog.findViewById<TextView>(R.id.mTxtSaveProfile)
         val mTxtAction = dialog.findViewById<TextView>(R.id.mTxtAction)
-        val mProgressLoadProfile = dialog.findViewById<TextView>(R.id.mProgressLoadProfile)
         val mCard = dialog.findViewById<CardView>(R.id.mCard)
         val mBackground = dialog.findViewById<LinearLayout>(R.id.mBackground)
+        val mProgress = dialog.findViewById<ProgressBar>(R.id.mProgress)
+        val mFrame = dialog.findViewById<FrameLayout>(R.id.mFrame)
 
+        mFrame.visibility = View.VISIBLE
         mTxtSaveProfile.visibility = View.VISIBLE
         mCard.visibility = View.VISIBLE
         mTxtAction.text = resources.getText(R.string.textView_text_avatar_preview)
@@ -241,8 +236,8 @@ class ProfileFragment : BaseFragment() {
             dialog.cancel()
         }
         mTxtSaveProfile.setOnClickListener {
-            uploadImage()
-            mProgressLoadProfile.visibility = View.VISIBLE
+            mProgress.visibility = View.VISIBLE
+            uploadImage(dialog)
         }
         dialog.show()
     }
