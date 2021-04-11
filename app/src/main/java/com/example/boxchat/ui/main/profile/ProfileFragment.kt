@@ -60,13 +60,6 @@ class ProfileFragment : BaseFragment() {
         storageRef = storage.reference
         Log.d("Storage ref", storageRef.toString())
 
-        mBtnSaveProfile.setOnClickListener {
-            uploadImage()
-        }
-        mUserAvatar.setOnClickListener {
-            dialogViewProfile()
-        }
-
         //To read data at a path and listen to read the changes
         getContextThis(requireContext())
         if (checkNetwork()) {
@@ -74,8 +67,9 @@ class ProfileFragment : BaseFragment() {
         } else {
             getYourselfLocal()
         }
-
-
+        mUserAvatar.setOnClickListener {
+            dialogViewProfile()
+        }
     }
 
     private fun getYourself() {
@@ -133,8 +127,6 @@ class ProfileFragment : BaseFragment() {
                 val bitmap: Bitmap =
                     MediaStore.Images.Media.getBitmap(activity?.contentResolver, filePath)
                 showChange(bitmap)
-//                mUserAvatar.setImageBitmap(bitmap)
-//                mBtnSaveProfile.visibility = View.VISIBLE
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -224,7 +216,7 @@ class ProfileFragment : BaseFragment() {
         }
     }
 
-    fun showChange(bitmap:Bitmap) {
+    fun showChange(bitmap: Bitmap) {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.dialog_show_image)
         val img = dialog.findViewById<ImageView>(R.id.showImage)
