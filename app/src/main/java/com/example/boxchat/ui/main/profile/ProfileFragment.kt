@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -126,7 +127,7 @@ class ProfileFragment : BaseFragment() {
             try {
                 val bitmap: Bitmap =
                     MediaStore.Images.Media.getBitmap(activity?.contentResolver, filePath)
-                showChange(bitmap)
+                showChangeImage(bitmap)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -192,7 +193,7 @@ class ProfileFragment : BaseFragment() {
         //view avatar
         mDialogView.findViewById<LinearLayout>(R.id.mDialogViewProfilePicture).setOnClickListener {
             if (checkNetwork()) {
-                val dialog = Dialog(requireContext())
+                val dialog = Dialog(requireContext(), R.style.FullScreenDialog)
                 dialog.setContentView(R.layout.dialog_show_image)
                 val img = dialog.findViewById<ImageView>(R.id.showImage)
                 val btnBack = dialog.findViewById<ImageView>(R.id.mBtnBackZoom)
@@ -216,20 +217,32 @@ class ProfileFragment : BaseFragment() {
         }
     }
 
-    fun showChange(bitmap: Bitmap) {
-        val dialog = Dialog(requireContext())
+    private fun showChangeImage(bitmap: Bitmap) {
+        val dialog = Dialog(requireContext(), R.style.FullScreenDialog)
         dialog.setContentView(R.layout.dialog_show_image)
         val img = dialog.findViewById<ImageView>(R.id.showImage)
+        val img2 = dialog.findViewById<ImageView>(R.id.showImage2)
         val btnBack = dialog.findViewById<ImageView>(R.id.mBtnBackZoom)
         val mTxtSaveProfile = dialog.findViewById<TextView>(R.id.mTxtSaveProfile)
-        mTxtSaveProfile.visibility = View.VISIBLE
+        val mTxtAction = dialog.findViewById<TextView>(R.id.mTxtAction)
+        val mProgressLoadProfile = dialog.findViewById<TextView>(R.id.mProgressLoadProfile)
+        val mCard = dialog.findViewById<CardView>(R.id.mCard)
+        val mBackground = dialog.findViewById<LinearLayout>(R.id.mBackground)
 
-        img.setImageBitmap(bitmap)
+        mTxtSaveProfile.visibility = View.VISIBLE
+        mCard.visibility = View.VISIBLE
+        mTxtAction.text = resources.getText(R.string.textView_text_avatar_preview)
+        img.visibility = View.GONE
+        img2.visibility = View.VISIBLE
+        mBackground.setBackgroundColor(resources.getColor(R.color.white))
+        img2.setImageBitmap(bitmap)
+
         btnBack.setOnClickListener {
             dialog.cancel()
         }
         mTxtSaveProfile.setOnClickListener {
             uploadImage()
+            mProgressLoadProfile.visibility = View.VISIBLE
         }
         dialog.show()
     }

@@ -14,9 +14,9 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name = "NoActionBar" parent = "Theme.AppCompat.Light.NoActionBar">
-        <item name = "android:windowActionBar">true</item>
-        <item name = "android:windowNoTitle">true</item>
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowActionBar">true</item>
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowLightStatusBar">true</item>
 
         <item name="colorPrimary">#26BEE0</item>
@@ -27,11 +27,20 @@
     </style>
 
     //custom show dialog to setting profile
+
     <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle"> @style/BottomSheetDialogTheme</item>
+        <item name="bottomSheetStyle">@style/BottomSheetDialogTheme</item>
     </style>
+
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>
+    //custom full screen dialog
 
+    <style name="FullScreenDialog" parent="NoActionBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
 </resources>
