@@ -60,6 +60,13 @@ class ProfileFragment : BaseFragment() {
         storageRef = storage.reference
         Log.d("Storage ref", storageRef.toString())
 
+        mBtnSaveProfile.setOnClickListener {
+            uploadImage()
+        }
+        mUserAvatar.setOnClickListener {
+            dialogViewProfile()
+        }
+
         //To read data at a path and listen to read the changes
         getContextThis(requireContext())
         if (checkNetwork()) {
@@ -68,12 +75,7 @@ class ProfileFragment : BaseFragment() {
             getYourselfLocal()
         }
 
-        mBtnSaveProfile.setOnClickListener {
-            uploadImage()
-        }
-        mUserAvatar.setOnClickListener {
-            dialogViewProfile()
-        }
+
     }
 
     private fun getYourself() {
@@ -87,7 +89,7 @@ class ProfileFragment : BaseFragment() {
                 if (i.userProfileImage == "") {
                     mUserAvatar.setImageResource(R.mipmap.ic_avatar)
                 } else {
-                    Glide.with(requireContext())
+                    Glide.with(this)
                         .load(i.userProfileImage)
                         .fitCenter()
                         .circleCrop()
@@ -130,8 +132,9 @@ class ProfileFragment : BaseFragment() {
             try {
                 val bitmap: Bitmap =
                     MediaStore.Images.Media.getBitmap(activity?.contentResolver, filePath)
-                mUserAvatar.setImageBitmap(bitmap)
-                mBtnSaveProfile.visibility = View.VISIBLE
+                showChange(bitmap)
+//                mUserAvatar.setImageBitmap(bitmap)
+//                mBtnSaveProfile.visibility = View.VISIBLE
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -177,7 +180,8 @@ class ProfileFragment : BaseFragment() {
         )
         val mLinearLayout = view?.findViewById<LinearLayout>(R.id.mDialog)
         val mDialogView =
-            LayoutInflater.from(context).inflate(R.layout.dialog_change_profile_image, mLinearLayout)
+            LayoutInflater.from(context)
+                .inflate(R.layout.dialog_change_profile_image, mLinearLayout)
         bottomSheetDialog.setContentView(mDialogView)
         bottomSheetDialog.show()
 
@@ -218,6 +222,24 @@ class ProfileFragment : BaseFragment() {
                 Toast.makeText(context, "Connect Internet To View !", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun showChange(bitmap:Bitmap) {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_show_image)
+        val img = dialog.findViewById<ImageView>(R.id.showImage)
+        val btnBack = dialog.findViewById<ImageView>(R.id.mBtnBackZoom)
+        val mTxtSaveProfile = dialog.findViewById<TextView>(R.id.mTxtSaveProfile)
+        mTxtSaveProfile.visibility = View.VISIBLE
+
+        img.setImageBitmap(bitmap)
+        btnBack.setOnClickListener {
+            dialog.cancel()
+        }
+        mTxtSaveProfile.setOnClickListener {
+            uploadImage()
+        }
+        dialog.show()
     }
 }
 
