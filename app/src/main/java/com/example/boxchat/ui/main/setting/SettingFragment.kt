@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -89,17 +91,25 @@ class SettingFragment : BaseFragment() {
     }
 
     private fun dialog() {
-        val mDialog = Dialog(requireContext(), R.style.HalfScreenDialog)
-        val mLinearLayout = view?.findViewById<LinearLayout>(R.id.mDialogLogout)
-        val mDialogView =
-            LayoutInflater.from(context).inflate(R.layout.dialog_sign_out, mLinearLayout)
-        mDialog.setContentView(mDialogView)
+        val mDialog = Dialog(requireContext())
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        mDialog.setContentView(R.layout.dialog_sign_out)
+
+        val window = mDialog.window
+        window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+
+        val windowAtt: WindowManager.LayoutParams = window?.attributes!!
+        windowAtt.gravity = View.TEXT_ALIGNMENT_GRAVITY
+        window.attributes = windowAtt
         mDialog.show()
 
-        mDialogView.findViewById<Button>(R.id.mBtnNo).setOnClickListener {
+        mDialog.findViewById<Button>(R.id.mBtnNo).setOnClickListener {
             mDialog.dismiss()
         }
-        mDialogView.findViewById<Button>(R.id.mBtnYes).setOnClickListener {
+        mDialog.findViewById<Button>(R.id.mBtnYes).setOnClickListener {
             mDialog.dismiss()
             status("offline")
             auth.signOut()
@@ -108,10 +118,7 @@ class SettingFragment : BaseFragment() {
                 deleteAllUserLocal()
                 deleteAllYourself()
             }
-
             startActivity(Intent(context, LoginActivity::class.java))
         }
-
     }
-
 }

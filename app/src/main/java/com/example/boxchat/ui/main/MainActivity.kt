@@ -3,17 +3,12 @@ package com.example.boxchat.ui.main
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.view.*
 import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
-import com.example.boxchat.commom.Firebase
-import com.example.boxchat.ui.login.LoginActivity
 import com.example.boxchat.utils.CheckNetwork.Companion.checkNetwork
 import com.example.boxchat.utils.CheckNetwork.Companion.getContextThis
 import com.example.boxchat.ui.main.map.MapsActivity
@@ -49,13 +44,19 @@ class MainActivity : BaseActivity() {
 
     private fun dialog() {
         val mDialog = Dialog(this)
-        val mLinearLayout = findViewById<LinearLayout>(R.id.mDialogNotInternet)
-        val mDialogView =
-            LayoutInflater.from(this).inflate(R.layout.dialog_not_internet, mLinearLayout)
-        mDialog.setContentView(mDialogView)
-        mDialog.show()
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        mDialog.setContentView(R.layout.dialog_not_internet)
+        val window = mDialog.window
+        window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
 
-        mDialogView.findViewById<Button>(R.id.mBtnContinue).setOnClickListener {
+        val windowAtt: WindowManager.LayoutParams = window?.attributes!!
+        windowAtt.gravity = View.TEXT_ALIGNMENT_GRAVITY
+        window.attributes = windowAtt
+        mDialog.show()
+        mDialog.findViewById<Button>(R.id.mBtnContinue).setOnClickListener {
             mDialog.dismiss()
         }
     }
