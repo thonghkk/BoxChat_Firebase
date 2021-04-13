@@ -39,7 +39,12 @@
     <string name="textView.text.info_app">Information Application</string>
     <string name="textView.text.version">Version : AD 1.0</string>
     <string name="textView.text.avatar_preview">Avatar Preview</string>
-    //menu
+    <string name="textView.text.no">No</string>
+    <string name="textView.text.yes">Yes</string>
+    <string name="textView.text.logout">Sign Out</string>
+    <string name="textView.text.question">Are you sure sign out ?</string>
+    <string name="textView.text.continue">Continue</string>
+     //menu
     <string name="textView.text.chat">Chat</string>
     <string name="textView.text.map">Map</string>
     <string name="textView.text.setting">Setting</string>
