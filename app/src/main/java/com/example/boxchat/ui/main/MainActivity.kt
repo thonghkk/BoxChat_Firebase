@@ -1,8 +1,13 @@
 package com.example.boxchat.ui.main
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.boxchat.R
@@ -38,7 +43,21 @@ class MainActivity : BaseActivity() {
         getContextThis(this)
 
         if (!checkNetwork()) {
-            Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
+            dialog()
         }
     }
+
+    private fun dialog() {
+        val mDialog = Dialog(this)
+        val mLinearLayout = findViewById<LinearLayout>(R.id.mDialogNotInternet)
+        val mDialogView =
+            LayoutInflater.from(this).inflate(R.layout.dialog_not_internet, mLinearLayout)
+        mDialog.setContentView(mDialogView)
+        mDialog.show()
+
+        mDialogView.findViewById<Button>(R.id.mBtnContinue).setOnClickListener {
+            mDialog.dismiss()
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.boxchat.ui.main.friends
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,20 +29,36 @@ class ChatWithFriendAdapterCircle(private var friends: List<User>) :
         private val userList = mutableListOf<User>()
 
         fun bindItems(friend: User) {
-            mNameFriend.text = friend.userName
-            val url = friend.userProfileImage
-            Glide.with(itemView)
-                .load(url)
-                .placeholder(R.mipmap.ic_avatar)
-                .fitCenter()
-                .transform()
-                .into(imgAvatar)
+            // val url = friend.userProfileImage
+            //get info user
+            Firebase.firebaseDatabase.getReference("Users")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (dataSnapshot: DataSnapshot in snapshot.children) {
+                            val mUsers = dataSnapshot.getValue(User::class.java)
+                            if (mUsers?.userId == friend.userId) {
 
+                                mNameFriend.text = mUsers.userName
+                                val url = mUsers.userProfileImage
+                                Glide.with(itemView)
+                                    .load(url)
+                                    .placeholder(R.mipmap.ic_avatar)
+                                    .fitCenter()
+                                    .transform()
+                                    .into(imgAvatar)
+                                Log.d("test", url)
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+
+                })
+            //custom click user
             mLineaLayout.setOnClickListener {
                 val intent = Intent(itemView.context, ChatActivity::class.java)
                 intent.putExtra("userId", friend.userId)
-                intent.putExtra("userName", friend.userName)
-                intent.putExtra("userImage", friend.userProfileImage)
                 itemView.context.startActivity(intent)
             }
 

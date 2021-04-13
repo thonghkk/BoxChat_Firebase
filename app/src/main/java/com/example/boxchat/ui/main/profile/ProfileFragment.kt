@@ -195,6 +195,7 @@ class ProfileFragment : BaseFragment() {
                     for (i in me) {
                         Glide.with(requireContext())
                             .load(i.userProfileImage)
+                            .placeholder(R.mipmap.ic_avatar)
                             .fitCenter()
                             .into(img)
                     }

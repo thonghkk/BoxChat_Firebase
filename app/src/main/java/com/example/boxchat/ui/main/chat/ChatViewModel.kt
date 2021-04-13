@@ -11,17 +11,20 @@ import com.example.boxchat.utils.CheckNetwork
 import com.google.firebase.database.*
 
 class ChatViewModel : ViewModel() {
+    private var friendList = mutableListOf<User>()
+    private val friendRef = getFriendReference()
+    private var yourSelfList = mutableListOf<User>()
+    private var userList = mutableListOf<User>()
     val refChat = getChatReference()
     val friend = MutableLiveData<List<User>>()
-    private var friendList = mutableListOf<User>()
-    val friendRef = getFriendReference()
-    var databaseReferenceProfile = getUserId()
+    var userRef = getUserId()
     val me = MutableLiveData<List<User>>()
-    private var yourSelfList = mutableListOf<User>()
+    val mUsers = MutableLiveData<List<User>>()
 
     init {
         getFriendList()
         getProfile()
+        getUser()
     }
 
     private fun getChatReference(): DatabaseReference {
@@ -36,9 +39,16 @@ class ChatViewModel : ViewModel() {
         return firebaseDatabase.getReference("Users")
     }
 
-
     fun addListFriend(user: List<User>) {
         friend.value = user
+    }
+
+    fun addMe(yourSelf: List<User>) {
+        me.value = yourSelf
+    }
+
+    fun addUser(user: List<User>) {
+        mUsers.value = user
     }
 
     private fun getFriendList() {
@@ -61,12 +71,8 @@ class ChatViewModel : ViewModel() {
             })
     }
 
-    fun addMe(yourSelf: List<User>) {
-        me.value = yourSelf
-    }
-
     private fun getProfile() {
-        databaseReferenceProfile.child(auth.uid!!).addValueEventListener(object :
+        userRef.child(auth.uid!!).addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
@@ -76,6 +82,22 @@ class ChatViewModel : ViewModel() {
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(CheckNetwork.context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun getUser() {
+        userRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (dataSnapshot: DataSnapshot in snapshot.children) {
+                    val user = dataSnapshot.getValue(User::class.java)
+                    userList.add(user!!)
+                    addUser(userList)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
             }
         })
     }

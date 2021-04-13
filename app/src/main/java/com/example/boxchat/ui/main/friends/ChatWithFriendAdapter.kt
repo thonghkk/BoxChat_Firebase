@@ -35,19 +35,34 @@ class ChatWithFriendAdapter(private var user: List<User>) :
         private var mImgStatusOff: ImageView = itemView.findViewById(R.id.mImgStatusOff)
 
         fun bindUser(friend: User) {
-            txtUserName.text = friend.userName
             Log.d("MEO", friend.userName)
             Log.d("MEO", friend.userId)
-            val url = friend.userProfileImage
 
             lastMessage(friend.userId, mMessageLast)
-            Glide.with(itemView)
-                .load(url)
-                .placeholder(R.mipmap.ic_avatar)
-                .fitCenter()
-                .transform()
-                .into(imgAvatar)
-            Log.d("test", url)
+            Firebase.firebaseDatabase.getReference("Users")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (dataSnapshot: DataSnapshot in snapshot.children) {
+                            val mUsers = dataSnapshot.getValue(User::class.java)
+                            if (mUsers?.userId == friend.userId) {
+                                txtUserName.text = mUsers.userName
+                                val url = mUsers.userProfileImage
+                                Glide.with(itemView)
+                                    .load(url)
+                                    .placeholder(R.mipmap.ic_avatar)
+                                    .fitCenter()
+                                    .transform()
+                                    .into(imgAvatar)
+                                Log.d("test", url)
+
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+
+                })
 
             mLayoutUser.setOnClickListener {
                 val intent = Intent(itemView.context, ChatActivity::class.java)

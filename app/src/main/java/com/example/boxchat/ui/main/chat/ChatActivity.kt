@@ -61,7 +61,9 @@ class ChatActivity : BaseActivity() {
         mLinearLayoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
 
         mChatRecycleView.layoutManager = mLinearLayoutManager
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/${user?.uid}")
+
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/${auth.uid}")
+
         //get value SharedPreferences
         FirebaseService.sharePref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
@@ -80,7 +82,7 @@ class ChatActivity : BaseActivity() {
             startActivity(intent)
         }
 
-        mChatViewModel.friend.observe(this, Observer { friend ->
+        mChatViewModel.mUsers.observe(this, Observer { friend ->
             for (j in friend) {
                 if (j.userId == userId) {
                     mNameFriend.text = j.userName

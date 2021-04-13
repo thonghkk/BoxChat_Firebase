@@ -79,7 +79,8 @@ class ViewStrangerActivity : BaseActivity() {
                         mViewBirthDay.text = i.userBirthDay
 
                         if (i.userDescription == "") {
-                            mTxtDescription.text = getString(R.string.textView_text_description_yourself)
+                            mTxtDescription.text =
+                                getString(R.string.textView_text_description_yourself)
                         } else {
                             mTxtDescription.text = i.userDescription
                         }
@@ -145,7 +146,8 @@ class ViewStrangerActivity : BaseActivity() {
                         if (snapshot.child("status").value.toString() == PENDING) {
                             mCurrentState = RECEIVER
                             mBtnAddFriend.text = resources.getText(R.string.textView_text_accept)
-                            mBtnCancelFriend.text = resources.getText(R.string.textView_text_cancel_friend)
+                            mBtnCancelFriend.text =
+                                resources.getText(R.string.textView_text_cancel_friend)
                             mBtnCancelFriend.visibility = View.VISIBLE
                         }
                     }
@@ -192,7 +194,8 @@ class ViewStrangerActivity : BaseActivity() {
                             .show()
                         mBtnCancelFriend.visibility = View.GONE
                         mCurrentState = NOT_SUBMIT_PENDING
-                        mBtnAddFriend.text = resources.getString(R.string.textView_text_cancel_request_friend)
+                        mBtnAddFriend.text =
+                            resources.getString(R.string.textView_text_cancel_request_friend)
                         //push notification
                         topic = "/topics/$strangerId"
                         PushNotification(
@@ -220,7 +223,8 @@ class ViewStrangerActivity : BaseActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                         mCurrentState = CURRENT_STATE
-                        mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
+                        mBtnAddFriend.text =
+                            resources.getString(R.string.textView_text_send_friend_request)
                         mBtnCancelFriend.visibility = View.GONE
                     } else {
                         Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
@@ -234,9 +238,8 @@ class ViewStrangerActivity : BaseActivity() {
                     if (task.isSuccessful) {
                         val hashMap: HashMap<String, String> = HashMap()
                         hashMap["userId"] = strangerId
-                        hashMap["userName"] = strangerName
-                        hashMap["userProfileImage"] = strangerImage
                         hashMap["status"] = FRIEND
+
                         mStrangerViewModel.friendRef.child(auth.uid!!).child(strangerId)
                             .setValue(hashMap)
                             .addOnCompleteListener {
@@ -247,7 +250,8 @@ class ViewStrangerActivity : BaseActivity() {
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     mCurrentState = FRIEND
-                                    mBtnAddFriend.text = resources.getText(R.string.textView_text_send_sms)
+                                    mBtnAddFriend.text =
+                                        resources.getText(R.string.textView_text_send_sms)
                                     mBtnCancelFriend.text =
                                         resources.getString(R.string.textView_text_un_friend)
                                     mBtnCancelFriend.visibility = View.VISIBLE
@@ -260,9 +264,6 @@ class ViewStrangerActivity : BaseActivity() {
                                     val mUser = snapshot.getValue(User::class.java)
                                     val hashMap2: HashMap<String, String> = HashMap()
                                     hashMap2["userId"] = mUser?.userId!!
-                                    hashMap2["userName"] = mUser.userName
-                                    hashMap2["userProfileImage"] =
-                                        mUser.userProfileImage
                                     hashMap2["status"] = FRIEND
                                     mStrangerViewModel.friendRef.child(strangerId)
                                         .child(auth.uid!!).setValue(hashMap2)
@@ -288,7 +289,8 @@ class ViewStrangerActivity : BaseActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     mCurrentState = CURRENT_STATE
-                    mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
+                    mBtnAddFriend.text =
+                        resources.getString(R.string.textView_text_send_friend_request)
                     mBtnCancelFriend.visibility = View.GONE
                 }
         }
@@ -310,7 +312,8 @@ class ViewStrangerActivity : BaseActivity() {
             mStrangerViewModel.requestRef.child(strangerId).child(auth.uid!!).removeValue()
                 .addOnCompleteListener {
                     mCurrentState = CURRENT_STATE
-                    mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
+                    mBtnAddFriend.text =
+                        resources.getString(R.string.textView_text_send_friend_request)
                     mBtnCancelFriend.visibility = View.GONE
                 }
         }
