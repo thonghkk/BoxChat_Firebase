@@ -37,7 +37,6 @@ class ChatWithFriendAdapter(private var user: List<User>) :
         fun bindUser(friend: User) {
             Log.d("MEO", friend.userName)
             Log.d("MEO", friend.userId)
-
             lastMessage(friend.userId, mMessageLast)
             Firebase.firebaseDatabase.getReference("Users")
                 .addValueEventListener(object : ValueEventListener {
@@ -47,14 +46,13 @@ class ChatWithFriendAdapter(private var user: List<User>) :
                             if (mUsers?.userId == friend.userId) {
                                 txtUserName.text = mUsers.userName
                                 val url = mUsers.userProfileImage
-                                Glide.with(itemView)
+                                Glide.with(itemView.context.applicationContext)
                                     .load(url)
                                     .placeholder(R.mipmap.ic_avatar)
                                     .fitCenter()
                                     .transform()
                                     .into(imgAvatar)
                                 Log.d("test", url)
-
                             }
                         }
                     }

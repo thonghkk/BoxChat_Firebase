@@ -1,5 +1,6 @@
 package com.example.boxchat.ui.main.friends
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,12 +17,14 @@ import com.example.boxchat.ui.main.chat.ChatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kotlin.coroutines.coroutineContext
 
 class ChatWithFriendAdapterCircle(private var friends: List<User>) :
     RecyclerView.Adapter<ChatWithFriendAdapterCircle.ViewHolder>(), Filterable {
     private val userOld: List<User> = friends
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private lateinit var mFriendFragmentViewModel: ChatWithFriendViewModel
         private val imgAvatar: ImageView = itemView.findViewById(R.id.mImgIcon)
         private val mNameFriend: TextView = itemView.findViewById(R.id.mNameFriend)
         private val mLineaLayout: LinearLayout = itemView.findViewById(R.id.mLineaLayout)
@@ -29,7 +32,7 @@ class ChatWithFriendAdapterCircle(private var friends: List<User>) :
         private val userList = mutableListOf<User>()
 
         fun bindItems(friend: User) {
-            // val url = friend.userProfileImage
+             val url = friend.userProfileImage
             //get info user
             Firebase.firebaseDatabase.getReference("Users")
                 .addValueEventListener(object : ValueEventListener {
@@ -40,7 +43,7 @@ class ChatWithFriendAdapterCircle(private var friends: List<User>) :
 
                                 mNameFriend.text = mUsers.userName
                                 val url = mUsers.userProfileImage
-                                Glide.with(itemView)
+                                Glide.with(itemView.context.applicationContext)
                                     .load(url)
                                     .placeholder(R.mipmap.ic_avatar)
                                     .fitCenter()
