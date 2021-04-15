@@ -230,6 +230,23 @@ class ViewStrangerActivity : BaseActivity() {
                         Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
+
+            mStrangerViewModel.requestRef.child(auth.uid!!).child(strangerId)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (!snapshot.exists()) {
+                            mCurrentState = CURRENT_STATE
+                            mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
+                            mBtnCancelFriend.visibility = View.GONE
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+                })
+
+
         }
         //if receiver accept , do below
         if (mCurrentState == RECEIVER) {
@@ -239,6 +256,10 @@ class ViewStrangerActivity : BaseActivity() {
                         val hashMap: HashMap<String, String> = HashMap()
                         hashMap["userId"] = strangerId
                         hashMap["status"] = FRIEND
+
+                        val hashMap2: HashMap<String, String> = HashMap()
+                        hashMap2["userId"] = auth.uid!!
+                        hashMap2["status"] = FRIEND
 
                         mStrangerViewModel.friendRef.child(auth.uid!!).child(strangerId)
                             .setValue(hashMap)
@@ -258,21 +279,24 @@ class ViewStrangerActivity : BaseActivity() {
                                 }
                             }
 
-                        mStrangerViewModel.databaseReference.child(auth.uid!!)
-                            .addValueEventListener(object : ValueEventListener {
-                                override fun onDataChange(snapshot: DataSnapshot) {
-                                    val mUser = snapshot.getValue(User::class.java)
-                                    val hashMap2: HashMap<String, String> = HashMap()
-                                    hashMap2["userId"] = mUser?.userId!!
-                                    hashMap2["status"] = FRIEND
-                                    mStrangerViewModel.friendRef.child(strangerId)
-                                        .child(auth.uid!!).setValue(hashMap2)
+                        mStrangerViewModel.friendRef.child(strangerId).child(auth.uid!!)
+                            .setValue(hashMap2)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    Toast.makeText(
+                                        this,
+                                        "You add friend",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    mCurrentState = FRIEND
+                                    mBtnAddFriend.text =
+                                        resources.getText(R.string.textView_text_send_sms)
+                                    mBtnCancelFriend.text =
+                                        resources.getString(R.string.textView_text_un_friend)
+                                    mBtnCancelFriend.visibility = View.VISIBLE
                                 }
+                            }
 
-                                override fun onCancelled(error: DatabaseError) {
-
-                                }
-                            })
                     }
                 }
         }
@@ -293,19 +317,37 @@ class ViewStrangerActivity : BaseActivity() {
                         resources.getString(R.string.textView_text_send_friend_request)
                     mBtnCancelFriend.visibility = View.GONE
                 }
+
+            //cancel friend from sender
+            mStrangerViewModel.friendRef.child(strangerId).child(auth.uid!!).removeValue()
+                .addOnCompleteListener {
+                    Toast.makeText(
+                        this,
+                        "You cancel friend",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    mCurrentState = CURRENT_STATE
+                    mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
+                    mBtnCancelFriend.visibility = View.GONE
+                }
+
+
+            mStrangerViewModel.friendRef.child(strangerId).child(auth.uid!!)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (!snapshot.exists()) {
+                            mCurrentState = CURRENT_STATE
+                            mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
+                            mBtnCancelFriend.visibility = View.GONE
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+                })
+
         }
-        //cancel friend from sender
-        mStrangerViewModel.friendRef.child(strangerId).child(auth.uid!!).removeValue()
-            .addOnCompleteListener {
-                Toast.makeText(
-                    this,
-                    "You cancel friend",
-                    Toast.LENGTH_SHORT
-                ).show()
-                mCurrentState = CURRENT_STATE
-                mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
-                mBtnCancelFriend.visibility = View.GONE
-            }
 
         //Not accept add friend
         if (mCurrentState == RECEIVER) {
