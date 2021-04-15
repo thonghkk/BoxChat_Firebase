@@ -47,7 +47,6 @@ class ViewStrangerActivity : BaseActivity() {
     private lateinit var mBtnBackStranger: ImageView
     private var mCurrentState = "NOTHING_HAPPEN"
     var topic = ""
-    val userList = mutableListOf<User>()
 
     override fun getLayoutID() = R.layout.activity_view_stranger
     override fun onCreateActivity(savedInstanceState: Bundle?) {
@@ -236,7 +235,23 @@ class ViewStrangerActivity : BaseActivity() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (!snapshot.exists()) {
                             mCurrentState = CURRENT_STATE
-                            mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
+                            mBtnAddFriend.text =
+                                resources.getString(R.string.textView_text_send_friend_request)
+                            mBtnCancelFriend.visibility = View.GONE
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+                })
+            mStrangerViewModel.requestRef.child(strangerId).child(auth.uid!!)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (!snapshot.exists()) {
+                            mCurrentState = CURRENT_STATE
+                            mBtnAddFriend.text =
+                                resources.getString(R.string.textView_text_send_friend_request)
                             mBtnCancelFriend.visibility = View.GONE
                         }
                     }
@@ -327,7 +342,8 @@ class ViewStrangerActivity : BaseActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     mCurrentState = CURRENT_STATE
-                    mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
+                    mBtnAddFriend.text =
+                        resources.getString(R.string.textView_text_send_friend_request)
                     mBtnCancelFriend.visibility = View.GONE
                 }
 
@@ -337,7 +353,8 @@ class ViewStrangerActivity : BaseActivity() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (!snapshot.exists()) {
                             mCurrentState = CURRENT_STATE
-                            mBtnAddFriend.text = resources.getString(R.string.textView_text_send_friend_request)
+                            mBtnAddFriend.text =
+                                resources.getString(R.string.textView_text_send_friend_request)
                             mBtnCancelFriend.visibility = View.GONE
                         }
                     }
