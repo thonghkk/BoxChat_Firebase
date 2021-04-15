@@ -107,7 +107,7 @@ class ChatActivity : BaseActivity() {
 
     private fun sendMessage(userId: String, userName: String) {
         mBtnSendMessage.setOnClickListener {
-            val message: String = mEnterMessage.text.toString()
+            val message: String = mEnterMessage.text.trim().toString()
             if (message.isBlank()) {
                 Toast.makeText(this, "Enter Message", Toast.LENGTH_SHORT).show()
                 mEnterMessage.setText("")
