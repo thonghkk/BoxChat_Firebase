@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.commom.Firebase.Companion.firebaseDatabase
+import com.example.boxchat.model.Chat
 import com.example.boxchat.model.User
 import com.example.boxchat.utils.CheckNetwork
 import com.google.firebase.database.*
@@ -15,16 +16,19 @@ class ChatViewModel : ViewModel() {
     private val friendRef = getFriendReference()
     private var yourSelfList = mutableListOf<User>()
     private var userList = mutableListOf<User>()
+    private var chatList = mutableListOf<Chat>()
     val refChat = getChatReference()
     val friend = MutableLiveData<List<User>>()
     var userRef = getUserId()
     val me = MutableLiveData<List<User>>()
     val mUsers = MutableLiveData<List<User>>()
+    val mChat = MutableLiveData<List<Chat>>()
 
     init {
         getFriendList()
         getProfile()
         getUser()
+        getChat()
     }
 
     private fun getChatReference(): DatabaseReference {
@@ -49,6 +53,10 @@ class ChatViewModel : ViewModel() {
 
     fun addUser(user: List<User>) {
         mUsers.value = user
+    }
+
+    fun addChat(chat: List<Chat>) {
+        mChat.value = chat
     }
 
     private fun getFriendList() {
@@ -101,4 +109,23 @@ class ChatViewModel : ViewModel() {
             }
         })
     }
+
+    private fun getChat(){
+        refChat.addValueEventListener(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                 for (dataSnapshot:DataSnapshot in snapshot.children){
+                     val chat = dataSnapshot.getValue(Chat::class.java)
+                     chatList.add(chat!!)
+                 }
+                addChat(chatList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+    }
+
 }

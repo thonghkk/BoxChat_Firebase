@@ -133,27 +133,21 @@ class ChatActivity : BaseActivity() {
         mChatViewModel.refChat.push().setValue(hashMap)
     }
 
+
     private fun readMessage(senderId: String, receiverId: String) {
-        mChatViewModel.refChat.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                chatList.clear()
-                for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val chat = dataSnapShot.getValue(Chat::class.java)
-                    if ((chat!!.senderId == senderId && chat.receiverId == receiverId) ||
-                        (chat.senderId == receiverId && chat.receiverId == senderId)
-                    ) {
-                        chatList.add(chat)
-                        //Scroll to bottom message
-                        mLinearLayoutManager.scrollToPosition(chatList.size - 1)
-                        Log.d("Chat List Size", chatList.size.toString())
-                    }
+        mChatViewModel.mChat.observe(this, Observer { chat ->
+            for (i in chat) {
+                if ((i.senderId == senderId && i.receiverId == receiverId) ||
+                    (i.senderId == receiverId && i.receiverId == senderId)
+                ) {
+                    chatList.add(i)
+                    //Scroll to bottom message
+                    mLinearLayoutManager.scrollToPosition(chatList.size - 1)
+                    Log.d("Chat List Size", chatList.size.toString())
                 }
-                mChatRecycleView.adapter = ChatAdapter(chatList)
             }
+            mChatRecycleView.adapter = ChatAdapter(chatList)
 
-            override fun onCancelled(error: DatabaseError) {
-
-            }
         })
     }
 
