@@ -73,7 +73,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                     val latLng = LatLng(location.latitude, location.longitude)
                     Log.d("Location", "${location.latitude}")
                     val markerOptions = MarkerOptions().position(latLng).title("You Here")
-                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_avatar))
+                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_map_))
                         .flat(true)
 
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 21F))
@@ -111,14 +111,29 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         mMap = googleMap!!
         mMapViewModel.driverAvailable.observe(this@MapsActivity, Observer { driver ->
             for (i in driver) {
-                val location = LatLng(i.latitude.toDouble(), i.longitude.toDouble())
-                mMarker = mMap.addMarker(
-                    MarkerOptions()
-                        .position(location)
-                        .title(i.userId)
-                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_chat))
-                )
-                mMarker.tag = 0
+                mMapViewModel.friendList.observe(this, Observer { friend->
+                    for (j in friend){
+                        if (i.userId == j.userId){
+                            val location = LatLng(i.latitude.toDouble(), i.longitude.toDouble())
+                            mMarker = mMap.addMarker(
+                                MarkerOptions()
+                                    .position(location)
+                                    .title(i.userId)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_chat))
+                            )
+                            mMarker.tag = 0
+                        }else{
+                            val location = LatLng(i.latitude.toDouble(), i.longitude.toDouble())
+                            mMarker = mMap.addMarker(
+                                MarkerOptions()
+                                    .position(location)
+                                    .title(i.userId)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_chat_stranger))
+                            )
+                            mMarker.tag = 0
+                        }
+                    }
+                })
             }
         })
         mMap.setOnMarkerClickListener(this)
