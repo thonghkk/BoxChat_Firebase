@@ -17,9 +17,9 @@
     <application
         android:icon="@mipmap/ic_logo_app"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:largeHeap="true"
         android:theme="@style/Theme.BoxChat">
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -42,6 +42,15 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name=".ui.main.admin.deleteadmin.TotalAdminActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".ui.main.admin.newadmin.ManagerUserActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".ui.main.admin.AdminActivity"
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".ui.main.setting.InfoAppActivity"
             android:theme="@style/NoActionBar" />

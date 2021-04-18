@@ -44,7 +44,12 @@
     <string name="textView.text.logout">Sign Out</string>
     <string name="textView.text.question">Are you sure sign out ?</string>
     <string name="textView.text.continue">Continue</string>
-     //menu
+    <string name="textView.text.dashboard">Dashboard</string>
+    <string name="textView.text.admin">Admin</string>
+    <string name="textView.text.user">User</string>
+    <string name="textView.text.add_new_admin">Add New Admin</string>
+    <string name="textView.text.view_admin">Review All Admin</string>
+    //menu
     <string name="textView.text.chat">Chat</string>
     <string name="textView.text.map">Map</string>
     <string name="textView.text.setting">Setting</string>

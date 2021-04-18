@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
 import com.example.boxchat.commom.Firebase
+import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.databaselocal.FriendLocalDatabase
 import com.example.boxchat.databaselocal.UserLocalDatabase
 import com.example.boxchat.databaselocal.YourselfLocalDatabase
@@ -26,9 +27,14 @@ import kotlinx.coroutines.launch
 class SettingViewModel(application: Application) : AndroidViewModel(application) {
 
     var databaseReferenceProfile = getUserId()
+    val adminRef = getAdminList()
     val me = MutableLiveData<List<User>>()
+    val userList = MutableLiveData<List<User>>()
+    val adminList = MutableLiveData<List<User>>()
     val readAllDataFromMe: LiveData<List<YourselfLocal>>
     private var yourSelfList = mutableListOf<User>()
+    private var listUser = mutableListOf<User>()
+    private var listAdmin = mutableListOf<User>()
     private val repository: FriendLocalRepository
     private val repositoryUser: UserLocalRepository
     private val repositoryYourSelf: YourselfLocalRepository
@@ -45,15 +51,30 @@ class SettingViewModel(application: Application) : AndroidViewModel(application)
         readAllDataFromMe = repositoryYourSelf.readAllDataFromMe
         //get info of me
         getProfile()
+        getNumberUser()
+        getAdmin()
     }
 
     private fun getUserId(): DatabaseReference {
         return Firebase.firebaseDatabase.getReference("Users")
     }
 
+    private fun getAdminList(): DatabaseReference {
+        return Firebase.firebaseDatabase.getReference("Admin").child(auth.uid!!)
+    }
+
     fun addMe(yourSelf: List<User>) {
         me.value = yourSelf
     }
+
+    fun addUser(user: List<User>) {
+        userList.value = user
+    }
+
+    fun addAdmin(admin: List<User>) {
+        adminList.value = admin
+    }
+
 
     private fun getProfile() {
         databaseReferenceProfile.child(Firebase.auth.uid!!).addValueEventListener(object :
@@ -66,6 +87,40 @@ class SettingViewModel(application: Application) : AndroidViewModel(application)
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(CheckNetwork.context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun getNumberUser() {
+        databaseReferenceProfile.addValueEventListener(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                listUser.clear()
+                for (dataSnapshot: DataSnapshot in snapshot.children) {
+                    val user = snapshot.getValue(User::class.java)
+                    listUser.add(user!!)
+                }
+                addUser(listUser)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(CheckNetwork.context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun getAdmin() {
+        adminRef.addValueEventListener(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val admin = snapshot.getValue(User::class.java)
+                if (admin != null) {
+                    listAdmin.add(admin)
+                    addAdmin(listAdmin)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
             }
         })
     }
