@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
+import com.example.boxchat.SplashActivity
 import com.example.boxchat.base.BaseFragment
 import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.commom.Firebase.Companion.user
@@ -56,7 +57,7 @@ class SettingFragment : BaseFragment() {
         })
 
         mAdmin.setOnClickListener {
-            startActivity(Intent(context?.applicationContext, AdminActivity::class.java))
+            startActivity(Intent(context, AdminActivity::class.java))
         }
 
         if (checkNetwork()) {

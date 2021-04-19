@@ -28,6 +28,7 @@ class AdminActivity : BaseActivity() {
     private lateinit var mManagerAdmin: LinearLayout
     override fun getLayoutID() = R.layout.activity_admin
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateActivity(savedInstanceState: Bundle?) {
 
         mNameAdmin = findViewById(R.id.mNameAdmin)

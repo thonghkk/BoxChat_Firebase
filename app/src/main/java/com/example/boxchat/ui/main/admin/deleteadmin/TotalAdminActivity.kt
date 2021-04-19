@@ -8,17 +8,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.boxchat.R
+import com.example.boxchat.base.BaseActivity
 import com.example.boxchat.ui.main.admin.AdminViewModel
 import com.example.boxchat.ui.main.setting.SettingViewModel
 import com.example.boxchat.ui.main.stranger.StrangerAdapter
 
-class TotalAdminActivity : AppCompatActivity() {
+class TotalAdminActivity : BaseActivity() {
     private lateinit var mRecycleAllAdminView: RecyclerView
     private lateinit var mTotalAdminViewModel: TotalAdminViewModel
     private lateinit var mSearchAllAdmin: SearchView
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_total_admin)
+    override fun getLayoutID() = R.layout.activity_total_admin
+
+    override fun onCreateActivity(savedInstanceState: Bundle?) {
 
         mSearchAllAdmin = findViewById(R.id.mSearchAllAdmin)
         mRecycleAllAdminView = findViewById(R.id.mRecycleAllAdminView)
