@@ -18,18 +18,24 @@ class TotalAdminViewModel : ViewModel() {
     private val userRef = getUserId()
 
     private val adminList = mutableListOf<User>()
+    private val userList = mutableListOf<User>()
 
     //custom Live Data
     val admins = MutableLiveData<List<User>>()
+    val users = MutableLiveData<List<User>>()
 
     init {
         getAllAdmin()
+        getAllUser()
     }
 
     fun addListAdmin(admin: List<User>) {
         admins.value = admin
     }
 
+    fun addListUser(admin: List<User>) {
+        users.value = admin
+    }
 
     private fun getAdminList(): DatabaseReference {
         return Firebase.firebaseDatabase.getReference("Admin")
@@ -45,25 +51,12 @@ class TotalAdminViewModel : ViewModel() {
                 adminList.clear()
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
                     val admin = dataSnapshot.getValue(User::class.java)
-                    if (admin?.userId != auth.uid){
-                        //userList
-                        userRef.addValueEventListener(object : ValueEventListener {
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                for (dataSnapShot: DataSnapshot in snapshot.children) {
-                                    val mUser = dataSnapShot.getValue(User::class.java)
-                                    if (mUser!!.userId == admin?.userId) {
-                                        adminList.add(mUser)
-                                    }
-                                }
-                                addListAdmin(adminList)
-                            }
-
-                            override fun onCancelled(error: DatabaseError) {
-
-                            }
-                        })
+                    if (admin?.userId != auth.uid) {
+                        adminList.add(admin!!)
                     }
                 }
+                addListAdmin(adminList)
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -72,4 +65,21 @@ class TotalAdminViewModel : ViewModel() {
         })
     }
 
+    private fun getAllUser() {
+        //userList
+        userRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                userList.clear()
+                for (dataSnapShot: DataSnapshot in snapshot.children) {
+                    val mUser = dataSnapShot.getValue(User::class.java)
+                        userList.add(mUser!!)
+                }
+                addListUser(userList)
+             }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+    }
 }

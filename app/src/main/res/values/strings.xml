@@ -49,6 +49,9 @@
     <string name="textView.text.user">User</string>
     <string name="textView.text.add_new_admin">Add New Admin</string>
     <string name="textView.text.view_admin">Review All Admin</string>
+    <string name="textView.text.updating">Updating...</string>
+    <string name="textView.text.delete_admin">Are you sure delete this person ?</string>
+    <string name="textView.text.add_admin">Are you sure add this person ?</string>
     //menu
     <string name="textView.text.chat">Chat</string>
     <string name="textView.text.map">Map</string>

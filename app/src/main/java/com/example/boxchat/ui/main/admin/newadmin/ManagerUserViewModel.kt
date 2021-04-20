@@ -14,8 +14,8 @@ import com.google.firebase.database.ValueEventListener
 
 class ManagerUserViewModel : ViewModel() {
 
-    val databaseReference = getUserId()
-    val adminRef = getAdminList()
+    private val databaseReference = getUserId()
+    private val adminRef = getAdminList()
     private val userList = mutableListOf<User>()
     private val adminList = mutableListOf<User>()
 

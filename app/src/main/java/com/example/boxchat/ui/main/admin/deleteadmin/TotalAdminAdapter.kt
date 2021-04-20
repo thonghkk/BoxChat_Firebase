@@ -1,9 +1,10 @@
 package com.example.boxchat.ui.main.admin.deleteadmin
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.app.Dialog
+import android.provider.Settings.Secure.getString
+import android.view.*
 import android.widget.*
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boxchat.R
@@ -31,7 +32,38 @@ class TotalAdminAdapter(var user: List<User>) :
                 .into(mAvatar)
 
             mDeleteAdmin.setOnClickListener {
-                addAdmin(users.userId)
+                dialog(users.userId)
+            }
+        }
+
+        private fun dialog(userId:String) {
+            val mDialog = Dialog(itemView.context)
+            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            mDialog.setContentView(R.layout.dialog_sign_out)
+
+            val mTitle = mDialog.findViewById<TextView>(R.id.mTitleDialog)
+            val mQuestion = mDialog.findViewById<TextView>(R.id.mQuestionDialog)
+            mTitle.visibility = View.GONE
+            mQuestion.setText(R.string.textView_text_delete_admin)
+
+            val window = mDialog.window
+            window?.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+
+            val windowAtt: WindowManager.LayoutParams = window?.attributes!!
+            windowAtt.gravity = View.TEXT_ALIGNMENT_GRAVITY
+            window.attributes = windowAtt
+            mDialog.show()
+
+            mDialog.findViewById<Button>(R.id.mBtnNo).setOnClickListener {
+                mDialog.dismiss()
+            }
+
+            mDialog.findViewById<Button>(R.id.mBtnYes).setOnClickListener {
+                addAdmin(userId)
+                mDialog.dismiss()
             }
         }
 
@@ -45,7 +77,6 @@ class TotalAdminAdapter(var user: List<User>) :
                             .show()
                     }
                 }
-
         }
     }
 

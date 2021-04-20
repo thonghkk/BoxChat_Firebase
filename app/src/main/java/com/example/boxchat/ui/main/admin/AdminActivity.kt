@@ -47,11 +47,11 @@ class AdminActivity : BaseActivity() {
         }
 
         mManagerUser.setOnClickListener {
-            startActivity(Intent(this,ManagerUserActivity::class.java))
+            startActivity(Intent(this, ManagerUserActivity::class.java))
         }
 
         mManagerAdmin.setOnClickListener {
-            startActivity(Intent(this,TotalAdminActivity::class.java))
+            startActivity(Intent(this, TotalAdminActivity::class.java))
         }
 
         mAdminViewModel.me.observe(this, Observer { admin ->
@@ -72,9 +72,10 @@ class AdminActivity : BaseActivity() {
         mAdminViewModel.chatList.observe(this, Observer { chat ->
             mTxtTotalChat.text = "Total Of Chat : ${chat.size}"
         })
-        mAdminViewModel.admins.observe(this, Observer { admin->
+        mAdminViewModel.admins.observe(this, Observer { admin ->
             mTxtTotalAdmin.text = "Total of Admin : ${admin.size}"
         })
+
     }
 
 }

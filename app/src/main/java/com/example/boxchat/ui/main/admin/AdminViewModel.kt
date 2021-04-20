@@ -11,13 +11,16 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AdminViewModel : ViewModel() {
 
     var databaseReferenceProfile = getUserId()
     var chatRef = getChatId()
-    val adminRef = getAdminList()
-    val me = MutableLiveData<List<User>>()
+    private val adminRef = getAdminList()
     private var yourSelfList = mutableListOf<User>()
 
     //list
@@ -25,18 +28,19 @@ class AdminViewModel : ViewModel() {
     private var listChat = mutableListOf<Chat>()
     private val adminList = mutableListOf<User>()
 
-
     //list live data
     val userList = MutableLiveData<List<User>>()
     val chatList = MutableLiveData<List<Chat>>()
     val admins = MutableLiveData<List<User>>()
-
+    val me = MutableLiveData<List<User>>()
 
     init {
         getProfile()
         getNumberUser()
-        getNumberChat()
         getListAdmin()
+        GlobalScope.launch {
+            getNumberChat()
+        }
     }
 
     private fun getUserId(): DatabaseReference {
@@ -100,21 +104,24 @@ class AdminViewModel : ViewModel() {
         })
     }
 
-    private fun getNumberChat() {
-        chatRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                listChat.clear()
-                for (dataSnapshot: DataSnapshot in snapshot.children) {
-                    val chat = snapshot.getValue(Chat::class.java)
-                    listChat.add(chat!!)
+    private suspend fun getNumberChat() {
+        delay(1000).apply {
+            chatRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    listChat.clear()
+                    for (dataSnapshot: DataSnapshot in snapshot.children) {
+                        val chat = snapshot.getValue(Chat::class.java)
+                        listChat.add(chat!!)
+                    }
+                    addChat(listChat)
                 }
-                addChat(listChat)
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-            }
+                override fun onCancelled(error: DatabaseError) {
+                }
 
-        })
+            })
+        }
+
     }
 
     private fun getListAdmin() {
@@ -133,5 +140,4 @@ class AdminViewModel : ViewModel() {
             }
         })
     }
-
 }
