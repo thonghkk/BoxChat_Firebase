@@ -45,13 +45,13 @@ class MapModel : ViewModel() {
     private fun getLocation() {
         mUserOnReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                mUserLocation.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val mLocation = dataSnapShot.getValue(MapLocation::class.java)
-                    if (mLocation!!.userId != Firebase.auth.uid) {
+                    if (mLocation!!.userId != auth.uid) {
                         mUserLocation.add(mLocation)
-                        addDriverAvailable(mUserLocation)
-
                     }
+                    addDriverAvailable(mUserLocation)
                 }
             }
 
@@ -60,12 +60,14 @@ class MapModel : ViewModel() {
             }
         })
     }
+
     //
     private fun getListFriends() {
         mFriend.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                mFriendList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val mFriends = dataSnapShot.getValue(MapLocation::class.java)
+                    val mFriends = dataSnapShot.getValue(User::class.java)
                     mFriendList.add(mFriends!!)
                 }
                 addFriendInList(mFriendList)
@@ -76,4 +78,6 @@ class MapModel : ViewModel() {
             }
         })
     }
+
+
 }

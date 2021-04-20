@@ -14,6 +14,7 @@ import com.example.boxchat.R
 import com.example.boxchat.base.BaseActivity
 import com.example.boxchat.commom.Firebase.Companion.auth
 import com.example.boxchat.model.MapLocation
+import com.example.boxchat.model.User
 import com.example.boxchat.ui.main.stranger.StrangerViewModel
 import com.example.boxchat.ui.main.stranger.ViewStrangerActivity
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -109,32 +110,42 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap!!
-        mMapViewModel.driverAvailable.observe(this@MapsActivity, Observer { driver ->
-            for (i in driver) {
-                mMapViewModel.friendList.observe(this, Observer { friend->
-                    for (j in friend){
-                        if (i.userId == j.userId){
-                            val location = LatLng(i.latitude.toDouble(), i.longitude.toDouble())
+        mMapViewModel.friendList.observe(this@MapsActivity, Observer { friend ->
+            mMapViewModel.driverAvailable.observe(this, Observer { drive ->
+                //Marks Friends
+                for (i in friend) {
+                    for (j in drive) {
+                        if (i.userId == j.userId) {
+                            val location = LatLng(j.latitude.toDouble(), j.longitude.toDouble())
                             mMarker = mMap.addMarker(
                                 MarkerOptions()
                                     .position(location)
-                                    .title(i.userId)
+                                    .title(j.userId)
                                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_chat))
                             )
                             mMarker.tag = 0
-                        }else{
-                            val location = LatLng(i.latitude.toDouble(), i.longitude.toDouble())
-                            mMarker = mMap.addMarker(
-                                MarkerOptions()
-                                    .position(location)
-                                    .title(i.userId)
-                                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_chat_stranger))
-                            )
-                            mMarker.tag = 0
+
                         }
                     }
-                })
-            }
+                }
+                //Marks Stranger
+                val all = friend + drive
+                val isFriend = all.groupBy { it.userId }
+                    .filter { it.value.size == 1 }
+                    .flatMap { it.value } as MutableList<MapLocation>
+
+                for (i in isFriend) {
+                    val location = LatLng(i.latitude.toDouble(), i.longitude.toDouble())
+                    mMarker = mMap.addMarker(
+                        MarkerOptions()
+                            .position(location)
+                            .title(i.userId)
+                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_logo_chat_stranger))
+                    )
+                    mMarker.tag = 0
+                }
+
+            })
         })
         mMap.setOnMarkerClickListener(this)
     }
