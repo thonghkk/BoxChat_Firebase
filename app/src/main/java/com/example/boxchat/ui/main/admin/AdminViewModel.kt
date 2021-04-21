@@ -3,6 +3,7 @@ package com.example.boxchat.ui.main.admin
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.boxchat.commom.Firebase
 import com.example.boxchat.model.Chat
 import com.example.boxchat.model.User
@@ -38,7 +39,7 @@ class AdminViewModel : ViewModel() {
         getProfile()
         getNumberUser()
         getListAdmin()
-        GlobalScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getNumberChat()
         }
     }
@@ -105,7 +106,7 @@ class AdminViewModel : ViewModel() {
     }
 
     private suspend fun getNumberChat() {
-        delay(1000).apply {
+        delay(10000).apply {
             chatRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     listChat.clear()

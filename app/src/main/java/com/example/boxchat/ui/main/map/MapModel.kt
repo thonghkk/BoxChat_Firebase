@@ -67,7 +67,7 @@ class MapModel : ViewModel() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 mFriendList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val mFriends = dataSnapShot.getValue(User::class.java)
+                    val mFriends = dataSnapShot.getValue(MapLocation::class.java)
                     mFriendList.add(mFriends!!)
                 }
                 addFriendInList(mFriendList)
