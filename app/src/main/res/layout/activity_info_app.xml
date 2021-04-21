@@ -55,14 +55,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center">
-        <TextView
-            android:id="@+id/mNumberUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/textView.text.name_user"
-            android:textSize="18sp"
-            android:padding="10dp"
-            />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
