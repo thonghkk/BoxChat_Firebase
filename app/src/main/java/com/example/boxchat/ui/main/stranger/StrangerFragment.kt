@@ -1,6 +1,7 @@
 package com.example.boxchat.ui.main.stranger
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.SearchView
@@ -32,6 +33,8 @@ class StrangerFragment : BaseFragment() {
         mRecyclerUserView = view.findViewById(R.id.mRecycleUsersView)
         mRecyclerUserView.layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
 
+        val list = mutableListOf<User>()
+
         if (checkNetwork()) {
             getStranger()
         } else {
@@ -41,7 +44,9 @@ class StrangerFragment : BaseFragment() {
 
     private fun getStranger() {
         mStrangerViewModel.users.observe(this, Observer { user ->
-            mRecyclerUserView.adapter = StrangerAdapter(user)
+            strangerAdapter = StrangerAdapter(user)
+            mRecyclerUserView.adapter = strangerAdapter
+            searchStranger(strangerAdapter)
             mStrangerViewModel.friends.observe(this, Observer { friend ->
                 val sum = friend + user
                 val a = sum.groupBy { it.userId }

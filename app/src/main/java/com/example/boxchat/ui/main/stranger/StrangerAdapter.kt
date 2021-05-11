@@ -48,10 +48,10 @@ class StrangerAdapter(private var user: List<User>) : RecyclerView.Adapter<Stran
 
     override fun getFilter(): Filter {
         return object : Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults? {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val strSearch = constraint.toString()
-                if (strSearch.isEmpty()) {
-                    user = userOld
+                user = if (strSearch.isEmpty()) {
+                    userOld
                 } else {
                     val list = mutableListOf<User>()
                     for (i in userOld) {
@@ -59,7 +59,7 @@ class StrangerAdapter(private var user: List<User>) : RecyclerView.Adapter<Stran
                             list.add(i)
                         }
                     }
-                    user = list
+                    list
                 }
                 val filterResult = FilterResults()
                 filterResult.values = user
